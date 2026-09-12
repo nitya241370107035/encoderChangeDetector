@@ -5,6 +5,8 @@ Purges all ingested data across:
   1. PostgreSQL database (tiles, scenes, change_events, review_items, ingestion_coverage)
   2. Qdrant vector database collections ('tile_embeddings' and 'maxar_tile_embeddings')
   3. Local data directories (data/tiles, data/uploads)
+
+  It is used for clearing the data in postgis and all the tiles present in the data/ folder 
 """
 
 import os
