@@ -597,16 +597,42 @@ window.setMaxarEpochPreset = function(preset) {
   }
 };
 
-window.onDirectSensorChange = function(val) {
+window.selectSensorFilter = function(val) {
+  const pSent = document.getElementById('pillSensorSentinel');
+  const pMax = document.getElementById('pillSensorMaxar');
+  const pAll = document.getElementById('pillSensorAll');
+  
+  if (pSent) {
+    pSent.style.background = (val === 'Sentinel-2') ? 'rgba(6,182,212,0.2)' : 'rgba(255,255,255,0.03)';
+    pSent.style.borderColor = (val === 'Sentinel-2') ? 'var(--accent-cyan)' : 'var(--border-color)';
+    pSent.style.color = (val === 'Sentinel-2') ? '#fff' : 'var(--text-secondary)';
+    pSent.style.boxShadow = (val === 'Sentinel-2') ? '0 0 10px rgba(6,182,212,0.2)' : 'none';
+  }
+  if (pMax) {
+    pMax.style.background = (val === 'Maxar') ? 'rgba(6,182,212,0.2)' : 'rgba(255,255,255,0.03)';
+    pMax.style.borderColor = (val === 'Maxar') ? 'var(--accent-cyan)' : 'var(--border-color)';
+    pMax.style.color = (val === 'Maxar') ? '#fff' : 'var(--text-secondary)';
+    pMax.style.boxShadow = (val === 'Maxar') ? '0 0 10px rgba(6,182,212,0.2)' : 'none';
+  }
+  if (pAll) {
+    pAll.style.background = (val === '') ? 'rgba(6,182,212,0.2)' : 'rgba(255,255,255,0.03)';
+    pAll.style.borderColor = (val === '') ? 'var(--accent-cyan)' : 'var(--border-color)';
+    pAll.style.color = (val === '') ? '#fff' : 'var(--text-secondary)';
+    pAll.style.boxShadow = (val === '') ? '0 0 10px rgba(6,182,212,0.2)' : 'none';
+  }
+
   const filterSensor = document.getElementById('filterSensor');
   if (filterSensor) filterSensor.value = val;
   const directSelects = document.querySelectorAll('#directSensorSelect');
   directSelects.forEach(s => s.value = val);
 };
 
+window.onDirectSensorChange = function(val) {
+  selectSensorFilter(val);
+};
+
 window.syncDirectSensor = function(val) {
-  const directSelects = document.querySelectorAll('#directSensorSelect');
-  directSelects.forEach(s => s.value = val || 'Sentinel-2');
+  selectSensorFilter(val || '');
 };
 
 window.handleGeoTiffFilesSelected = function(files) {
@@ -1006,13 +1032,46 @@ window.startIngestion = async function() {
 };
 
 // ============================================================
-// 8. PHASE 2.7 â SEMANTIC RETRIEVAL CHAT & TILE INSPECTOR
+// 8. PHASE 2.7 — SEMANTIC RETRIEVAL CHAT & TILE INSPECTOR
 // ============================================================
 
 let attachedSearchFile = null;
 let currentSearchResults = [];
 let currentInspectingTile = null;
 let mapTileHighlightLayer = null;
+let activeSensorFilter = 'Sentinel-2';
+
+window.selectSensorFilter = function(sensorName) {
+  activeSensorFilter = (sensorName !== undefined && sensorName !== null) ? sensorName : '';
+  
+  // Update Pills visual styling
+  const pSentinel = document.getElementById('pillSensorSentinel');
+  const pMaxar = document.getElementById('pillSensorMaxar');
+  const pAll = document.getElementById('pillSensorAll');
+  
+  const inactiveStyle = "background: rgba(255,255,255,0.03); border: 1.5px solid var(--border-color); color: var(--text-secondary); font-size: 12px; font-weight: 600; border-radius: 20px; padding: 6px 16px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s;";
+  const activeSentinelStyle = "background: rgba(6,182,212,0.18); border: 1.5px solid var(--accent-cyan); color: #fff; font-size: 12px; font-weight: 600; border-radius: 20px; padding: 6px 16px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; box-shadow: 0 0 12px rgba(6,182,212,0.25);";
+  const activeMaxarStyle = "background: rgba(245,158,11,0.18); border: 1.5px solid var(--accent-amber); color: #fff; font-size: 12px; font-weight: 600; border-radius: 20px; padding: 6px 16px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; box-shadow: 0 0 12px rgba(245,158,11,0.25);";
+  const activeAllStyle = "background: rgba(99,102,241,0.18); border: 1.5px solid var(--accent-indigo); color: #fff; font-size: 12px; font-weight: 600; border-radius: 20px; padding: 6px 16px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; box-shadow: 0 0 12px rgba(99,102,241,0.25);";
+  
+  if (pSentinel) pSentinel.style.cssText = (activeSensorFilter === 'Sentinel-2') ? activeSentinelStyle : inactiveStyle;
+  if (pMaxar) pMaxar.style.cssText = (activeSensorFilter === 'Maxar') ? activeMaxarStyle : inactiveStyle;
+  if (pAll) pAll.style.cssText = (!activeSensorFilter || activeSensorFilter === '') ? activeAllStyle : inactiveStyle;
+
+  // Synchronize inputs
+  const filterSensor = document.getElementById('filterSensor');
+  if (filterSensor) filterSensor.value = activeSensorFilter;
+  const directSelect = document.getElementById('directSensorSelect');
+  if (directSelect) directSelect.value = activeSensorFilter;
+};
+
+window.syncDirectSensor = function(val) {
+  selectSensorFilter(val);
+};
+
+window.onDirectSensorChange = function(val) {
+  selectSensorFilter(val);
+};
 
 window.toggleSearchFilterPopover = function() {
   const popover = document.getElementById('searchFilterPopover');
@@ -1022,14 +1081,23 @@ window.toggleSearchFilterPopover = function() {
 };
 
 window.resetSearchFilters = function() {
-  document.getElementById('filterTopK').value = 5;
-  document.getElementById('topKValueLabel').innerText = '5';
-  document.getElementById('filterSensor').value = 'Sentinel-2';
-  document.getElementById('filterStartDate').value = '';
-  document.getElementById('filterEndDate').value = '';
-  document.getElementById('filterMinQuality').value = '0.0';
-  document.getElementById('filterMaxCloud').value = '100';
-  document.getElementById('filterCountBadge').style.display = 'none';
+  const topK = document.getElementById('filterTopK');
+  if (topK) topK.value = 5;
+  const topKLabel = document.getElementById('topKValueLabel');
+  if (topKLabel) topKLabel.innerText = '5';
+  
+  selectSensorFilter('Sentinel-2');
+  
+  const sDate = document.getElementById('filterStartDate');
+  if (sDate) sDate.value = '';
+  const eDate = document.getElementById('filterEndDate');
+  if (eDate) eDate.value = '';
+  const minQ = document.getElementById('filterMinQuality');
+  if (minQ) minQ.value = '0.0';
+  const maxC = document.getElementById('filterMaxCloud');
+  if (maxC) maxC.value = '100';
+  const badge = document.getElementById('filterCountBadge');
+  if (badge) badge.style.display = 'none';
 };
 
 window.onSearchImageSelected = function(event) {
@@ -1040,7 +1108,7 @@ window.onSearchImageSelected = function(event) {
   const preview = document.getElementById('searchImageAttachmentPreview');
   const nameLabel = document.getElementById('attachedImageName');
   if (preview && nameLabel) {
-    nameLabel.innerText = `ð· ${file.name}`;
+    nameLabel.innerText = file.name;
     preview.style.display = 'inline-flex';
   }
 };
@@ -1061,6 +1129,302 @@ window.applyQuickPrompt = function(promptText) {
   }
 };
 
+// ============================================================
+// CHAT SYSTEM STATE & PERSISTENCE (PHASE 2.8)
+// ============================================================
+
+let currentConversationId = null;
+let cachedConversations = [];
+let defaultWelcomeFeedHtml = '';
+
+function getCurrentUserId() {
+  let uid = localStorage.getItem('aerolens_user_id');
+  if (!uid) {
+    uid = 'analyst_' + Math.random().toString(36).substring(2, 10);
+    localStorage.setItem('aerolens_user_id', uid);
+  }
+  return uid;
+}
+
+window.regenerateUserIdentity = function() {
+  const newUid = 'analyst_' + Math.random().toString(36).substring(2, 10);
+  if (confirm(`Switch analyst identity to "${newUid}"?\nThis starts an isolated session separate from current chats.`)) {
+    localStorage.setItem('aerolens_user_id', newUid);
+    const label = document.getElementById('analystIdLabel');
+    if (label) label.textContent = `Analyst: ${newUid}`;
+    startNewChat();
+    loadUserConversations();
+  }
+};
+
+window.toggleChatSidebar = function() {
+  const sidebar = document.getElementById('chatSidebar');
+  const wrapper = document.querySelector('.retrieval-layout-wrapper');
+  const floatBtn = document.getElementById('floatingSidebarBtn');
+  if (!sidebar) return;
+
+  const isCollapsed = sidebar.classList.toggle('collapsed');
+  if (wrapper) wrapper.classList.toggle('sidebar-collapsed', isCollapsed);
+  if (floatBtn) {
+    floatBtn.style.display = isCollapsed ? 'inline-flex' : 'none';
+  }
+  localStorage.setItem('aerolens_sidebar_collapsed', isCollapsed ? 'true' : 'false');
+};
+
+function formatRelativeTime(dateStr) {
+  if (!dateStr) return '';
+  const now = new Date();
+  const d = new Date(dateStr);
+  const diffMs = now - d;
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHours = Math.floor(diffMin / 60);
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffMin < 1) return 'Just now';
+  if (diffMin < 60) return `${diffMin}m ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  if (diffDays === 1) return 'Yesterday';
+  if (diffDays < 7) return `${diffDays}d ago`;
+  return d.toLocaleDateString([], { month: 'short', day: 'numeric' });
+}
+
+window.loadUserConversations = async function() {
+  const uid = getCurrentUserId();
+  const listEl = document.getElementById('chatHistoryList');
+  const countBadge = document.getElementById('chatCountBadge');
+  if (!listEl) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/api/v1/chat/conversations?user_id=${encodeURIComponent(uid)}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const convs = await res.json();
+    cachedConversations = convs || [];
+
+    if (countBadge) countBadge.textContent = cachedConversations.length;
+    renderConversationsList(cachedConversations);
+  } catch (err) {
+    console.error('Failed to load conversations:', err);
+  }
+};
+
+function renderConversationsList(conversations) {
+  const listEl = document.getElementById('chatHistoryList');
+  if (!listEl) return;
+
+  if (!conversations || conversations.length === 0) {
+    listEl.innerHTML = `
+      <div class="chat-history-empty" id="chatHistoryEmpty">
+        <svg class="ui-icon icon-cyan" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <div>No saved searches yet.</div>
+        <div style="font-size: 11px; opacity: 0.7;">Submit your first query to begin a persistent session.</div>
+      </div>
+    `;
+    return;
+  }
+
+  let html = '';
+  conversations.forEach(conv => {
+    const isActive = conv.conversation_id === currentConversationId;
+    const timeStr = formatRelativeTime(conv.updated_at || conv.created_at);
+    const titleEscaped = escapeHtml(conv.title || 'Untitled Search');
+
+    html += `
+      <div class="chat-history-item ${isActive ? 'active' : ''}" 
+           id="conv_item_${conv.conversation_id}"
+           onclick="selectConversation('${conv.conversation_id}')"
+           title="${titleEscaped}">
+        <div class="chat-history-item-icon">
+          <svg class="ui-icon icon-sm" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="chat-history-item-content">
+          <div class="chat-history-item-title">${titleEscaped}</div>
+          <div class="chat-history-item-meta">
+            <span>${timeStr}</span>
+            <span>&bull;</span>
+            <span>${conv.message_count || 0} msgs</span>
+          </div>
+        </div>
+        <div class="chat-item-actions">
+          <button class="chat-item-action-btn" onclick="renameConversation(event, '${conv.conversation_id}')" title="Rename Conversation">
+            <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          </button>
+          <button class="chat-item-action-btn delete" onclick="deleteConversation(event, '${conv.conversation_id}')" title="Delete Conversation">
+            <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          </button>
+        </div>
+      </div>
+    `;
+  });
+
+  listEl.innerHTML = html;
+}
+
+window.filterConversationsList = function(q) {
+  const query = (q || '').trim().toLowerCase();
+  if (!query) {
+    renderConversationsList(cachedConversations);
+    return;
+  }
+  const filtered = cachedConversations.filter(c => (c.title || '').toLowerCase().includes(query));
+  renderConversationsList(filtered);
+};
+
+window.startNewChat = function() {
+  currentConversationId = null;
+  const feed = document.getElementById('retrievalChatFeed');
+  if (feed && defaultWelcomeFeedHtml) {
+    feed.innerHTML = defaultWelcomeFeedHtml;
+    feed.scrollTop = 0;
+  }
+  // Clear inputs
+  const textInput = document.getElementById('searchPromptInput');
+  if (textInput) textInput.value = '';
+  clearAttachedSearchImage();
+
+  // Remove active styling on sidebar items
+  document.querySelectorAll('.chat-history-item').forEach(el => el.classList.remove('active'));
+};
+
+window.selectConversation = async function(conversationId) {
+  if (!conversationId) return;
+  const uid = getCurrentUserId();
+  const feed = document.getElementById('retrievalChatFeed');
+  if (!feed) return;
+
+  currentConversationId = conversationId;
+
+  // Update sidebar active highlights
+  document.querySelectorAll('.chat-history-item').forEach(el => el.classList.remove('active'));
+  const activeEl = document.getElementById(`conv_item_${conversationId}`);
+  if (activeEl) activeEl.classList.add('active');
+
+  // Loading indicator
+  feed.innerHTML = `
+    <div class="chat-message assistant" style="animation: fadeIn 0.2s ease;">
+      <div class="chat-avatar">
+        <svg class="ui-icon icon-md" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/><path d="M15 9l5-5"/><path d="M9 15l-5 5"/></svg>
+      </div>
+      <div class="chat-bubble">
+        <div style="display: flex; align-items: center; gap: 10px; color: var(--accent-cyan); font-size: 13px;">
+          <span class="status-dot"></span>
+          <span>Restoring conversation state and candidate tiles...</span>
+        </div>
+      </div>
+    </div>
+  `;
+
+  try {
+    const res = await fetch(`${API_BASE}/api/v1/chat/conversations/${conversationId}?user_id=${encodeURIComponent(uid)}`);
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.detail || `Failed to load conversation (${res.status})`);
+    }
+    const convData = await res.json();
+
+    // Clear feed to reconstruct exact message turns
+    feed.innerHTML = '';
+    const messages = convData.messages || [];
+
+    if (messages.length === 0) {
+      feed.innerHTML = defaultWelcomeFeedHtml;
+      return;
+    }
+
+    // Reset current search results store with all retrieved tiles across turns
+    currentSearchResults = [];
+
+    messages.forEach(msg => {
+      if (msg.role === 'user') {
+        renderUserChatMessage(msg.content, null, msg.attached_image_name);
+      } else if (msg.role === 'assistant') {
+        const queryContext = msg.query_context || {};
+        const tileResults = msg.results || [];
+        // Accumulate in currentSearchResults so tile inspection works immediately
+        tileResults.forEach(t => {
+          if (!currentSearchResults.find(x => x.tile_id === t.tile_id)) {
+            currentSearchResults.push(t);
+          }
+        });
+        const fakeResponse = {
+          results: tileResults,
+          execution_time_ms: queryContext.execution_time_ms || 0,
+          total_found: tileResults.length
+        };
+        renderAssistantResultsBubble(fakeResponse, queryContext);
+      }
+    });
+
+    feed.scrollTop = feed.scrollHeight;
+  } catch (err) {
+    feed.innerHTML = '';
+    renderAssistantErrorBubble(`Could not restore past chat: ${err.message}`);
+  }
+};
+
+window.renameConversation = async function(e, conversationId) {
+  if (e) e.stopPropagation();
+  const conv = cachedConversations.find(c => c.conversation_id === conversationId);
+  const currentTitle = conv ? conv.title : '';
+  const newTitle = prompt('Enter a new title for this search session:', currentTitle);
+  if (!newTitle || !newTitle.trim() || newTitle.trim() === currentTitle) return;
+
+  const uid = getCurrentUserId();
+  try {
+    const res = await fetch(`${API_BASE}/api/v1/chat/conversations/${conversationId}?user_id=${encodeURIComponent(uid)}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: newTitle.trim() })
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    await loadUserConversations();
+  } catch (err) {
+    alert(`Rename failed: ${err.message}`);
+  }
+};
+
+window.deleteConversation = async function(e, conversationId) {
+  if (e) e.stopPropagation();
+  if (!confirm('Are you sure you want to delete this search session? This will remove all retrieved tiles and queries permanently.')) return;
+
+  const uid = getCurrentUserId();
+  try {
+    const res = await fetch(`${API_BASE}/api/v1/chat/conversations/${conversationId}?user_id=${encodeURIComponent(uid)}`, {
+      method: 'DELETE'
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    if (currentConversationId === conversationId) {
+      startNewChat();
+    }
+    await loadUserConversations();
+  } catch (err) {
+    alert(`Delete failed: ${err.message}`);
+  }
+};
+
+function initChatSystem() {
+  const uid = getCurrentUserId();
+  const label = document.getElementById('analystIdLabel');
+  if (label) label.textContent = `Analyst: ${uid}`;
+
+  const feed = document.getElementById('retrievalChatFeed');
+  if (feed) {
+    defaultWelcomeFeedHtml = feed.innerHTML;
+  }
+
+  // Restore sidebar collapse state
+  if (localStorage.getItem('aerolens_sidebar_collapsed') === 'true') {
+    const sidebar = document.getElementById('chatSidebar');
+    const wrapper = document.querySelector('.retrieval-layout-wrapper');
+    const floatBtn = document.getElementById('floatingSidebarBtn');
+    if (sidebar) sidebar.classList.add('collapsed');
+    if (wrapper) wrapper.classList.add('sidebar-collapsed');
+    if (floatBtn) floatBtn.style.display = 'inline-flex';
+  }
+
+  loadUserConversations();
+}
+
 window.submitSemanticSearch = async function() {
   const textInput = document.getElementById('searchPromptInput');
   const promptText = textInput ? textInput.value.trim() : '';
@@ -1074,20 +1438,48 @@ window.submitSemanticSearch = async function() {
   if (!chatFeed) return;
 
   // 1. Gather Filters
-  const topK = parseInt(document.getElementById('filterTopK')?.value || '5', 10);
+  let rawTopK = parseInt(document.getElementById('filterTopK')?.value || '5', 10);
+  const topK = isNaN(rawTopK) ? 5 : Math.min(100, Math.max(1, rawTopK));
+  
   const directSensor = document.getElementById('directSensorSelect')?.value;
   const popoverSensor = document.getElementById('filterSensor')?.value?.trim();
-  const rawSensor = (directSensor && directSensor !== "") ? directSensor : popoverSensor;
+  const rawSensor = activeSensorFilter !== undefined ? activeSensorFilter : ((directSensor && directSensor !== "") ? directSensor : popoverSensor);
   const sensor = (rawSensor && rawSensor !== "" && rawSensor !== "Any") ? rawSensor : undefined;
   const startDate = document.getElementById('filterStartDate')?.value || undefined;
   const endDate = document.getElementById('filterEndDate')?.value || undefined;
-  const minQuality = parseFloat(document.getElementById('filterMinQuality')?.value || '0.0');
-  const maxCloud = parseFloat(document.getElementById('filterMaxCloud')?.value || '100.0');
+
+  // Parse and normalize minQuality to strictly satisfy backend Pydantic constraint (0.0 to 1.0)
+  let rawQuality = parseFloat(document.getElementById('filterMinQuality')?.value || '0.0');
+  let minQuality = 0.0;
+  if (!isNaN(rawQuality) && rawQuality > 0) {
+    if (rawQuality > 1.0) {
+      rawQuality = rawQuality / 100.0;
+    }
+    minQuality = Math.min(1.0, Math.max(0.0, rawQuality));
+  }
+
+  // Parse and clamp maxCloud to [0.0, 100.0]
+  let rawCloud = parseFloat(document.getElementById('filterMaxCloud')?.value || '100.0');
+  let maxCloud = 100.0;
+  if (!isNaN(rawCloud)) {
+    maxCloud = Math.min(100.0, Math.max(0.0, rawCloud));
+  }
+
+  // Query Turn Context for Visual Pipeline Rendering
+  const queryTurnContext = {
+    promptText: promptText,
+    attachedFile: attachedSearchFile,
+    attachedFileName: attachedSearchFile ? attachedSearchFile.name : null,
+    filePreviewUrl: attachedSearchFile ? URL.createObjectURL(attachedSearchFile) : null,
+    sensor: sensor || 'All Sensors',
+    topK: topK,
+    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+  };
 
   // 2. Render User Message in Chat
   renderUserChatMessage(promptText, attachedSearchFile);
 
-  // Clear inputs
+  // Clear input fields
   if (textInput) textInput.value = '';
   const searchFileToUpload = attachedSearchFile;
   clearAttachedSearchImage();
@@ -1108,7 +1500,7 @@ window.submitSemanticSearch = async function() {
       if (sensor) formData.append('sensor', sensor);
       if (startDate) formData.append('start_date', startDate);
       if (endDate) formData.append('end_date', endDate);
-      formData.append('min_quality', minQuality.toString());
+      formData.append('min_quality', minQuality.toFixed(2));
       formData.append('max_cloud_pct', maxCloud.toString());
       formData.append('min_similarity', '0.65');
 
@@ -1131,8 +1523,8 @@ window.submitSemanticSearch = async function() {
           sensor: sensor || undefined,
           start_date: startDate ? new Date(startDate).toISOString() : undefined,
           end_date: endDate ? new Date(endDate).toISOString() : undefined,
-          min_quality: minQuality > 0 ? minQuality : undefined,
-          max_cloud_pct: maxCloud < 100 ? maxCloud : undefined
+          min_quality: minQuality > 0 ? parseFloat(minQuality.toFixed(2)) : undefined,
+          max_cloud_pct: maxCloud < 100 ? parseFloat(maxCloud.toFixed(1)) : undefined
         }
       };
 
@@ -1152,9 +1544,70 @@ window.submitSemanticSearch = async function() {
     const loadingElem = document.getElementById(loadingMsgId);
     if (loadingElem) loadingElem.remove();
 
-    // Render Search Results
-    renderAssistantResultsBubble(responseData);
+    // Render Search Results into Visual Pipeline
+    renderAssistantResultsBubble(responseData, queryTurnContext);
     chatFeed.scrollTop = chatFeed.scrollHeight;
+
+    // 4. Save turn to Persistent Database & Update Sidebar
+    try {
+      const uid = getCurrentUserId();
+      // If currently in New Chat mode, initialize conversation thread
+      if (!currentConversationId) {
+        let titleCandidate = promptText || (searchFileToUpload ? `Image: ${searchFileToUpload.name}` : 'Tactical Search');
+        if (titleCandidate.length > 38) titleCandidate = titleCandidate.substring(0, 38) + '...';
+        const createRes = await fetch(`${API_BASE}/api/v1/chat/conversations`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: uid, title: titleCandidate })
+        });
+        if (createRes.ok) {
+          const newConv = await createRes.json();
+          currentConversationId = newConv.conversation_id;
+        }
+      }
+
+      if (currentConversationId) {
+        const turnMessages = [
+          {
+            role: 'user',
+            content: promptText || '(Reference Image Query)',
+            attached_image_name: searchFileToUpload ? searchFileToUpload.name : null,
+            query_context: {
+              sensor: sensor || 'All Sensors',
+              topK: topK,
+              startDate: startDate,
+              endDate: endDate,
+              minQuality: minQuality,
+              maxCloud: maxCloud,
+              timestamp: queryTurnContext.timestamp
+            }
+          },
+          {
+            role: 'assistant',
+            content: `Retrieved ${responseData.total_found || (responseData.results ? responseData.results.length : 0)} candidate tiles`,
+            query_context: {
+              sensor: sensor || 'All Sensors',
+              topK: topK,
+              execution_time_ms: responseData.execution_time_ms,
+              total_found: responseData.total_found,
+              timestamp: queryTurnContext.timestamp
+            },
+            results: responseData.results || []
+          }
+        ];
+
+        await fetch(`${API_BASE}/api/v1/chat/conversations/${currentConversationId}/messages?user_id=${encodeURIComponent(uid)}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(turnMessages)
+        });
+
+        // Refresh sidebar list
+        await loadUserConversations();
+      }
+    } catch (saveErr) {
+      console.warn('Could not persist chat turn to database:', saveErr);
+    }
 
   } catch (err) {
     const loadingElem = document.getElementById(loadingMsgId);
@@ -1164,22 +1617,30 @@ window.submitSemanticSearch = async function() {
   }
 };
 
-function renderUserChatMessage(text, file) {
+function renderUserChatMessage(text, file, attachedImageName) {
   const chatFeed = document.getElementById('retrievalChatFeed');
+  if (!chatFeed) return;
   const msg = document.createElement('div');
   msg.className = 'chat-message user';
 
   let contentHtml = '';
   if (file) {
     const previewUrl = URL.createObjectURL(file);
-    contentHtml += `<div style="margin-bottom: 6px;"><img src="${previewUrl}" style="max-height: 120px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);" alt="Uploaded Query"></div>`;
+    contentHtml += `<div style="margin-bottom: 8px;"><img src="${previewUrl}" style="max-height: 140px; border-radius: var(--radius-sm); border: 1px solid rgba(6,182,212,0.4);" alt="Uploaded Query"></div>`;
+  } else if (attachedImageName) {
+    contentHtml += `<div style="margin-bottom: 8px; display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: var(--radius-sm); background: rgba(6,182,212,0.15); border: 1px solid rgba(6,182,212,0.3); font-size: 11px; font-family: 'JetBrains Mono', monospace; color: #38bdf8;">
+      <svg class="ui-icon icon-sm icon-cyan" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <span>${escapeHtml(attachedImageName)}</span>
+    </div>`;
   }
   if (text) {
-    contentHtml += `<div class="chat-text" style="font-weight: 500;">${escapeHtml(text)}</div>`;
+    contentHtml += `<div class="chat-text" style="font-weight: 500; font-size: 14px;">${escapeHtml(text)}</div>`;
   }
 
   msg.innerHTML = `
-    <div class="chat-avatar">ð¤</div>
+    <div class="chat-avatar">
+      <svg class="ui-icon icon-md" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>
     <div class="chat-bubble">
       ${contentHtml}
     </div>
@@ -1189,15 +1650,18 @@ function renderUserChatMessage(text, file) {
 
 function renderAssistantLoadingBubble(id) {
   const chatFeed = document.getElementById('retrievalChatFeed');
+  if (!chatFeed) return;
   const msg = document.createElement('div');
   msg.className = 'chat-message assistant';
   msg.id = id;
   msg.innerHTML = `
-    <div class="chat-avatar">ð°ï¸</div>
+    <div class="chat-avatar">
+      <svg class="ui-icon icon-md" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/><path d="M15 9l5-5"/><path d="M9 15l-5 5"/></svg>
+    </div>
     <div class="chat-bubble">
       <div style="display: flex; align-items: center; gap: 10px; color: var(--accent-cyan); font-size: 13px;">
         <span class="status-dot"></span>
-        <span>Computing RemoteCLIP 512-dim embedding & searching Qdrant archive...</span>
+        <span>Computing RemoteCLIP 512-dim embedding & searching Qdrant vector archive...</span>
       </div>
     </div>
   `;
@@ -1206,107 +1670,152 @@ function renderAssistantLoadingBubble(id) {
 
 function renderAssistantErrorBubble(errMsg) {
   const chatFeed = document.getElementById('retrievalChatFeed');
+  if (!chatFeed) return;
   const msg = document.createElement('div');
   msg.className = 'chat-message assistant';
   msg.innerHTML = `
-    <div class="chat-avatar">â ï¸</div>
+    <div class="chat-avatar" style="background: rgba(244, 63, 94, 0.2); border-color: rgba(244, 63, 94, 0.4); color: #f43f5e;">
+      <svg class="ui-icon icon-md" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    </div>
     <div class="chat-bubble" style="border-color: rgba(244, 63, 94, 0.4); background: rgba(244, 63, 94, 0.1);">
-      <div style="color: var(--accent-rose); font-weight: 600; font-size: 13px; margin-bottom: 4px;">Search Failed</div>
-      <div style="font-size: 12px; color: var(--text-secondary);">${escapeHtml(errMsg)}</div>
+      <div style="color: var(--accent-rose); font-weight: 700; font-size: 13px; margin-bottom: 4px;">Search Failed</div>
+      <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.4;">${escapeHtml(errMsg)}</div>
     </div>
   `;
   chatFeed.appendChild(msg);
 }
 
-function renderAssistantResultsBubble(response) {
+function renderAssistantResultsBubble(response, queryInfo) {
   const chatFeed = document.getElementById('retrievalChatFeed');
-  const msg = document.createElement('div');
-  msg.className = 'chat-message assistant';
+  if (!chatFeed) return;
 
   currentSearchResults = response.results || [];
+  const execTime = response.execution_time_ms || 0;
+  const totalFound = response.total_found || 0;
+  const requestedK = queryInfo?.topK || 5;
+  const targetSensorName = queryInfo?.sensor || 'All Sensors';
 
-  let headerHtml = `
-    <div class="chat-bubble-header">
-      <span class="assistant-name">Search Results (${response.total_found} Matches)</span>
-      <span class="assistant-meta">â¡ ${response.execution_time_ms} ms &bull; Cosine Similarity</span>
-    </div>
-  `;
-
-  if (response.total_found === 0) {
-    msg.innerHTML = `
-      <div class="chat-avatar">ð°ï¸</div>
-      <div class="chat-bubble">
-        ${headerHtml}
-        <div class="chat-text" style="color: var(--text-secondary);">
-          ${response.query_type === 'image' ? 'No matching tiles found with similarity >= 65% for this reference image. Try broadening your filters or uploading a different scene.' : 'No matching tiles found for this query within the selected filter constraints. Try broadening your date range or adjusting quality filters.'}
-        </div>
+  // Build Results Grid or Empty State
+  let resultsGridHtml = '';
+  if (totalFound === 0) {
+    resultsGridHtml = `
+      <div style="padding: 36px 20px; text-align: center; background: rgba(0,0,0,0.25); border-radius: var(--radius-md); border: 1px dashed rgba(255,255,255,0.1); color: var(--text-secondary); font-size: 13px;">
+        <svg class="ui-icon icon-lg icon-cyan" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2" style="margin-bottom: 8px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <div style="font-weight: 600; color: #f1f5f9; margin-bottom: 4px;">No matching satellite tiles found in the archive</div>
+        <div style="font-size: 12px; color: var(--text-muted);">Try broadening the sensor filter, adjusting the acquisition date range, or lowering the quality gate.</div>
       </div>
     `;
-    chatFeed.appendChild(msg);
-    return;
+  } else {
+    resultsGridHtml = `<div class="retrieval-results-grid">`;
+    response.results.forEach((item, idx) => {
+      const scorePct = (item.score * 100).toFixed(1);
+      const thumbUrl = getTileThumbnailUrl(item);
+      const dateStr = item.acquisition_date ? item.acquisition_date.split('T')[0] : 'Historical';
+      const isMaxar = (item.sensor && item.sensor.toLowerCase().includes('maxar')) || item.tile_id.includes('maxar');
+      const sensorLabel = isMaxar ? 'Maxar 0.5m' : 'Sentinel-2';
+
+      let ndviVal = item.mean_ndvi !== null && item.mean_ndvi !== undefined ? item.mean_ndvi.toFixed(2) : null;
+      if (ndviVal === null && item.spot_description) {
+        const m = item.spot_description.match(/VARI visible vegetation index:\s*([\d\.\-]+)/i);
+        if (m && m[1]) ndviVal = parseFloat(m[1]).toFixed(2);
+      }
+      const ndwiVal = item.mean_ndwi !== null && item.mean_ndwi !== undefined ? item.mean_ndwi.toFixed(2) : null;
+      const ndbiVal = item.mean_ndbi !== null && item.mean_ndbi !== undefined ? item.mean_ndbi.toFixed(2) : null;
+
+      let chipsHtml = '';
+      if (isMaxar) {
+        if (ndviVal !== null) {
+          chipsHtml += `<span class="spec-chip ndvi">VARI ${ndviVal}</span>`;
+        }
+        chipsHtml += `<span class="spec-chip res">RGB 0.5m Optical</span>`;
+      } else {
+        if (ndviVal !== null) chipsHtml += `<span class="spec-chip ndvi">NDVI ${ndviVal}</span>`;
+        if (ndwiVal !== null) chipsHtml += `<span class="spec-chip ndwi">NDWI ${ndwiVal}</span>`;
+        if (ndbiVal !== null) chipsHtml += `<span class="spec-chip ndbi">NDBI ${ndbiVal}</span>`;
+        if (!chipsHtml) chipsHtml = `<span class="spec-chip ndvi">10m Multi-Spectral</span>`;
+      }
+
+      resultsGridHtml += `
+        <div class="result-card">
+          <div class="result-thumb-wrap">
+            <img class="result-thumb-img" src="${thumbUrl}" alt="${item.tile_id}" onerror="handleTileThumbError(this, '${item.tile_id}')">
+            <div class="result-sensor-tag">
+              <svg class="ui-icon icon-sm" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/><path d="M15 9l5-5"/><path d="M9 15l-5 5"/></svg>
+              ${sensorLabel}
+            </div>
+            <div class="result-score-badge">${scorePct}% Match</div>
+          </div>
+          <div class="result-body">
+            <div class="result-title-row">
+              <span class="result-tile-id" title="${item.tile_id}">#${idx + 1} &bull; ${item.tile_id}</span>
+              <span class="result-date">${dateStr}</span>
+            </div>
+
+            <!-- Spot Description -->
+            <div class="result-spot-desc">
+              ${escapeHtml(item.spot_description || (isMaxar ? 'High-resolution sub-meter optical reconnaissance imagery.' : 'Multi-spectral satellite signature matched.'))}
+            </div>
+
+            <!-- Spectral Chips -->
+            <div class="result-spectral-chips">
+              ${chipsHtml}
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="result-card-actions">
+              <button class="result-action-btn primary" onclick="openTileInspect('${item.tile_id}')" title="Inspect imagery and spectral lineage">
+                <svg class="ui-icon icon-sm icon-cyan" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                Inspect
+              </button>
+              <button class="result-action-btn" onclick="openTileInMap('${item.tile_id}', ${item.centroid_lat || 'null'}, ${item.centroid_lon || 'null'}, ${JSON.stringify(item.geometry_geojson || null).replace(/"/g, '&quot;')})" title="Navigate to physical tile in Map Explorer">
+                <svg class="ui-icon icon-sm" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+                Map
+              </button>
+              <button class="result-action-btn" onclick="discoverSimilarFromTile('${item.tile_id}')" title="Discover similar candidate sites">
+                <svg class="ui-icon icon-sm icon-cyan" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 12 21.5 2.5"/><circle cx="12" cy="12" r="2"/></svg>
+                Similar
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+    resultsGridHtml += `</div>`;
   }
 
-  // Build Results Grid
-  let gridHtml = `<div class="retrieval-results-grid">`;
-  response.results.forEach((item, idx) => {
-    const scorePct = (item.score * 100).toFixed(1);
-    const thumbUrl = getTileThumbnailUrl(item);
-    const dateStr = item.acquisition_date ? item.acquisition_date.split('T')[0] : 'Unknown Date';
-
-    const ndviVal = item.mean_ndvi !== null && item.mean_ndvi !== undefined ? item.mean_ndvi.toFixed(2) : '-';
-    const ndwiVal = item.mean_ndwi !== null && item.mean_ndwi !== undefined ? item.mean_ndwi.toFixed(2) : '-';
-    const ndbiVal = item.mean_ndbi !== null && item.mean_ndbi !== undefined ? item.mean_ndbi.toFixed(2) : '-';
-
-    gridHtml += `
-      <div class="result-card">
-        <div class="result-thumb-wrap">
-          <img class="result-thumb-img" src="${thumbUrl}" alt="${item.tile_id}" onerror="handleTileThumbError(this, '${item.tile_id}')">
-          <div class="result-score-badge">${scorePct}% Match</div>
+  // Build clean message bubble
+  const msg = document.createElement('div');
+  msg.className = 'chat-message assistant';
+  msg.innerHTML = `
+    <div class="chat-avatar">
+      <svg class="ui-icon icon-md" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/><path d="M15 9l5-5"/><path d="M9 15l-5 5"/></svg>
+    </div>
+    <div class="chat-bubble" style="width: 100%; max-width: 100%;">
+      <div class="chat-bubble-header" style="flex-wrap: wrap; gap: 8px; margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="assistant-name" style="font-size: 14px; font-weight: 700;">AeroLens Search Results</span>
+          <span class="tag-badge" style="background: rgba(6,182,212,0.15); color: #38bdf8;">${targetSensorName}</span>
         </div>
-        <div class="result-body">
-          <div class="result-title-row">
-            <span class="result-tile-id">#${idx + 1} &bull; ${item.tile_id}</span>
-            <span class="result-date">ð ${dateStr}</span>
-          </div>
-
-          <!-- Spot Description (Phase 2.4) -->
-          <div class="result-spot-desc">
-            ${escapeHtml(item.spot_description || 'Analysis complete.')}
-          </div>
-
-          <!-- Spectral Index Mini-Pills -->
-          <div class="result-spectral-chips">
-            <span class="spec-chip ndvi">NDVI ${ndviVal}</span>
-            <span class="spec-chip ndwi">NDWI ${ndwiVal}</span>
-            <span class="spec-chip ndbi">NDBI ${ndbiVal}</span>
-          </div>
-
-          <!-- Actions -->
-          <div class="result-card-actions">
-            <button class="result-action-btn" onclick="openTileInspect('${item.tile_id}')">
-              🔍 Inspect
-            </button>
-            <button class="result-action-btn" onclick="openTileInMap('${item.tile_id}', ${item.centroid_lat || 'null'}, ${item.centroid_lon || 'null'}, ${JSON.stringify(item.geometry_geojson || null).replace(/"/g, '&quot;')})">
-              🗺️ Open in Map
-            </button>
-            <button class="result-action-btn" onclick="discoverSimilarFromTile('${item.tile_id}')" style="color: #38bdf8; font-weight: 600;" title="Discover similar sites across the entire archive">
-              ⚡ Find Similar
-            </button>
-          </div>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 11px; font-family: 'JetBrains Mono', monospace;">
+          <span class="pipeline-badge highlight" style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 4px; background: rgba(6,182,212,0.15); color: #38bdf8; border: 1px solid rgba(6,182,212,0.3);">
+            <svg class="ui-icon icon-sm icon-cyan" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            ${execTime} ms
+          </span>
+          <span class="pipeline-badge success" style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 4px; background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3);">
+            <svg class="ui-icon icon-sm icon-emerald" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            ${totalFound} Matches
+          </span>
+          <span style="color: var(--text-muted);">Top ${requestedK}</span>
         </div>
       </div>
-    `;
-  });
-  gridHtml += `</div>`;
 
-  msg.innerHTML = `
-    <div class="chat-avatar">ð°ï¸</div>
-    <div class="chat-bubble" style="width: 100%;">
-      ${headerHtml}
-      ${gridHtml}
+      <!-- Clean Result Cards Grid -->
+      ${resultsGridHtml}
     </div>
   `;
+
   chatFeed.appendChild(msg);
+  chatFeed.scrollTop = chatFeed.scrollHeight;
 }
 
 // Fallback image generator for missing/mock tile previews
@@ -1319,12 +1828,22 @@ window.getTileThumbnailUrl = function(item) {
     return t.startsWith('http') ? t : `${API_BASE}${t.startsWith('/') ? '' : '/'}${t}`;
   }
   if (item.site_key && item.site_key !== 'null') {
-    return `${API_BASE}/data/tiles/${item.site_key}/${item.tile_id}_preview.jpg`;
+    return `${API_BASE}/data/tiles/${item.site_key}/${item.tile_id}_thumb.jpg`;
   }
   return createTileSvgDataUri(item.tile_id);
 };
 
 window.handleTileThumbError = function(img, tileId) {
+  if (!img) return;
+  const currentSrc = img.src || '';
+  if (currentSrc.includes('_thumb.jpg')) {
+    img.src = currentSrc.replace('_thumb.jpg', '_preview.jpg');
+    return;
+  }
+  if (currentSrc.includes('_preview.jpg')) {
+    img.src = currentSrc.replace('_preview.jpg', '.jpg');
+    return;
+  }
   img.onerror = null;
   img.src = createTileSvgDataUri(tileId);
 };
@@ -1347,7 +1866,7 @@ function createTileSvgDataUri(tileId) {
     <circle cx="256" cy="256" r="140" fill="none" stroke="rgba(6,182,212,0.25)" stroke-width="2" stroke-dasharray="6,6"/>
     <line x1="256" y1="80" x2="256" y2="432" stroke="rgba(6,182,212,0.3)" stroke-width="1.5"/>
     <line x1="80" y1="256" x2="432" y2="256" stroke="rgba(6,182,212,0.3)" stroke-width="1.5"/>
-    <text x="256" y="240" font-family="monospace" font-size="28" fill="#38bdf8" text-anchor="middle" font-weight="bold">ð°ï¸ SENTINEL-2</text>
+    <text x="256" y="240" font-family="monospace" font-size="28" fill="#38bdf8" text-anchor="middle" font-weight="bold">SENTINEL-2</text>
     <text x="256" y="275" font-family="monospace" font-size="14" fill="#94a3b8" text-anchor="middle">512x512 MULTI-SPECTRAL</text>
     <text x="256" y="300" font-family="monospace" font-size="12" fill="#06b6d4" text-anchor="middle">${cleanId}</text>
   </svg>`;
@@ -1359,24 +1878,71 @@ function createTileSvgDataUri(tileId) {
 // ============================================================
 
 window.openTileInspect = function(tileId) {
-  const item = currentSearchResults.find(t => t.tile_id === tileId);
-  if (!item) return;
+  // Comprehensive lookup across all tile stores
+  let item = (window.__tileMap && window.__tileMap.get(tileId))
+    || currentSearchResults.find(t => t.tile_id === tileId)
+    || (window.__lastDiscoveredTiles && Array.isArray(window.__lastDiscoveredTiles) && window.__lastDiscoveredTiles.find(t => t.tile_id === tileId))
+    || (typeof currentClusterTiles !== 'undefined' && Array.isArray(currentClusterTiles) && currentClusterTiles.find(t => t.tile_id === tileId))
+    || (window.currentClusterTiles && Array.isArray(window.currentClusterTiles) && window.currentClusterTiles.find(t => t.tile_id === tileId));
+
+  if (!item && typeof activeClusters !== 'undefined' && Array.isArray(activeClusters)) {
+    const cl = activeClusters.find(c => c.representative_tile_id === tileId);
+    if (cl) {
+      item = {
+        tile_id: tileId,
+        sensor: cl.sensor || 'Multi-Sensor',
+        spot_description: `Representative medoid tile of ${cl.label || 'cluster'}.`,
+        score: 1.0,
+        acquisition_date: cl.computed_at
+      };
+    }
+  }
+
+  // Graceful fallback so inspecting any tile ID never silently fails or blocks
+  if (!item) {
+    item = {
+      tile_id: tileId,
+      sensor: tileId.includes('maxar') ? 'Maxar WorldView' : 'Sentinel-2 L2A',
+      spot_description: 'Satellite imagery details and multi-spectral analysis from archive.',
+      score: 1.0,
+      mean_ndvi: null,
+      mean_ndwi: null,
+      mean_ndbi: null,
+      acquisition_date: 'Historical'
+    };
+  }
 
   currentInspectingTile = item;
   const modal = document.getElementById('tileInspectModal');
   if (!modal) return;
 
+  // Move modal to end of body to guarantee it sits above all other modals (discovery, popovers, etc.)
+  if (modal.parentElement !== document.body || modal !== document.body.lastElementChild) {
+    document.body.appendChild(modal);
+  }
+
+  const isMaxar = (item.sensor && item.sensor.toLowerCase().includes('maxar')) || item.tile_id.includes('maxar');
+
   // Set Title & Subtitle
-  document.getElementById('inspectTileTitle').innerText = `Tile: ${item.tile_id}`;
-  document.getElementById('inspectTileSubtitle').innerText = `${item.sensor || 'Sentinel-2'} &bull; Scene: ${item.scene_id || 'N/A'}`;
+  const titleEl = document.getElementById('inspectTileTitle');
+  if (titleEl) titleEl.innerText = `Tile: ${item.tile_id}`;
+  
+  const subTitleEl = document.getElementById('inspectTileSubtitle');
+  if (subTitleEl) subTitleEl.innerText = `${item.sensor || (isMaxar ? 'Maxar WorldView' : 'Sentinel-2 L2A')} • Scene: ${item.scene_id || 'N/A'}`;
 
   // Image & Score
   const thumbUrl = getTileThumbnailUrl(item);
-  document.getElementById('inspectTileImage').src = thumbUrl;
-  document.getElementById('inspectScoreBadge').innerText = `${(item.score * 100).toFixed(1)}% Match`;
+  const imgEl = document.getElementById('inspectTileImage');
+  if (imgEl) imgEl.src = thumbUrl;
+
+  const scoreBadgeEl = document.getElementById('inspectScoreBadge');
+  if (scoreBadgeEl) scoreBadgeEl.innerText = `${item.score !== undefined && item.score !== null ? (item.score * 100).toFixed(1) : '100.0'}% Match`;
 
   // Description
-  document.getElementById('inspectDescriptionBox').innerText = item.spot_description || "Detailed spectral indices calculated.";
+  const descBoxEl = document.getElementById('inspectDescriptionBox');
+  if (descBoxEl) {
+    descBoxEl.innerText = item.spot_description || (isMaxar ? "High-resolution optical reconnaissance imagery from Maxar WorldView archive." : "Multi-spectral surface reflectance and tri-spectral indices evaluated.");
+  }
 
   // Download GeoTIFF link
   const tifBtn = document.getElementById('inspectDownloadTifBtn');
@@ -1385,35 +1951,91 @@ window.openTileInspect = function(tileId) {
   }
 
   // Spectral Meters
-  const ndvi = item.mean_ndvi !== null && item.mean_ndvi !== undefined ? item.mean_ndvi : 0;
-  const ndwi = item.mean_ndwi !== null && item.mean_ndwi !== undefined ? item.mean_ndwi : 0;
-  const ndbi = item.mean_ndbi !== null && item.mean_ndbi !== undefined ? item.mean_ndbi : 0;
+  let ndvi = item.mean_ndvi !== null && item.mean_ndvi !== undefined ? item.mean_ndvi : null;
+  const ndwi = item.mean_ndwi !== null && item.mean_ndwi !== undefined ? item.mean_ndwi : null;
+  const ndbi = item.mean_ndbi !== null && item.mean_ndbi !== undefined ? item.mean_ndbi : null;
 
-  document.getElementById('inspectValNdvi').innerText = item.mean_ndvi !== null && item.mean_ndvi !== undefined ? ndvi.toFixed(3) : 'N/A';
-  document.getElementById('inspectValNdwi').innerText = item.mean_ndwi !== null && item.mean_ndwi !== undefined ? ndwi.toFixed(3) : 'N/A';
-  document.getElementById('inspectValNdbi').innerText = item.mean_ndbi !== null && item.mean_ndbi !== undefined ? ndbi.toFixed(3) : 'N/A';
+  // Fallback check: if ndvi is null but spot_description mentions VARI
+  if (ndvi === null && item.spot_description) {
+    const m = item.spot_description.match(/VARI visible vegetation index:\s*([\d\.\-]+)/i);
+    if (m && m[1]) {
+      ndvi = parseFloat(m[1]);
+    }
+  }
 
-  // Scale -1 to +1 into 0% to 100%
-  document.getElementById('inspectBarNdvi').style.width = `${Math.min(100, Math.max(0, ((ndvi + 1) / 2) * 100))}%`;
-  document.getElementById('inspectBarNdwi').style.width = `${Math.min(100, Math.max(0, ((ndwi + 1) / 2) * 100))}%`;
-  document.getElementById('inspectBarNdbi').style.width = `${Math.min(100, Math.max(0, ((ndbi + 1) / 2) * 100))}%`;
+  // Label
+  const labelNdviEl = document.getElementById('inspectLabelNdvi');
+  if (labelNdviEl) {
+    labelNdviEl.innerText = isMaxar ? 'NDVI / VARI (Vegetation)' : 'NDVI (Vegetation)';
+  }
+
+  // Values and Progress Bars
+  const valNdviEl = document.getElementById('inspectValNdvi');
+  const barNdviEl = document.getElementById('inspectBarNdvi');
+  if (valNdviEl && barNdviEl) {
+    if (ndvi !== null && !isNaN(ndvi)) {
+      valNdviEl.innerText = ndvi.toFixed(3);
+      barNdviEl.style.width = `${Math.min(100, Math.max(0, ((ndvi + 1) / 2) * 100))}%`;
+    } else {
+      valNdviEl.innerText = isMaxar ? 'N/A (Optical RGB)' : 'N/A';
+      barNdviEl.style.width = '0%';
+    }
+  }
+
+  const valNdwiEl = document.getElementById('inspectValNdwi');
+  const barNdwiEl = document.getElementById('inspectBarNdwi');
+  if (valNdwiEl && barNdwiEl) {
+    if (ndwi !== null && !isNaN(ndwi)) {
+      valNdwiEl.innerText = ndwi.toFixed(3);
+      barNdwiEl.style.width = `${Math.min(100, Math.max(0, ((ndwi + 1) / 2) * 100))}%`;
+    } else {
+      valNdwiEl.innerText = isMaxar ? 'N/A (Optical RGB)' : 'N/A';
+      barNdwiEl.style.width = '0%';
+    }
+  }
+
+  const valNdbiEl = document.getElementById('inspectValNdbi');
+  const barNdbiEl = document.getElementById('inspectBarNdbi');
+  if (valNdbiEl && barNdbiEl) {
+    if (ndbi !== null && !isNaN(ndbi)) {
+      valNdbiEl.innerText = ndbi.toFixed(3);
+      barNdbiEl.style.width = `${Math.min(100, Math.max(0, ((ndbi + 1) / 2) * 100))}%`;
+    } else {
+      valNdbiEl.innerText = isMaxar ? 'N/A (Optical RGB)' : 'N/A';
+      barNdbiEl.style.width = '0%';
+    }
+  }
 
   // Metadata Table
-  document.getElementById('inspectMetaTileId').innerText = item.tile_id;
-  document.getElementById('inspectMetaSceneId').innerText = item.scene_id || 'N/A';
-  document.getElementById('inspectMetaDate').innerText = item.acquisition_date || 'N/A';
-  document.getElementById('inspectMetaCoords').innerText = (item.centroid_lat && item.centroid_lon) 
-    ? `${item.centroid_lat.toFixed(4)}Â° N, ${item.centroid_lon.toFixed(4)}Â° E` 
-    : 'N/A';
-  document.getElementById('inspectMetaCloud').innerText = `${item.cloud_pct !== null && item.cloud_pct !== undefined ? item.cloud_pct.toFixed(1) : '0.0'}%`;
-  document.getElementById('inspectMetaQuality').innerText = `${item.quality_confidence !== null && item.quality_confidence !== undefined ? item.quality_confidence.toFixed(2) : '1.00'} (Gated)`;
+  const metaTileId = document.getElementById('inspectMetaTileId');
+  if (metaTileId) metaTileId.innerText = item.tile_id;
 
-  modal.style.display = 'flex';
+  const metaSceneId = document.getElementById('inspectMetaSceneId');
+  if (metaSceneId) metaSceneId.innerText = item.scene_id || 'N/A';
+
+  const metaDate = document.getElementById('inspectMetaDate');
+  if (metaDate) metaDate.innerText = item.acquisition_date ? item.acquisition_date.split('T')[0] : 'Historical';
+
+  const metaCoords = document.getElementById('inspectMetaCoords');
+  if (metaCoords) {
+    metaCoords.innerText = (item.centroid_lat && item.centroid_lon) 
+      ? `${item.centroid_lat.toFixed(4)}° N, ${item.centroid_lon.toFixed(4)}° E` 
+      : 'N/A';
+  }
+
+  const metaCloud = document.getElementById('inspectMetaCloud');
+  if (metaCloud) metaCloud.innerText = `${item.cloud_pct !== null && item.cloud_pct !== undefined ? item.cloud_pct.toFixed(1) : '0.0'}%`;
+
+  const metaQuality = document.getElementById('inspectMetaQuality');
+  if (metaQuality) metaQuality.innerText = `${item.quality_confidence !== null && item.quality_confidence !== undefined ? item.quality_confidence.toFixed(2) : '1.00'} (Gated)`;
+
+  modal.style.zIndex = '100000';
+  modal.style.setProperty('display', 'flex', 'important');
 };
 
 window.closeTileInspect = function() {
   const modal = document.getElementById('tileInspectModal');
-  if (modal) modal.style.display = 'none';
+  if (modal) modal.style.setProperty('display', 'none', 'important');
   currentInspectingTile = null;
 };
 
@@ -1439,14 +2061,17 @@ window.__lastDiscoveredTiles = [];
 window.discoverSimilarFromTile = async function(tileId) {
   if (!tileId) return;
 
-  const chatFeed = document.getElementById('chatFeed');
+  const chatFeed = document.getElementById('retrievalChatFeed') || document.getElementById('chatFeed');
   if (chatFeed) {
     // 1. Post user prompt in chat
     const userMsg = document.createElement('div');
     userMsg.className = 'chat-message user';
     userMsg.innerHTML = `
+      <div class="chat-avatar">
+        <svg class="ui-icon icon-md" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
       <div class="chat-bubble">
-        ⚡ Find visually and semantically similar sites like <code>${tileId}</code> across the entire archive
+        Find visually and semantically similar sites like <code>${tileId}</code> across the entire archive
       </div>
     `;
     chatFeed.appendChild(userMsg);
@@ -1456,7 +2081,9 @@ window.discoverSimilarFromTile = async function(tileId) {
     loadingMsg.className = 'chat-message assistant';
     loadingMsg.id = 'discoveryLoadingIndicator';
     loadingMsg.innerHTML = `
-      <div class="chat-avatar">🛰️</div>
+      <div class="chat-avatar">
+        <svg class="ui-icon icon-md" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/><path d="M15 9l5-5"/><path d="M9 15l-5 5"/></svg>
+      </div>
       <div class="chat-bubble" style="display: flex; align-items: center; gap: 10px;">
         <div class="status-dot"></div>
         <span>Searching Qdrant multi-region vector space for twins of <strong>${tileId}</strong> (zero re-encoding)...</span>
@@ -1473,11 +2100,26 @@ window.discoverSimilarFromTile = async function(tileId) {
       throw new Error(err.detail || `Discovery HTTP error ${res.status}`);
     }
 
-    const results = await res.json();
+    const rawResults = await res.json();
+
+    // Filter results to match the seed's sensor domain so Sentinel doesn't pull in random Maxar tiles from another cluster
+    const isSeedMaxar = tileId.toLowerCase().includes('maxar');
+    let domainMatches = (rawResults || []).filter(item => {
+      const isItemMaxar = (item.sensor && item.sensor.toLowerCase().includes('maxar')) || item.tile_id.toLowerCase().includes('maxar');
+      return isSeedMaxar ? isItemMaxar : !isItemMaxar;
+    });
+    if (!domainMatches || domainMatches.length === 0) {
+      domainMatches = rawResults || [];
+    }
+
+    // Keep exactly the top 5 domain-matching tiles so popup and chat message are 100% identical
+    const results = domainMatches.slice(0, 5);
     window.__lastDiscoveredTiles = results;
 
-    // Cache currentSearchResults so inspect modal finds them
+    // Cache in universal tileMap and currentSearchResults
+    window.__tileMap = window.__tileMap || new Map();
     results.forEach(r => {
+      if (r && r.tile_id) window.__tileMap.set(r.tile_id, r);
       if (!currentSearchResults.some(t => t.tile_id === r.tile_id)) {
         currentSearchResults.push(r);
       }
@@ -1487,14 +2129,14 @@ window.discoverSimilarFromTile = async function(tileId) {
     const loader = document.getElementById('discoveryLoadingIndicator');
     if (loader) loader.remove();
 
-    // ALWAYS open the rich interactive pop-up window showing the top 5 similar tiles
-    showDiscoveryResultsModal(tileId, results.slice(0, 5));
+    // Open the rich interactive pop-up window showing the exact same 5 similar tiles
+    showDiscoveryResultsModal(tileId, results);
 
     if (!chatFeed) {
       return;
     }
 
-    // Render Discovery Response in Chat (as history)
+    // Render Discovery Response in Chat (as history) - exact same 5 tiles
     const msg = document.createElement('div');
     msg.className = 'chat-message assistant';
 
@@ -1503,7 +2145,7 @@ window.discoverSimilarFromTile = async function(tileId) {
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="font-size: 16px;">⚡</span>
+              <svg class="ui-icon icon-cyan" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 12 21.5 2.5"/><circle cx="12" cy="12" r="2"/></svg>
               <h4 style="font-size: 14px; font-weight: 700; color: #38bdf8; margin: 0;">Discovery: Similar Sites Found</h4>
               <span class="tag-badge" style="background: rgba(6,182,212,0.2); color: var(--accent-cyan);">PS 2.2.4</span>
             </div>
@@ -1511,8 +2153,9 @@ window.discoverSimilarFromTile = async function(tileId) {
               Seed: <code>${tileId}</code> &bull; <strong>${results.length} matches</strong> across multiple geographic sectors (Zero Re-Encoding)
             </p>
           </div>
-          <button class="map-btn primary" onclick="openAllOnMap(window.__lastDiscoveredTiles)" style="padding: 8px 16px; font-weight: 700; background: #06b6d4; color: #000;">
-            🗺️ See All Locations on Map
+          <button class="map-btn primary" onclick="openAllOnMap(window.__lastDiscoveredTiles)" style="padding: 8px 16px; font-weight: 700; background: #06b6d4; color: #000; display: inline-flex; align-items: center; gap: 6px;">
+            <svg class="ui-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+            See All Locations on Map
           </button>
         </div>
       </div>
@@ -1522,7 +2165,7 @@ window.discoverSimilarFromTile = async function(tileId) {
     results.forEach((item, idx) => {
       const scorePct = (item.score * 100).toFixed(1);
       const thumbUrl = getTileThumbnailUrl(item);
-      const dateStr = item.acquisition_date ? item.acquisition_date.split('T')[0] : 'Unknown Date';
+      const dateStr = item.acquisition_date ? item.acquisition_date.split('T')[0] : 'Historical';
 
       const ndviVal = item.mean_ndvi !== null && item.mean_ndvi !== undefined ? item.mean_ndvi.toFixed(2) : '-';
       const ndwiVal = item.mean_ndwi !== null && item.mean_ndwi !== undefined ? item.mean_ndwi.toFixed(2) : '-';
@@ -1537,7 +2180,7 @@ window.discoverSimilarFromTile = async function(tileId) {
           <div class="result-body">
             <div class="result-title-row">
               <span class="result-tile-id">#${idx + 1} &bull; ${item.tile_id}</span>
-              <span class="result-date">📅 ${dateStr}</span>
+              <span class="result-date">${dateStr}</span>
             </div>
             <div class="result-spot-desc">
               ${escapeHtml(item.spot_description || 'Visually & semantically similar terrain signature.')}
@@ -1549,13 +2192,16 @@ window.discoverSimilarFromTile = async function(tileId) {
             </div>
             <div class="result-card-actions">
               <button class="result-action-btn" onclick="openTileInspect('${item.tile_id}')">
-                🔍 Inspect
+                <svg class="ui-icon icon-sm icon-cyan" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                Inspect
               </button>
               <button class="result-action-btn" onclick="openTileInMap('${item.tile_id}', ${item.centroid_lat || 'null'}, ${item.centroid_lon || 'null'}, ${JSON.stringify(item.geometry_geojson || null).replace(/"/g, '&quot;')})">
-                🗺️ Map
+                <svg class="ui-icon icon-sm" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+                Map
               </button>
               <button class="result-action-btn" onclick="discoverSimilarFromTile('${item.tile_id}')" style="color: #38bdf8; font-weight: 600;" title="Recursive discovery from this match">
-                ⚡ Find Similar
+                <svg class="ui-icon icon-sm icon-cyan" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 12 21.5 2.5"/><circle cx="12" cy="12" r="2"/></svg>
+                Similar
               </button>
             </div>
           </div>
@@ -1565,7 +2211,9 @@ window.discoverSimilarFromTile = async function(tileId) {
     gridHtml += `</div>`;
 
     msg.innerHTML = `
-      <div class="chat-avatar">🛰️</div>
+      <div class="chat-avatar">
+        <svg class="ui-icon icon-md" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/><path d="M15 9l5-5"/><path d="M9 15l-5 5"/></svg>
+      </div>
       <div class="chat-bubble" style="width: 100%;">
         ${headerHtml}
         ${gridHtml}
@@ -1583,7 +2231,9 @@ window.discoverSimilarFromTile = async function(tileId) {
       const errMsg = document.createElement('div');
       errMsg.className = 'chat-message assistant';
       errMsg.innerHTML = `
-        <div class="chat-avatar">⚠️</div>
+        <div class="chat-avatar" style="background: rgba(244, 63, 94, 0.2); border-color: rgba(244, 63, 94, 0.4); color: #f43f5e;">
+          <svg class="ui-icon icon-md" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
         <div class="chat-bubble" style="color: #f87171;">
           Discovery Error: ${escapeHtml(err.message)}
         </div>
@@ -1604,9 +2254,16 @@ window.showDiscoveryResultsModal = function(seedTileId, results) {
     document.body.appendChild(modal);
   }
 
-  const top5 = (results || []).slice(0, 5);
+  // Register in tile map
+  window.__tileMap = window.__tileMap || new Map();
+  (results || []).forEach(t => {
+    if (t && t.tile_id) window.__tileMap.set(t.tile_id, t);
+  });
+  window.__lastDiscoveredTiles = results || [];
 
-  const resultCardsHtml = top5.map((item, idx) => {
+  const displayTiles = (results || []).slice(0, 5);
+
+  const resultCardsHtml = displayTiles.map((item, idx) => {
     const hasScore = item.score !== undefined && item.score !== null;
     const scorePct = hasScore ? (item.score * 100).toFixed(1) + '% Match' : 'Cluster Member';
     const thumbUrl = getTileThumbnailUrl(item);
@@ -1629,7 +2286,10 @@ window.showDiscoveryResultsModal = function(seedTileId, results) {
         <div class="result-body" style="display: flex; flex-direction: column; flex: 1; padding: 14px;">
           <div class="result-title-row">
             <span class="result-tile-id" style="font-size: 12px; font-weight: 700;" title="${item.tile_id}">#${idx + 1} &bull; ${item.tile_id.length > 22 ? item.tile_id.slice(0, 20) + '...' : item.tile_id}</span>
-            <span class="result-date">📅 ${dateStr}</span>
+            <span class="result-date" style="display: inline-flex; align-items: center; gap: 4px;">
+              <svg class="ui-icon icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              ${dateStr}
+            </span>
           </div>
           <div class="result-spot-desc" style="font-size: 11px; margin: 6px 0; color: var(--text-secondary); line-height: 1.4;">
             ${escapeHtml(item.spot_description || 'High-dimensional visual & semantic twin.')}
@@ -1640,11 +2300,13 @@ window.showDiscoveryResultsModal = function(seedTileId, results) {
             <span class="spec-chip ndbi">NDBI ${ndbiVal}</span>
           </div>
           <div class="result-card-actions" style="margin-top: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-            <button class="map-btn primary" onclick="openTileInMap('${item.tile_id}', ${item.centroid_lat || 'null'}, ${item.centroid_lon || 'null'}, ${JSON.stringify(item.geometry_geojson || null).replace(/"/g, '&quot;')})" style="padding: 7px 8px; font-size: 11px; font-weight: 700; background: linear-gradient(135deg, #06b6d4, #6366f1); color: #fff;">
-              🗺️ See on Map
+            <button class="map-btn primary" onclick="openTileInMap('${item.tile_id}', ${item.centroid_lat || 'null'}, ${item.centroid_lon || 'null'}, ${JSON.stringify(item.geometry_geojson || null).replace(/"/g, '&quot;')})" style="padding: 7px 8px; font-size: 11px; font-weight: 700; background: linear-gradient(135deg, #06b6d4, #6366f1); color: #fff; display: inline-flex; align-items: center; justify-content: center; gap: 4px;">
+              <svg class="ui-icon icon-sm" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+              See Map
             </button>
-            <button class="map-btn" onclick="openTileInspect('${item.tile_id}')" style="padding: 7px 8px; font-size: 11px; font-weight: 600;">
-              🔍 Inspect Tile
+            <button class="map-btn" onclick="openTileInspect('${item.tile_id}')" style="padding: 7px 8px; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 4px;">
+              <svg class="ui-icon icon-sm icon-cyan" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Inspect
             </button>
           </div>
         </div>
@@ -1656,28 +2318,29 @@ window.showDiscoveryResultsModal = function(seedTileId, results) {
     <div class="discovery-modal-content">
       <div class="discovery-modal-header">
         <div style="display: flex; align-items: center; gap: 10px;">
-          <div style="width: 34px; height: 34px; border-radius: 8px; background: rgba(6,182,212,0.2); border: 1px solid var(--accent-cyan); display: flex; align-items: center; justify-content: center; font-size: 18px;">
-            ⚡
+          <div style="width: 34px; height: 34px; border-radius: 8px; background: rgba(6,182,212,0.2); border: 1px solid var(--accent-cyan); display: flex; align-items: center; justify-content: center;">
+            <svg class="ui-icon icon-md icon-cyan" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 12 21.5 2.5"/><circle cx="12" cy="12" r="2"/></svg>
           </div>
           <div>
-            <h3 style="font-size: 16px; font-weight: 800; color: #fff; margin: 0;">Top 5 Discovered Similar Sites</h3>
+            <h3 style="font-size: 16px; font-weight: 800; color: #fff; margin: 0;">Top ${displayTiles.length} Discovered Similar Sites</h3>
             <span style="font-size: 12px; color: var(--text-muted);">Unsupervised High-Dimensional Similarity Search (PS 2.2.4 &bull; Zero GPU Re-Encoding)</span>
           </div>
         </div>
         <div style="display: flex; align-items: center; gap: 12px;">
-          <button class="map-btn primary" onclick="openAllOnMap(window.__lastDiscoveredTiles)" style="padding: 8px 16px; font-weight: 700; background: #06b6d4; color: #000;">
-            🗺️ See All ${top5.length} on Map
+          <button class="map-btn primary" onclick="openAllOnMap(window.__lastDiscoveredTiles)" style="padding: 8px 16px; font-weight: 700; background: #06b6d4; color: #000; display: inline-flex; align-items: center; gap: 6px;">
+            <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+            See All ${displayTiles.length} on Map
           </button>
           <button class="modal-close-btn" onclick="closeDiscoveryModal()">&times;</button>
         </div>
       </div>
       <div class="discovery-modal-body">
         <div class="discovery-seed-box">
-          <span style="font-size: 22px;">🎯</span>
+          <svg class="ui-icon icon-cyan" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
           <div>
             <div style="font-size: 13px; font-weight: 700; color: #38bdf8;">Seed Tile: <code>${escapeHtml(seedTileId)}</code></div>
             <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">
-              Directly queried 512-dim RemoteCLIP embedding in Qdrant &bull; Identified top ${top5.length} visual and terrain signature twins across archive sectors.
+              Directly queried 512-dim RemoteCLIP embedding in Qdrant &bull; Identified top ${displayTiles.length} visual and terrain signature twins across archive sectors.
             </div>
           </div>
         </div>
@@ -1688,6 +2351,7 @@ window.showDiscoveryResultsModal = function(seedTileId, results) {
     </div>
   `;
 
+  modal.style.zIndex = '3000';
   modal.style.display = 'flex';
 };
 
@@ -1899,6 +2563,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (document.getElementById('leafletMap')) {
     initMap();
     checkUrlParamsForTileHighlight();
+  }
+  if (document.getElementById('retrievalChatFeed')) {
+    initChatSystem();
   }
 });
 
