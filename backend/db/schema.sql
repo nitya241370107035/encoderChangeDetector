@@ -150,6 +150,36 @@ CREATE TABLE IF NOT EXISTS ingestion_coverage (
   last_updated                TIMESTAMP DEFAULT now()
 );
 
+
+-- ============================================================
+-- 9. CHAT_CONVERSATIONS & CHAT_MESSAGES — ChatGPT/Gemini Style History
+-- ============================================================
+CREATE TABLE IF NOT EXISTS chat_conversations (
+  conversation_id   VARCHAR(64) PRIMARY KEY,
+  user_id           VARCHAR(128) NOT NULL,
+  title             VARCHAR(255) NOT NULL,
+  created_at        TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at        TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_chat_conversations_user_updated
+  ON chat_conversations(user_id, updated_at DESC);
+
+CREATE TABLE IF NOT EXISTS chat_messages (
+  message_id             SERIAL PRIMARY KEY,
+  conversation_id        VARCHAR(64) NOT NULL REFERENCES chat_conversations(conversation_id) ON DELETE CASCADE,
+  role                   VARCHAR(20) NOT NULL, -- 'user' or 'assistant'
+  content                TEXT NOT NULL,
+  attached_image_name    TEXT,
+  attached_image_preview TEXT,
+  query_context          JSONB,
+  results                JSONB,
+  created_at             TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_chat_messages_conv_created
+  ON chat_messages(conversation_id, created_at ASC);
+
 -- ============================================================
 -- Notes
 -- ============================================================
@@ -162,5 +192,3 @@ CREATE TABLE IF NOT EXISTS ingestion_coverage (
 -- * band_count / bit_depth / file_size_bytes were added after the
 --   per-tile storage sizing discussion — needed for the evaluation
 --   report's storage-footprint number.
-
-

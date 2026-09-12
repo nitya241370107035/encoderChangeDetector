@@ -61,6 +61,15 @@ def ensure_schema_migrated(conn=None):
 
             CREATE INDEX IF NOT EXISTS tiles_ndvi_idx ON tiles (mean_ndvi);
             CREATE INDEX IF NOT EXISTS tiles_ndbi_idx ON tiles (mean_ndbi);
+
+            CREATE TABLE IF NOT EXISTS clusters (
+              cluster_id               TEXT PRIMARY KEY,
+              label                    TEXT,
+              representative_tile_id   TEXT,
+              tile_count               INT DEFAULT 0,
+              computed_at              TIMESTAMP DEFAULT now(),
+              model_version            TEXT
+            );
             """
             cur.execute(migration_sql)
             conn.commit()

@@ -5,23 +5,26 @@ Matches schema.sql perfectly.
 
 from datetime import datetime
 from typing import Optional, List, Dict, Any
-from sqlalchemy import (
-    Column,
-    String,
-    Float,
-    Integer,
-    BigInteger,
-    DateTime,
-    ForeignKey,
-    ARRAY,
-    func
-)
-from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import declarative_base, relationship
-from geoalchemy2 import Geometry
 from pydantic import BaseModel, Field
 
-Base = declarative_base()
+try:
+    from sqlalchemy import (
+        Column,
+        String,
+        Float,
+        Integer,
+        BigInteger,
+        DateTime,
+        ForeignKey,
+        ARRAY,
+        func
+    )
+    from sqlalchemy.dialects.postgresql import JSONB
+    from sqlalchemy.orm import declarative_base, relationship
+    from geoalchemy2 import Geometry
+    Base = declarative_base()
+except ImportError:
+    Base = object
 
 # ============================================================
 # 1. SQLAlchemy ORM Models (matching schema.sql)
@@ -133,6 +136,34 @@ class IngestionCoverage(Base):
     last_updated = Column(DateTime, server_default=func.now())
 
 
+class ChatConversation(Base):
+    __tablename__ = "chat_conversations"
+
+    conversation_id = Column(String(64), primary_key=True)
+    user_id = Column(String(128), nullable=False, index=True)
+    title = Column(String(255), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+    messages = relationship("ChatMessage", back_populates="conversation", cascade="all, delete-orphan", order_by="ChatMessage.created_at")
+
+
+class ChatMessage(Base):
+    __tablename__ = "chat_messages"
+
+    message_id = Column(Integer, primary_key=True, autoincrement=True)
+    conversation_id = Column(String(64), ForeignKey("chat_conversations.conversation_id", ondelete="CASCADE"), nullable=False, index=True)
+    role = Column(String(20), nullable=False)
+    content = Column(String, nullable=False)
+    attached_image_name = Column(String, nullable=True)
+    attached_image_preview = Column(String, nullable=True)
+    query_context = Column(JSONB, nullable=True)
+    results = Column(JSONB, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    conversation = relationship("ChatConversation", back_populates="messages")
+
+
 # ============================================================
 # 2. Pydantic Schemas for API / Schema Validation
 # ============================================================
@@ -201,6 +232,68 @@ class ReviewItemSchema(BaseModel):
     analyst_id: str = "demo_analyst"
     decided_at: Optional[datetime] = None
     query_context: Optional[Dict[str, Any]] = None
+
+    class Config:
+        from_attributes = True
+
+
+# ============================================================
+# 3. Chat System Pydantic Schemas
+# ============================================================
+
+class ChatConversationCreate(BaseModel):
+    conversation_id: Optional[str] = None
+    user_id: str
+    title: str = "New Semantic Search"
+
+
+class ChatConversationUpdate(BaseModel):
+    title: str
+
+
+class ChatMessageCreate(BaseModel):
+    role: str = "user"  # "user" or "assistant"
+    content: str
+    attached_image_name: Optional[str] = None
+    attached_image_preview: Optional[str] = None
+    query_context: Optional[Dict[str, Any]] = None
+    results: Optional[List[Dict[str, Any]]] = None
+
+
+class ChatMessageSchema(BaseModel):
+    message_id: int
+    conversation_id: str
+    role: str
+    content: str
+    attached_image_name: Optional[str] = None
+    attached_image_preview: Optional[str] = None
+    query_context: Optional[Dict[str, Any]] = None
+    results: Optional[List[Dict[str, Any]]] = None
+    created_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+
+class ChatConversationSchema(BaseModel):
+    conversation_id: str
+    user_id: str
+    title: str
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    message_count: Optional[int] = 0
+
+    class Config:
+        from_attributes = True
+
+
+class ConversationDetailResponse(BaseModel):
+    conversation_id: str
+    user_id: str
+    title: str
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    messages: List[ChatMessageSchema] = []
 
     class Config:
         from_attributes = True
