@@ -17,6 +17,7 @@ from backend.api.routers.archive import router as archive_router
 from backend.api.routers.search import router as search_router
 from backend.api.routers.change import router as change_router
 from backend.api.routers.discovery import router as discovery_router
+from backend.api.routers.chat import router as chat_router
 
 app = FastAPI(
     title="Satellite Imagery Semantic Retrieval & Change Detection API",
@@ -40,6 +41,7 @@ app.include_router(archive_router)
 app.include_router(search_router)
 app.include_router(change_router)
 app.include_router(discovery_router)
+app.include_router(chat_router)
 
 # Mount Data & Static directories if they exist
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent

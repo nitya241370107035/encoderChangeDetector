@@ -39,24 +39,31 @@ class RemoteCLIPEncoder:
         device: Optional[str] = None
     ):
         if device is None:
-            self.device = "cuda" if torch.cuda.is_available() else "cpu"
+            env_dev = os.getenv("DEVICE")
+            if env_dev:
+                self.device = env_dev
+            else:
+                self.device = "cuda" if torch.cuda.is_available() else "cpu"
         else:
             self.device = device
 
         if checkpoint_path is None:
-            # Check default project locations
-            base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-            candidates = [
-                os.path.join(base_dir, "models", "retrieval", "RemoteCLIP-ViT-B-32.pt"),
-                os.path.join(base_dir, "SIH2026", "models", "retrieval", "RemoteCLIP-ViT-B-32.pt")
-            ]
-            for cand in candidates:
-                if os.path.exists(cand):
-                    checkpoint_path = cand
-                    break
+            env_path = os.getenv("REMOTECLIP_CHECKPOINT_PATH")
+            if env_path and os.path.exists(env_path):
+                checkpoint_path = env_path
+            else:
+                # Check default project locations
+                base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+                candidates = [
+                    os.path.join(base_dir, "models", "retrieval", "RemoteCLIP-ViT-B-32.pt")
+                ]
+                for cand in candidates:
+                    if os.path.exists(cand):
+                        checkpoint_path = cand
+                        break
 
-            if checkpoint_path is None:
-                checkpoint_path = candidates[0]
+                if checkpoint_path is None:
+                    checkpoint_path = candidates[0]
 
         self.checkpoint_path = checkpoint_path
         if not os.path.exists(self.checkpoint_path):
