@@ -28,7 +28,7 @@ RUN pip install --upgrade pip && \
 
 # Copy source repository
 COPY . /app/
-RUN chmod +x /app/infra/docker/entrypoint.sh
+RUN sed -i 's/\r$//' /app/infra/docker/entrypoint.sh && chmod +x /app/infra/docker/entrypoint.sh
 
 EXPOSE 8000
 
