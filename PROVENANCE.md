@@ -1,48 +1,42 @@
-# Data & Model Provenance Log (`PROVENANCE.md`)
+# Data & Model Provenance Registry (`PROVENANCE.md`)
 
-## Overview & Purpose
+## 1. Overview & Operational Purpose
 
-This document serves as the official **Data and Model Lineage Audit Log** for the *Semantic Retrieval & Multi-Temporal Change Analysis of Satellite Imagery* project (PS SIH-26227 for Indian Army DGIS / Ministry of Defence).
+This document serves as the official **Data and Model Lineage Audit Log** for the *Semantic Retrieval & Multi-Temporal Change Analysis of Satellite Imagery* project (Ministry of Defence / Indian Army Problem Statement SIH-26227).
 
-To ensure complete transparency, security compliance, and licensing auditability in a **fully on-premises and air-gapped environment**, every dataset, pre-trained model checkpoint, and open-source dependency ingested into the platform is logged in this document.
-
----
-
-## 📋 Tracked Metadata Fields
-
-For every ingested component, the following metadata fields are tracked:
-
-1. **Item Name**: Descriptive identifier of the dataset or model checkpoint.
-2. **Component Type**: Categorized into `Training Dataset`, `Evaluation Dataset`, `Pre-trained Weights`, `Third-Party Dependency`, or `Earth Observation Data`.
-3. **Source Provider / URL**: Official public URL or data provider repository.
-4. **License & Usage Terms**: Legal license governing offline usage (e.g. CC BY 4.0, MIT, Apache 2.0, Open Data).
-5. **Storage Location**: Local on-premises path within the workspace or container.
-6. **Status**: Deployment state (`In-Use`, `Staged`, `Planned`).
+To ensure complete transparency, security compliance, and licensing auditability in a **fully on-premises and air-gapped environment**, every external pre-trained model checkpoint and satellite data source ingested into the platform is declared in this registry.
 
 ---
 
-## 📊 Ingestion Audit Table
+## 2. Pre-Trained Model Checkpoint Registry (PS 2.2.7)
 
-| Item Name | Component Type | Source Provider / URL | License | Storage Location | Status |
+As mandated by **PS Section 2.2.7**, public pre-trained models are declared with their origin, license, checkpoint path, and operational function:
+
+| Model Name | Architecture / Version | Source Provider / Paper Citation | License | Storage Location | Operational Function |
 |---|---|---|---|---|---|
-| **RemoteCLIP (ViT-B/32)** | Pre-trained Vision-Language Weights | [HuggingFace / RemoteCLIP](https://huggingface.co/chendelong/RemoteCLIP) | MIT License | `models/retrieval/RemoteCLIP-ViT-B-32.pt` | **In-Use** 🟢 |
-| **Sentinel-2 L2A COG Archive** | Earth Observation Satellite Imagery (10m) | [AWS Earth Search STAC / Copernicus](https://earth-search.aws.element84.com/v1) | Open Data (Copernicus) | `data/tiles/{region_id}/{date}/` | **In-Use** 🟢 |
-| **s2cloudless Model** | ML Gradient-Boosted Cloud Detector | [Sentinel Hub / Sinergise](https://github.com/sentinel-hub/sentinel2-cloud-detector) | MIT License | `s2cloudless` pip package | **In-Use** 🟢 |
-| **Qdrant Vector Database** | Vector Search Engine (512-dim Cosine) | [Qdrant Repository](https://github.com/qdrant/qdrant) | Apache 2.0 | Docker (`eo_qdrant:6333`) | **In-Use** 🟢 |
-| **PostgreSQL 16 + PostGIS 3.4** | Sovereign Spatial Database | [PostGIS Official](https://postgis.net/) | GPL v2 | Docker (`eo_postgres:5434`) | **In-Use** 🟢 |
-| **MinIO S3 Object Store** | S3-Compatible Local Object Store | [MinIO Official](https://min.io/) | AGPL v3.0 | Docker (`eo_minio:9000`) | **In-Use** 🟢 |
-| **Leaflet & Esri World Imagery** | Interactive Geospatial Web Map | [Leaflet](https://leafletjs.com/) / Esri ArcGIS | BSD-2-Clause / Open Map Data | `frontend/` Web UI | 
+| **RemoteCLIP** | `ViT-B/32` (512-dim $L_2$-normalized vector) | Liu et al., *"RemoteCLIP: A Vision Language Foundation Model for Remote Sensing"*, IEEE TGRS. Checkpoint: [HuggingFace / RemoteCLIP](https://huggingface.co/chendelong/RemoteCLIP) | MIT / Apache 2.0 | `models/retrieval/RemoteCLIP-ViT-B-32.pt` | Unified text-to-image and image-to-image semantic embedding generation. |
+| **s2cloudless** | `S2PixelCloudDetector` (LightGBM 10-band model) | Sentinel Hub / Sinergise: [GitHub / sentinel2-cloud-detector](https://github.com/sentinel-hub/sentinel2-cloud-detector) | MIT License | Bundled package (`s2cloudless`) | Per-pixel cloud probability classification for Tier-1 false-alarm suppression. |
 
+> [!NOTE]
+> **Internal Algorithms (Not External Pretrained Checkpoints):**  
+> Custom algorithmic components such as the **Directional Shadow Ray-Tracer** (`cloud_removal/shadow_mask.py`) and the **HDBSCAN Unsupervised Clustering Job** (`backend/jobs/run_clustering.py`) are proprietary algorithms and workflow scripts authored within this repository, not downloaded third-party deep learning model weights.
 
 ---
 
-## 🛡️ Offline Air-Gap Verification & Sovereign Compliance
+## 3. Satellite Imagery Data Sources
 
-Before deploying the platform in an offline / air-gapped sovereign defense environment:
-1. **s2cloudless Model Weights Verification**: The `s2cloudless` model (`S2PixelCloudDetector`) uses a pre-trained LightGBM classifier bundled directly within the package (`s2cloudless/models/model_0.txt`). Verified 100% offline-compliant with zero runtime network calls.
-2. **Dual Cloud Detection Strategy**:
-   - **Entry Point A (10-band STAC COGs)**: Direct invocation of `S2PixelCloudDetector` over 10 Sentinel-2 bands (`B01`, `B02`, `B04`, `B05`, `B08`, `B8A`, `B09`, `B10`, `B11`, `B12`).
-   - **Entry Point B (4-5 band offline files)**: Automatic fallback to multi-spectral whiteness & NDSI heuristic cloud detector (`_spectral_fallback_detector`).
-3. **Zero External API Calls**: Ingestion engine uses local COGs or pre-staged local files when network access is restricted.
-4. **Deterministic Fallback**: Automatic offline mock generator available for unit testing and CI/CD without internet access.
-5. **Isolated Docker Network**: All microservices (`eo_backend`, `eo_postgres`, `eo_qdrant`, `eo_minio`) communicate exclusively across the local Docker bridge network (`0.0.0.0:8000`).
+This satellite imagery is used strictly for collecting the data and serving as a baseline source of data for our ingestion, semantic retrieval, clustering, and change detection pipeline:
+
+| Dataset / Sensor | Spatial Resolution | Bands Utilized | Provider / Access Point | Terms / License | Role in Pipeline |
+|---|---|---|---|---|---|
+| **Sentinel-2 MSI Level-2A** | 10m & 20m | Blue (B2), Green (B3), Red (B4), NIR (B8), SWIR1 (B11) | European Space Agency (ESA) / AWS Earth Search STAC | Copernicus Open Data Policy | Baseline multi-spectral source for tile tiling, spectral indices (NDVI, NDWI, NDBI), and change detection. |
+| **Maxar WorldView** | 0.5m Pan-sharpened / 2.0m Multi-spectral | Red, Green, Blue, NIR | Maxar Open Data Program / Organiser Supplied | Maxar Open Data Attribution Non-Commercial | High-resolution optical validation and cross-sensor semantic vector search. |
+
+---
+
+## 4. Air-Gap Verification & Sovereign Compliance (PS 2.2.6 & 2.2.7)
+
+To guarantee that the platform functions 100% offline without external cloud or internet connectivity:
+1. **Model Weights Staging:** `RemoteCLIP-ViT-B-32.pt` weights and `s2cloudless` LightGBM models are pre-staged locally on disk before evaluation.
+2. **Zero Outbound Telemetry:** No runtime network calls, external API queries, or telemetry endpoints are triggered by either model during initialization or inference.
+3. **Local Container Network:** Microservices (`eo_backend`, `eo_postgres`, `eo_qdrant`, `eo_minio`) communicate exclusively across the internal Docker bridge network (`0.0.0.0:8000`).

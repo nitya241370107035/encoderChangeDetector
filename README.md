@@ -195,3 +195,11 @@ For complete route definitions, request/response JSON schemas, query parameters,
 
 ## 🛡️ Provenance & Data Lineage
 All data sources, satellite collections, model architectures, and processing licenses are documented in [`PROVENANCE.md`](PROVENANCE.md).
+
+---
+
+## 🎯 Complete Problem Statement & Project Context
+
+For the comprehensive breakdown of the Ministry of Defence (MoD) / Indian Army Problem Statement (SIH-26227), architectural methodology, two-tiered false-alarm suppression strategy, end-to-end pipeline specifications, and requirement traceability, please refer to:
+
+👉 **[Complete Project Context & Architecture Guide (`ProjectContext.md`)](ProjectContext.md)**
