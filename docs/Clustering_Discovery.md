@@ -15,7 +15,7 @@ The Discovery and Clustering subsystem directly fulfills all mandates outlined i
 | **Unsupervised Site Clustering** | Unsupervised, embedding-based clustering of similar geographic, terrain, and infrastructure sites across the entire archive. | Offline/periodic background job (`backend/jobs/run_clustering.py`) scrolls all 512-D RemoteCLIP vectors from Qdrant, normalizes to unit length, and executes **HDBSCAN** density-based clustering with medoid selection. |
 | **Cross-Site Discovery ("Find Similar")** | Allow an analyst who identifies a single location of interest to branch out and discover other locations with comparable visual or semantic characteristics without constructing manual queries for each site. | Seed-based discovery service (`GET /api/v1/discover/{tile_id}`) pulls the seed tile's precomputed 512-D embedding directly from Qdrant, executing high-speed $k$-NN nearest-neighbor search across all regions with **zero prompt engineering and zero re-encoding**. |
 | **Instant Cluster Member Exploration** | Inspect and browse all imagery tiles belonging to a common semantic partition group without query execution. | Cluster retrieval service (`GET /api/v1/clusters/{cluster_id}/tiles`) uses indexed PostgreSQL queries (`SELECT tile_id FROM tiles WHERE cluster_id = %s`) to instantly return member tiles. |
-| **Tactical Terrain Explainability** | Human-interpretable classification of cluster themes. | Automated cluster labeling derives dominant terrain types (e.g., *"Dense Woodland & Forest Canopy"*, *"Industrial / Tarmac Logistics"*) from the average multi-spectral indices ($\overline{\text{NDVI}}, \overline{\text{NDWI}}, \overline{\text{NDBI}}$) of cluster members. |
+| **Tactical Terrain Explainability** | Human-interpretable classification of cluster themes. | Automated cluster labeling derives dominant terrain types (e.g., *"Dense Woodland & Forest Canopy"*, *"Industrial / Tarmac Logistics"*) from the average multi-spectral indices (average NDVI, NDWI, NDBI) of cluster members. |
 
 ---
 
@@ -110,27 +110,30 @@ The background clustering job (`backend/jobs/run_clustering.py`) is decoupled fr
 ### 3.2 HDBSCAN Density-Based Clustering
 The pipeline applies **HDBSCAN (Hierarchical Density-Based Spatial Clustering of Applications with Noise)**:
 * **Dynamic Minimum Cluster Size:**
-  $$\text{min\_cluster\_size} = \min\left(5, \max\left(2, \lfloor n_{\text{samples}} / 3 \rfloor\right)\right)$$
+  ```python
+  min_cluster_size = min(5, max(2, n_samples // 3))
+  ```
 * **Metric:** Euclidean distance over unit-normalized embeddings.
 * **Noise / Outlier Handling:** Outlier tiles that do not conform to any cohesive cluster are assigned label `-1`. These points have their PostgreSQL and Qdrant `cluster_id` set to `NULL`, preventing false semantic groupings.
-* **Adaptive KMeans Fallback:** If sample sizes are small ($n_{\text{samples}} \ge 4$) and HDBSCAN groups all samples into noise or fewer than 2 clusters, the system automatically falls back to adaptive KMeans clustering with $k = \min(5, \max(2, \lfloor n / 2 \rfloor))$ to ensure clear partitioning.
+* **Adaptive KMeans Fallback:** If sample sizes are small ($n \ge 4$) and HDBSCAN groups all samples into noise or fewer than 2 clusters, the system automatically falls back to adaptive KMeans clustering with `k = min(5, max(2, n // 2))` to ensure clear partitioning.
 
 ### 3.3 Medoid Selection & Spectral Label Synthesis
-For each coherent cluster $C_k$ containing member vectors $\{\mathbf{v}_1, \dots, \mathbf{v}_m\}$:
-1. **Centroid Computation:**
-   $$\mathbf{c}_k = \frac{1}{m} \sum_{i=1}^{m} \mathbf{v}_i$$
-2. **Medoid (Representative Tile) Selection:** The actual tile whose vector is closest to the mathematical centroid is elected as the cluster's representative medoid:
-   $$\text{medoid}_k = \arg\min_{\mathbf{v}_i \in C_k} \|\mathbf{v}_i - \mathbf{c}_k\|_2$$
-   The medoid's thumbnail is displayed as the visual cover card for the cluster in the analyst UI.
+For each coherent cluster $C_k$ containing member vectors:
+1. **Centroid Computation:** Calculates the geometric mean vector of all member embeddings.
+2. **Medoid (Representative Tile) Selection:** The actual tile whose vector is closest to the mathematical centroid is elected as the cluster's representative medoid. The medoid's thumbnail is displayed as the visual cover card for the cluster in the analyst UI.
 3. **Spectral Signature Labeling:**
-   The job queries PostgreSQL for the mean spectral indices of all member tiles:
-   $$\overline{\text{NDVI}} = \frac{1}{m} \sum \text{mean\_ndvi}, \quad \overline{\text{NDWI}} = \frac{1}{m} \sum \text{mean\_ndwi}, \quad \overline{\text{NDBI}} = \frac{1}{m} \sum \text{mean\_ndbi}$$
+   The job queries PostgreSQL for the average spectral indices of all member tiles:
+   ```python
+   avg_ndvi = mean([tile.mean_ndvi for tile in cluster_members])
+   avg_ndwi = mean([tile.mean_ndwi for tile in cluster_members])
+   avg_ndbi = mean([tile.mean_ndbi for tile in cluster_members])
+   ```
    Automated heuristics classify the cluster into military and tactical landscape categories:
-   - If $\overline{\text{NDWI}} \ge 0.15 \implies$ **Aquatic & Coastal Water**
-   - Else if $\overline{\text{NDVI}} \ge 0.35 \implies$ **Dense Woodland & Forest Canopy**
-   - Else if $\overline{\text{NDVI}} \ge 0.20 \implies$ **Vegetative & Agricultural Fields**
-   - Else if $\overline{\text{NDBI}} \ge 0.03 \implies$ **Urban Core & Built-up Infrastructure**
-   - Else if $\overline{\text{NDBI}} \ge 0.00 \implies$ **Industrial / Tarmac Logistics**
+   - If `avg_ndwi >= 0.15` $\implies$ **Aquatic & Coastal Water**
+   - Else if `avg_ndvi >= 0.35` $\implies$ **Dense Woodland & Forest Canopy**
+   - Else if `avg_ndvi >= 0.20` $\implies$ **Vegetative & Agricultural Fields**
+   - Else if `avg_ndbi >= 0.03` $\implies$ **Urban Core & Built-up Infrastructure**
+   - Else if `avg_ndbi >= 0.00` $\implies$ **Industrial / Tarmac Logistics**
    - Else $\implies$ **Open Arid & Transition Terrain**
 
 ### 3.4 Dual-Store Persistence & Atomic Synchronization
@@ -155,9 +158,9 @@ When an intelligence analyst identifies a target location of interest (e.g., fro
    ```
    **No neural network forward pass or GPU inference is required.** The 512-D vector is instantly fetched from RAM.
 3. **Global Archive $k$-NN Traversal:** Qdrant performs nearest-neighbor search across all collections using Cosine distance:
-   $$\text{similarity}(\mathbf{u}, \mathbf{v}) = \frac{\mathbf{u} \cdot \mathbf{v}}{\|\mathbf{u}\|_2 \|\mathbf{v}\|_2}$$
-   The search automatically excludes the seed `tile_id` itself and enforces a minimum similarity cutoff ($\text{min\_similarity} \ge 0.40$).
-4. **PostgreSQL Hydration & Spatial Deduplication:** Candidates are hydrated from PostgreSQL with coordinates, acquisition dates, cloud percentages, and spectral means, filtering out redundant overlapping patches within $\sim 200\text{m}$.
+   $$\text{Cosine Similarity}(\mathbf{u}, \mathbf{v}) = \frac{\mathbf{u} \cdot \mathbf{v}}{\|\mathbf{u}\|_2 \|\mathbf{v}\|_2}$$
+   The search automatically excludes the seed `tile_id` itself and enforces a minimum similarity cutoff (`min_similarity >= 0.40`).
+4. **PostgreSQL Hydration & Spatial Deduplication:** Candidates are hydrated from PostgreSQL with coordinates, acquisition dates, cloud percentages, and spectral means, filtering out redundant overlapping patches within ~200m.
 
 ### 4.2 Instant Cluster Member Retrieval
 If an analyst wants to inspect all tiles grouped under a cluster:

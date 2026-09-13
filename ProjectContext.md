@@ -76,7 +76,7 @@ False alarms are addressed at **two distinct, dedicated architectural checkpoint
   Incoming raw tiles undergo pixel-level cloud detection (`s2cloudless`), directional cloud-shadow ray-tracing, and validity masking (`bad_mask`). Dynamic percentile contrast stretching (0.5%–99.5%) is calculated strictly over clean ground pixels, neutralizing lighting inconsistencies and ephemeral haze before vectors or indices are calculated.
 
 * **Tier 2 — At the Change Detection Stage (Mask-Aware Delta Verification):**  
-  Rather than performing naive pixel subtraction (which flags seasonal vegetation blooming or slight shadows as construction), the change detection engine applies per-pixel bad-mask exclusion and multi-spectral index delta verification ($\Delta\text{NDVI}$, $\Delta\text{NDBI}$, $\Delta\text{NDWI}$). Confounding atmospheric pixels are masked out, and only persistent physical/structural transformations are retained.
+  Rather than performing naive pixel subtraction (which flags seasonal vegetation blooming or slight shadows as construction), the change detection engine applies per-pixel bad-mask exclusion and multi-spectral index delta verification (Delta NDVI, Delta NDBI, Delta NDWI). Confounding atmospheric pixels are masked out, and only persistent physical/structural transformations are retained.
 
 ---
 
@@ -90,7 +90,7 @@ The Ingestion Pipeline (`backend/ingestion/`) converts raw satellite rasters int
 3. **Tier-1 False-Alarm Suppression:** Executes machine-learning cloud detection (`s2cloudless`) and directional shadow ray-tracing, producing a combined per-pixel boolean validity mask (`bad_mask`) saved as `{tile_id}_mask.tif` and computing per-tile `cloud_pct` and `quality_confidence`.
 4. **Dual Normalization Architecture:**
    - **Adaptive Percentile Stretching (0.5%–99.5%):** Applied strictly over clean ground pixels to generate clear visual RGB thumbnails (`{tile_id}_thumb.jpg`) for analyst inspection and RemoteCLIP embedding.
-   - **Fixed-Scale Surface Reflectance ($DN / 10000.0$):** Retains raw physical reflectance $[0.0, 1.5]$ in multi-band GeoTIFFs (`{tile_id}.tif`) for mathematically sound inter-temporal change detection.
+   - **Fixed-Scale Surface Reflectance (DN / 10,000):** Retains raw physical reflectance [0.0, 1.5] in multi-band GeoTIFFs (`{tile_id}.tif`) for mathematically sound inter-temporal change detection.
 5. **Clean Spectral Indices:** Calculates NDVI, NDWI, and NDBI strictly on non-cloud, non-shadow pixels (`~bad_mask`), recording `mean_ndvi`, `mean_ndwi`, and `mean_ndbi`.
 6. **RemoteCLIP Embedding & Qdrant Upsert:** Encodes RGB visual tiles into 512-dimensional vectors with rich metadata payloads (`tile_id`, `site_key`, coordinates, date, spectral means, sensor) and upserts them to Qdrant without full index rebuilds.
 7. **Spatial DB Registration:** Persists footprint geometries, file paths, and scene metadata to PostgreSQL + PostGIS, linked to Qdrant vectors via deterministic `tile_id`.
@@ -123,9 +123,9 @@ The Semantic Retrieval Pipeline (`backend/services/vector_search.py`, `backend/s
    - Spatial Area of Interest (AOI polygon or bounding box pre-resolved via PostGIS `ST_Intersects`).
    - Temporal acquisition date ranges.
    - Sensor selection (`Sentinel-2`, `Maxar WorldView`, or `All`).
-   - Quality confidence gates ($\ge \text{min\_quality}$) and cloud thresholds ($\le \text{max\_cloud\_pct}$).
-4. **PostgreSQL Hydration & Spatial Deduplication:** Hydrates Top-$K$ candidate `tile_id`s in a single SQL query from PostgreSQL `tiles`. Applies spatial deduplication ($\sim 200\text{m}$ radius and `site_key`) so returned candidates represent distinct physical ground locations rather than overlapping crops.
-5. **Multi-Spectral Ground Truth & Deep Inspection:** Every retrieved candidate provides coordinates, capture timestamp, sensor provenance, cloud percentage, quality confidence score, true footprint geometry, and multi-spectral indices ($\text{NDVI}, \text{NDWI}, \text{NDBI}$).
+   - Quality confidence gates (`quality_confidence >= min_quality`) and cloud thresholds (`cloud_pct <= max_cloud_pct`).
+4. **PostgreSQL Hydration & Spatial Deduplication:** Hydrates Top-$K$ candidate `tile_id`s in a single SQL query from PostgreSQL `tiles`. Applies spatial deduplication (~200m radius and `site_key`) so returned candidates represent distinct physical ground locations rather than overlapping crops.
+5. **Multi-Spectral Ground Truth & Deep Inspection:** Every retrieved candidate provides coordinates, capture timestamp, sensor provenance, cloud percentage, quality confidence score, true footprint geometry, and multi-spectral indices (NDVI, NDWI, NDBI).
 6. **Automated Tactical Explanations:** Evaluates compound spectral distributions to synthesize human-interpretable terrain assessments (e.g., classifying airfields, urban cores, riparian wetlands, or natural forests).
 
 ### 4.2 Problem Statement Requirements Resolved
@@ -148,10 +148,10 @@ The Clustering and Discovery subsystem (`backend/jobs/run_clustering.py`, `backe
 
 1. **Periodic Background Clustering Job (`run_clustering_job`):**
    - Scrolls all 512-dimensional tile vectors across both Sentinel-2 and Maxar Qdrant collections.
-   - Normalizes embeddings to unit length ($L_2$) so Euclidean distance corresponds directly to Cosine similarity.
+   - Normalizes embeddings to unit length (L2) so Euclidean distance corresponds directly to Cosine similarity.
    - Executes **HDBSCAN** density clustering to partition tiles into cohesive geographic/infrastructure clusters without human supervision. Outlier/noise points receive label `-1` and a `NULL` cluster ID.
    - Elects the **medoid** (the actual tile vector closest to the cluster's geometric centroid) as the visual representative.
-   - Analyzes PostgreSQL multi-spectral index averages ($\overline{\text{NDVI}}, \overline{\text{NDWI}}, \overline{\text{NDBI}}$) across member tiles to synthesize human-readable tactical landscape labels (e.g. *"Dense Woodland & Forest Canopy"*, *"Industrial / Tarmac Logistics"*).
+   - Analyzes PostgreSQL multi-spectral index averages (average NDVI, NDWI, NDBI) across member tiles to synthesize human-readable tactical landscape labels (e.g. *"Dense Woodland & Forest Canopy"*, *"Industrial / Tarmac Logistics"*).
    - Atomically updates `tiles.cluster_id` and the `clusters` table in PostgreSQL and updates Qdrant point payloads (`cluster_id`).
 
 2. **Single-Click Analyst Discovery ("Find Similar"):**
@@ -195,7 +195,7 @@ Once completed and benchmarked, this pipeline will directly resolve:
   - Estimation of earliest available observation date via backward temporal trajectory traversal.
 * **PS Section 2.2.3 (False-Alarm Suppression & Quality Handling — Tier 2):**
   - Elimination of false positives caused by seasonal vegetation cycles, sun angle, illumination variations, clouds, and moving shadows.
-  - Enforcement of the pixel-level bad-mask union (`bad_mask_before | bad_mask_after`) and minimum clean ground area thresholds ($\ge 30\%$).
+  - Enforcement of the pixel-level bad-mask union (`bad_mask_before | bad_mask_after`) and minimum clean ground area thresholds (>= 30%).
 
 ---
 
@@ -217,7 +217,7 @@ The Analyst Workflow and Provenance Subsystem provides the operational decision-
 2. **Synchronized Before-and-After Evidence Viewer:**
    - Provides a coordinate-locked dual-pane or swipe viewer displaying pre-event ($T_1$) and post-event ($T_2$) visual thumbnails and physical reflectance GeoTIFFs side-by-side.
    - Panning and zooming are spatially synchronized across both temporal panes.
-   - Displays real-time delta spectral indices ($\Delta\text{NDVI}, \Delta\text{NDBI}, \Delta\text{NDWI}$), capture timestamps, sensor platforms, and bad-pixel validity masks.
+   - Displays real-time delta spectral indices (Delta NDVI, Delta NDBI, Delta NDWI), capture timestamps, sensor platforms, and bad-pixel validity masks.
 3. **Immutable Decision Audit Trail (`review_audit_log`):**
    - Enables analysts to take verifiable operational action: **[ Confirm Change ]** or **[ Reject False Alarm ]**.
    - Permanently logs every decision into an append-only audit ledger with the reviewing officer's ID, decision timestamp, and tactical rationale.

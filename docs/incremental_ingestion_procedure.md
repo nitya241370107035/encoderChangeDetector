@@ -249,7 +249,7 @@ curl -X POST "http://localhost:8000/api/v1/search" \
        "top_k": 5
      }'
 ```
-*Result:* Returns `200 OK` in $< 50\text{ ms}$. Searches are completely non-blocking during ingestion.
+*Result:* Returns `200 OK` in under 50 ms. Searches are completely non-blocking during ingestion.
 
 ---
 

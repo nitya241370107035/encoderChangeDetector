@@ -14,9 +14,9 @@ The Semantic Retrieval Pipeline directly fulfills all functional requirements sp
 |---|---|---|
 | **Free-Text Search** | Search satellite imagery archives using natural language queries without prior coordinates or timestamps. | Fine-tuned `RemoteCLIP ViT-B-32` text encoder maps prompts (e.g. *"airfield runways with hangars near water"*) into 512-dimensional unit vectors. |
 | **Multimodal Image-to-Image Search** | Upload a reference satellite image patch to find visually and contextually similar ground locations. | RemoteCLIP vision encoder processes uploaded image bytes (JPEG, PNG, GeoTIFF) into the identical 512-D vector space. |
-| **Rank-Ordered Results** | Rank candidate ground locations by mathematical similarity score. | Cosine vector similarity matching ($\text{score} \in [0.0, 1.0]$) in Qdrant; results returned in descending relevance order. |
+| **Rank-Ordered Results** | Rank candidate ground locations by mathematical similarity score. | Cosine vector similarity matching (score in [0.0, 1.0]) in Qdrant; results returned in descending relevance order. |
 | **Compound Filtering** | Refine semantic queries by geographic area, time window, sensor, and quality parameters. | Hybrid query engine combines PostGIS spatial intersection (`ST_Intersects`) with Qdrant payload filters (sensor, acquisition date, cloud %, quality score). |
-| **Analyst Inspection & Explainability** | Provide verifiable evidence, indices, and contextual explanations for retrieved candidates. | Hydrates tiles from PostgreSQL with true footprints, spectral index distributions ($\text{NDVI}, \text{NDWI}, \text{NDBI}$), and automated tactical spot descriptions. |
+| **Analyst Inspection & Explainability** | Provide verifiable evidence, indices, and contextual explanations for retrieved candidates. | Hydrates tiles from PostgreSQL with true footprints, spectral index distributions (NDVI, NDWI, NDBI), and automated tactical spot descriptions. |
 
 ---
 
@@ -142,15 +142,15 @@ In dense archives, a single physical airfield or port might be split across over
 - This guarantees that Top-$K$ results display $K$ **distinct physical geographical locations**, rather than 5 repeated snapshots of the same tarmac.
 
 ### 5.3 Automated 3-Index Tactical Spot Description Generator
-For every retrieved tile, `generate_tile_description()` evaluates its multi-spectral index profile ($\text{NDVI} \times \text{NDWI} \times \text{NDBI}$) to synthesize rule-based terrain assessments:
-- **Runways / Logistics Yards:** $\text{NDBI} \ge 0.03 \land \text{NDVI} < 0.18 \land \text{NDWI} < -0.15$
-  $$\implies \text{"High-density paved industrial or transport corridor (runways, logistics yards, tarmac aprons) with minimal vegetation."}$$
-- **Dense Urban Core:** $\text{NDBI} \ge 0.04 \land \text{NDVI} < 0.24$
-  $$\implies \text{"Dense urban core characterized by concrete infrastructure, built structures, and road networks."}$$
-- **Riparian Corridor / Wetlands:** $\text{NDWI} \ge 0.05 \land \text{NDVI} \ge 0.20$
-  $$\implies \text{"Riparian wetland or active riverbank corridor exhibiting rich soil moisture and water-tolerant flora."}$$
-- **Dense Woodland / Forest:** $\text{NDVI} \ge 0.40 \land \text{NDBI} < -0.05$
-  $$\implies \text{"Dense natural woodland with high chlorophyll biomass and zero artificial built-up footprint."}$$
+For every retrieved tile, `generate_tile_description()` evaluates its multi-spectral index profile (`NDVI x NDWI x NDBI`) to synthesize rule-based terrain assessments:
+- **Runways / Logistics Yards:** `NDBI >= 0.03` and `NDVI < 0.18` and `NDWI < -0.15`  
+  > *"High-density paved industrial or transport corridor (runways, logistics yards, tarmac aprons) with minimal vegetation."*
+- **Dense Urban Core:** `NDBI >= 0.04` and `NDVI < 0.24`  
+  > *"Dense urban core characterized by concrete infrastructure, built structures, and road networks."*
+- **Riparian Corridor / Wetlands:** `NDWI >= 0.05` and `NDVI >= 0.20`  
+  > *"Riparian wetland or active riverbank corridor exhibiting rich soil moisture and water-tolerant flora."*
+- **Dense Woodland / Forest:** `NDVI >= 0.40` and `NDBI < -0.05`  
+  > *"Dense natural woodland with high chlorophyll biomass and zero artificial built-up footprint."*
 
 ---
 
@@ -229,6 +229,6 @@ The Semantic Retrieval Pipeline exposes two primary endpoints under `/api/v1/sea
 
 ## 7. Operational Guarantees & Analyst Inspection
 
-1. **Sub-Second Latency:** Query embedding and Qdrant graph traversal consistently execute in $< 50\text{ ms}$, ensuring rapid exploration across millions of indexed tiles.
+1. **Sub-Second Latency:** Query embedding and Qdrant graph traversal consistently execute in under 50 ms, ensuring rapid exploration across millions of indexed tiles.
 2. **Deep Inspection Modal:** Every retrieved card provides one-click visual preview, coordinate verification, dynamic spectral gauge meters, and direct GeoTIFF download for military GIS workstations (QGIS/ArcGIS).
 3. **Audit Logging:** Every query, analyst identity, execution latency, and retrieved tile IDs are logged to the PostgreSQL `search_log` table for defense compliance and intelligence audit trails.

@@ -24,8 +24,7 @@ The Ingestion Pipeline directly resolves the operational demands specified in Mi
 In satellite data, imagery is not represented as vector shapes (points/lines/polygons); it is ingested in **raster form**:
 * A raster is a regular 2-dimensional grid (matrix) of cells called **pixels**.
 * Each pixel corresponds to a precise geographic footprint on the Earth's surface defined by an **Affine Geotransform** (`from_bounds(min_lon, min_lat, max_lon, max_lat, width, height)`).
-* In multi-spectral remote sensing, each pixel holds multiple numeric values (Digital Numbers / surface reflectance) across distinct electromagnetic wavelengths (Bands). In memory, this is loaded as a 3D NumPy tensor of shape:
-  $$\text{Shape} = (\text{Bands}, \text{Height}, \text{Width})$$
+* In multi-spectral remote sensing, each pixel holds multiple numeric values (Digital Numbers / surface reflectance) across distinct electromagnetic wavelengths (Bands). In memory, this is loaded as a 3D NumPy tensor of shape: `(Bands, Height, Width)`.
 
 ### 2.2 Multi-Sensor Compatibility (`backend/ingestion/canvas.py`)
 Different satellites capture different band arrangements and radiometric ranges:
@@ -73,11 +72,15 @@ A primary failure mode in automated military change detection is false alarms tr
 
 ### 3.3 Quality Mask Combination & GeoTIFF Export
 - Merges masks into a unified boolean matrix:
-  $$\text{bad\_mask} = \text{cloud\_mask} \lor \text{shadow\_mask}$$
+  ```python
+  bad_mask = cloud_mask | shadow_mask
+  ```
 - For each generated 512×512 tile, the bad mask is written to disk as `{tile_id}_mask.tif` (a 1-band `uint8` GeoTIFF where `0 = clean ground`, `1 = cloud/shadow`).
 - Calculates aggregate metrics:
-  $$\text{tile\_cloud\_pct} = \frac{\sum \text{bad\_mask}}{\text{total\_pixels}}$$
-  $$\text{quality\_confidence} = \max\left(0.0, \min\left(1.0, 1.0 - \text{tile\_cloud\_pct}\right)\right)$$
+  ```python
+  tile_cloud_pct = np.sum(bad_mask) / total_pixels
+  quality_confidence = max(0.0, min(1.0, 1.0 - tile_cloud_pct))
+  ```
 
 ---
 
@@ -97,7 +100,9 @@ A critical innovation in AeroLens is the separation of **Visual Contrast Normali
 * **Crucial Rule:** Adaptive percentile stretching must **NEVER** be applied to the multi-band scientific GeoTIFFs. Doing so changes the pixel numbers arbitrarily based on scene content, destroying radiometric comparability between $T_1$ and $T_2$ acquisitions.
 * Function: `to_fixed_reflectance()` in `backend/ingestion/tiler.py`.
 * Converts raw Digital Numbers (DN) using standard Sentinel-2 / Landsat fixed scaling:
-  $$\text{Reflectance} = \text{clip}\left(\frac{\text{DN}}{10000.0}, 0.0, 1.5\right)$$
+  ```python
+  Reflectance = np.clip(DN / 10000.0, 0.0, 1.5)
+  ```
 * Saved to disk as: `{tile_id}.tif` (`float32` multi-band GeoTIFF with EPSG:4326 transform).
 * Purpose: Preserves genuine physical surface reflectance for mathematical delta comparisons across years.
 
@@ -107,15 +112,19 @@ A critical innovation in AeroLens is the separation of **Visual Contrast Normali
 
 ### 5.1 Grid Slicing Algorithm (`backend/ingestion/tiler.py`)
 - The reprojected working canvas is sliced into uniform **512×512 pixel patches** using a fixed-stride sliding window (`_get_grid_steps()`):
-  $$\text{stride} = \lfloor \text{crop\_size} \times (1.0 - \text{overlap\_pct}) \rfloor$$
-- Default ground crop: $512\text{ px}$ with $10\%\text{ overlap}$ ($51\text{ px}$), ensuring zero boundary gaps or missing targets along tile edges.
+  ```python
+  stride = int(crop_size * (1.0 - overlap_pct))
+  ```
+- Default ground crop: `512 px` with `10% overlap` (`51 px`), ensuring zero boundary gaps or missing targets along tile edges.
 - Each tile receives a deterministic, coordinate-based identifier:
-  $$\text{tile\_id} = \text{clean\_scene\_id} + \text{"\_tile\_"} + \text{index:05d}$$
-  $$\text{site\_key} = \text{"site\_"} + \text{round(lat, 4)} + \text{"\_"} + \text{round(lon, 4)} + \text{"\_"} + \text{hash}$$
+  ```python
+  tile_id = f"{clean_scene_id}_tile_{index:05d}"
+  site_key = f"site_{round(lat, 4)}_{round(lon, 4)}_{spatial_hash}"
+  ```
   *(The `site_key` is identical across multi-temporal acquisitions of the exact same ground location).*
 
 ### 5.2 Spectral Indices Computation (Clean-Pixel Masked)
-Spectral indices are calculated on the multi-band arrays, **strictly excluding** pixels flagged in `bad_mask` or NoData sentinels ($-9999, \text{NaN}, \text{Inf}$):
+Spectral indices are calculated on the multi-band arrays, **strictly excluding** pixels flagged in `bad_mask` or NoData sentinels (`-9999`, `NaN`, `Inf`):
 
 1. **NDVI (Normalized Difference Vegetation Index):**
    $$\text{NDVI} = \frac{\text{NIR} - \text{Red}}{\text{NIR} + \text{Red}}$$
@@ -130,6 +139,7 @@ Spectral indices are calculated on the multi-band arrays, **strictly excluding**
    *Identifies concrete infrastructure, urban density, runways, and bare soil.*
 
 The mean values (`mean_ndvi`, `mean_ndwi`, `mean_ndbi`) are calculated and recorded in database tables and vector payloads.
+
 
 ---
 
@@ -201,8 +211,8 @@ report = resolve_change_pair(
 ```
 
 1. **Per-Pixel Mask Combination:** `combined_bad_mask = mask_before | mask_after`.
-2. **Valid Ground Gating:** Evaluates the usable ground fraction. If $< 30\%$, the pair is safely flagged as `insufficient_coverage` rather than raising false alarms.
-3. **True Ground Delta:** Reflectance differences ($|\Delta \text{Reflectance}|$) and index shifts ($\Delta\text{NDVI}$, $\Delta\text{NDBI}$, $\Delta\text{NDWI}$) are computed strictly over `~combined_bad_mask`.
+2. **Valid Ground Gating:** Evaluates the usable ground fraction. If less than 30%, the pair is safely flagged as `insufficient_coverage` rather than raising false alarms.
+3. **True Ground Delta:** Physical surface reflectance differences and index shifts (`Delta_NDVI`, `Delta_NDBI`, `Delta_NDWI`) are computed strictly over clean pixels (`~combined_bad_mask`).
 
 ---
 
