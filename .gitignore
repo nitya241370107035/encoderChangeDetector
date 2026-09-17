@@ -17,6 +17,7 @@ data/tiles/
 data/uploads/
 data/processed_scenes/
 data/cache/
+data/change_staging/
 !data/README.md
 !data/custom_aoi.geojson
 

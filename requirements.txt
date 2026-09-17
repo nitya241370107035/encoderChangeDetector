@@ -22,6 +22,7 @@ qdrant-client>=1.12.0
 torch>=2.0.0
 torchvision>=0.15.0
 open-clip-torch>=2.24.0
+einops>=0.8.0
 
 # Web & API Framework
 fastapi>=0.110.0

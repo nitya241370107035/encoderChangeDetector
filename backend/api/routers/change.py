@@ -127,3 +127,106 @@ def compute_pair_change(request: TilePairChangeRequest):
     except Exception as e:
         logger.error(f"Change pair evaluation error: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Change detection failed: {str(e)}")
+
+
+class PrithviDetectRequest(BaseModel):
+    tile_id: Optional[str] = Field(None, description="Database tile_id to stage and run Prithvi change analysis")
+    tile_id_before: Optional[str] = None
+    tile_id_after: Optional[str] = None
+    tile_before_path: Optional[str] = None
+    tile_after_path: Optional[str] = None
+    mask_before_path: Optional[str] = None
+    mask_after_path: Optional[str] = None
+    grid_size: int = Field(8, ge=2, le=16, description="Grid layout size (default 8 for 8x8 = 64 patches)")
+    quality_thresh: float = Field(0.20, ge=0.05, le=0.95, description="Max bad pixel fraction per patch")
+    z_threshold: float = Field(2.0, ge=1.0, le=10.0, description="Z-score threshold for change candidate patches")
+
+
+@router.post("/prithvi-detect", response_model=Dict[str, Any])
+def prithvi_detect(request: PrithviDetectRequest):
+    """
+    Executes the 8x8 Prithvi-EO-2.0-300M multi-spectral change detection pipeline.
+    Produces both:
+      1. patch_change_analysis.png (4-panel visual plot)
+      2. patch_change_results.json (structured patch candidates with z-scores)
+    """
+    try:
+        import os
+        from scripts.prithvi_patch_change_detector import analyze_prithvi_patches
+
+        tif_before = request.tile_before_path
+        tif_after = request.tile_after_path
+        mask_before = request.mask_before_path
+        mask_after = request.mask_after_path
+        site_key = "custom"
+
+        if request.tile_id:
+            staged = stage_tile_temporal_series(tile_id=request.tile_id)
+            epochs = staged.get("epochs", [])
+            if len(epochs) < 2:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Tile {request.tile_id} only has {len(epochs)} clean observation(s). Minimum 2 required for change detection."
+                )
+            tif_before = epochs[0]["files"]["tif"]
+            mask_before = epochs[0]["files"].get("mask")
+            tif_after = epochs[1]["files"]["tif"]
+            mask_after = epochs[1]["files"].get("mask")
+            site_key = staged.get("site_key", request.tile_id)
+
+        elif request.tile_id_before and request.tile_id_after:
+            conn = get_pg_connection()
+            with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+                cur.execute(
+                    "SELECT tile_id, site_key, file_path, bad_mask_path FROM tiles WHERE tile_id IN (%s, %s);",
+                    (request.tile_id_before, request.tile_id_after)
+                )
+                rows = {r["tile_id"]: r for r in cur.fetchall()}
+            conn.close()
+
+            if request.tile_id_before not in rows or request.tile_id_after not in rows:
+                raise HTTPException(status_code=404, detail="One or both tile IDs not found in database.")
+
+            tif_before = rows[request.tile_id_before]["file_path"]
+            mask_before = rows[request.tile_id_before].get("bad_mask_path")
+            tif_after = rows[request.tile_id_after]["file_path"]
+            mask_after = rows[request.tile_id_after].get("bad_mask_path")
+            site_key = rows[request.tile_id_before].get("site_key", "custom")
+
+        if not tif_before or not tif_after:
+            raise HTTPException(
+                status_code=400,
+                detail="Must provide tile_id, (tile_id_before and tile_id_after), or (tile_before_path and tile_after_path)."
+            )
+
+        out_dir = f"data/runs/prithvi_{site_key}"
+        os.makedirs(out_dir, exist_ok=True)
+
+        report = analyze_prithvi_patches(
+            before_tif=str(tif_before),
+            after_tif=str(tif_after),
+            before_mask_path=str(mask_before) if mask_before else None,
+            after_mask_path=str(mask_after) if mask_after else None,
+            grid_size=request.grid_size,
+            quality_thresh=request.quality_thresh,
+            z_threshold=request.z_threshold,
+            output_dir=out_dir
+        )
+
+        return {
+            "status": "success",
+            "encoder": "Prithvi-EO-2.0-300M",
+            "site_key": site_key,
+            "grid_size": request.grid_size,
+            "total_patches": request.grid_size * request.grid_size,
+            "analysis_image_url": f"/{out_dir}/patch_change_analysis.png",
+            "results_json_url": f"/{out_dir}/patch_change_results.json",
+            "report": report
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Prithvi change detection error: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Prithvi change detection failed: {str(e)}")
+

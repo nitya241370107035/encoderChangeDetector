@@ -1,651 +1,57 @@
 {
-  "before_image": "data/tiles/giga_berlin/2021-02-22/S2A_33UVU_20210222_2_L2A_tile_00001_thumb.jpg",
-  "after_image": "data/tiles/giga_berlin/2023-09-10/S2A_33UVU_20230910_1_L2A_tile_00001_thumb.jpg",
+  "encoder": "Prithvi-EO-2.0-300M",
+  "embedding_dim": 1024,
+  "before_image": "data/tiles/berlin_tesla/2021-02-22/S2A_33UVU_20210222_2_L2A_tile_00002.tif",
+  "after_image": "data/tiles/berlin_tesla/2023-09-10/S2A_33UVU_20230910_1_L2A_tile_00002.tif",
   "grid_size": 8,
   "patch_pixels": [
     64,
     64
   ],
   "total_patches": 64,
-  "valid_patches": 63,
-  "dropped_patches": 1,
+  "valid_patches": 61,
+  "dropped_patches": 3,
   "robust_stats": {
-    "median_distance": 0.0683,
-    "mad": 0.018,
+    "median_distance": 0.009,
+    "mad": 0.0064,
     "z_threshold": 2.0
   },
-  "num_candidates": 10,
+  "num_candidates": 19,
   "candidates": [
     {
-      "patch_id": 5,
-      "row": 0,
-      "col": 5,
-      "bbox": [
-        320,
-        0,
-        384,
-        64
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0178,
-      "bad_frac_t2": 0.0,
-      "distance": 0.21252715587615967,
-      "z_score": 8.01,
-      "is_candidate": true
-    },
-    {
-      "patch_id": 6,
-      "row": 0,
-      "col": 6,
-      "bbox": [
-        384,
-        0,
-        448,
-        64
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.15946775674819946,
-      "z_score": 5.06,
-      "is_candidate": true
-    },
-    {
-      "patch_id": 24,
+      "patch_id": 27,
       "row": 3,
-      "col": 0,
+      "col": 3,
       "bbox": [
-        0,
         192,
-        64,
+        192,
+        256,
         256
       ],
       "is_valid": true,
       "drop_reason": null,
       "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.15364623069763184,
-      "z_score": 4.74,
+      "bad_frac_t2": 0.0454,
+      "distance": 0.09696143865585327,
+      "z_score": 13.69,
       "is_candidate": true
     },
     {
-      "patch_id": 4,
-      "row": 0,
-      "col": 4,
-      "bbox": [
-        256,
-        0,
-        320,
-        64
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0359,
-      "bad_frac_t2": 0.0,
-      "distance": 0.15007168054580688,
-      "z_score": 4.54,
-      "is_candidate": true
-    },
-    {
-      "patch_id": 42,
-      "row": 5,
-      "col": 2,
-      "bbox": [
-        128,
-        320,
-        192,
-        384
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.14807641506195068,
-      "z_score": 4.43,
-      "is_candidate": true
-    },
-    {
-      "patch_id": 3,
-      "row": 0,
-      "col": 3,
-      "bbox": [
-        192,
-        0,
-        256,
-        64
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0046,
-      "distance": 0.13841146230697632,
-      "z_score": 3.89,
-      "is_candidate": true
-    },
-    {
-      "patch_id": 57,
-      "row": 7,
+      "patch_id": 33,
+      "row": 4,
       "col": 1,
       "bbox": [
         64,
-        448,
-        128,
-        512
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.11367517709732056,
-      "z_score": 2.52,
-      "is_candidate": true
-    },
-    {
-      "patch_id": 31,
-      "row": 3,
-      "col": 7,
-      "bbox": [
-        448,
-        192,
-        512,
-        256
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0049,
-      "bad_frac_t2": 0.0,
-      "distance": 0.1128917932510376,
-      "z_score": 2.48,
-      "is_candidate": true
-    },
-    {
-      "patch_id": 13,
-      "row": 1,
-      "col": 5,
-      "bbox": [
-        320,
-        64,
-        384,
-        128
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.10651791095733643,
-      "z_score": 2.12,
-      "is_candidate": true
-    },
-    {
-      "patch_id": 63,
-      "row": 7,
-      "col": 7,
-      "bbox": [
-        448,
-        448,
-        512,
-        512
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.10432696342468262,
-      "z_score": 2.0,
-      "is_candidate": true
-    }
-  ],
-  "all_patches": [
-    {
-      "patch_id": 0,
-      "row": 0,
-      "col": 0,
-      "bbox": [
-        0,
-        0,
-        64,
-        64
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0081,
-      "bad_frac_t2": 0.0103,
-      "distance": 0.03583425283432007,
-      "z_score": -1.8,
-      "is_candidate": false
-    },
-    {
-      "patch_id": 1,
-      "row": 0,
-      "col": 1,
-      "bbox": [
-        64,
-        0,
-        128,
-        64
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.012,
-      "bad_frac_t2": 0.0039,
-      "distance": 0.031830430030822754,
-      "z_score": -2.02,
-      "is_candidate": false
-    },
-    {
-      "patch_id": 2,
-      "row": 0,
-      "col": 2,
-      "bbox": [
-        128,
-        0,
-        192,
-        64
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0015,
-      "bad_frac_t2": 0.0059,
-      "distance": 0.0384976863861084,
-      "z_score": -1.65,
-      "is_candidate": false
-    },
-    {
-      "patch_id": 3,
-      "row": 0,
-      "col": 3,
-      "bbox": [
-        192,
-        0,
-        256,
-        64
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0046,
-      "distance": 0.13841146230697632,
-      "z_score": 3.89,
-      "is_candidate": true
-    },
-    {
-      "patch_id": 4,
-      "row": 0,
-      "col": 4,
-      "bbox": [
-        256,
-        0,
-        320,
-        64
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0359,
-      "bad_frac_t2": 0.0,
-      "distance": 0.15007168054580688,
-      "z_score": 4.54,
-      "is_candidate": true
-    },
-    {
-      "patch_id": 5,
-      "row": 0,
-      "col": 5,
-      "bbox": [
-        320,
-        0,
-        384,
-        64
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0178,
-      "bad_frac_t2": 0.0,
-      "distance": 0.21252715587615967,
-      "z_score": 8.01,
-      "is_candidate": true
-    },
-    {
-      "patch_id": 6,
-      "row": 0,
-      "col": 6,
-      "bbox": [
-        384,
-        0,
-        448,
-        64
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.15946775674819946,
-      "z_score": 5.06,
-      "is_candidate": true
-    },
-    {
-      "patch_id": 7,
-      "row": 0,
-      "col": 7,
-      "bbox": [
-        448,
-        0,
-        512,
-        64
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0012,
-      "distance": 0.0351642370223999,
-      "z_score": -1.84,
-      "is_candidate": false
-    },
-    {
-      "patch_id": 8,
-      "row": 1,
-      "col": 0,
-      "bbox": [
-        0,
-        64,
-        64,
-        128
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0005,
-      "bad_frac_t2": 0.0,
-      "distance": 0.057112276554107666,
-      "z_score": -0.62,
-      "is_candidate": false
-    },
-    {
-      "patch_id": 9,
-      "row": 1,
-      "col": 1,
-      "bbox": [
-        64,
-        64,
-        128,
-        128
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.05094254016876221,
-      "z_score": -0.96,
-      "is_candidate": false
-    },
-    {
-      "patch_id": 10,
-      "row": 1,
-      "col": 2,
-      "bbox": [
-        128,
-        64,
-        192,
-        128
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0286,
-      "bad_frac_t2": 0.0,
-      "distance": 0.06268656253814697,
-      "z_score": -0.31,
-      "is_candidate": false
-    },
-    {
-      "patch_id": 11,
-      "row": 1,
-      "col": 3,
-      "bbox": [
-        192,
-        64,
-        256,
-        128
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.001,
-      "bad_frac_t2": 0.0059,
-      "distance": 0.07313889265060425,
-      "z_score": 0.27,
-      "is_candidate": false
-    },
-    {
-      "patch_id": 12,
-      "row": 1,
-      "col": 4,
-      "bbox": [
-        256,
-        64,
-        320,
-        128
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.05496746301651001,
-      "z_score": -0.74,
-      "is_candidate": false
-    },
-    {
-      "patch_id": 13,
-      "row": 1,
-      "col": 5,
-      "bbox": [
-        320,
-        64,
-        384,
-        128
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.10651791095733643,
-      "z_score": 2.12,
-      "is_candidate": true
-    },
-    {
-      "patch_id": 14,
-      "row": 1,
-      "col": 6,
-      "bbox": [
-        384,
-        64,
-        448,
-        128
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.09774130582809448,
-      "z_score": 1.64,
-      "is_candidate": false
-    },
-    {
-      "patch_id": 15,
-      "row": 1,
-      "col": 7,
-      "bbox": [
-        448,
-        64,
-        512,
-        128
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.05734223127365112,
-      "z_score": -0.61,
-      "is_candidate": false
-    },
-    {
-      "patch_id": 16,
-      "row": 2,
-      "col": 0,
-      "bbox": [
-        0,
-        128,
-        64,
-        192
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0015,
-      "bad_frac_t2": 0.0005,
-      "distance": 0.07592737674713135,
-      "z_score": 0.43,
-      "is_candidate": false
-    },
-    {
-      "patch_id": 17,
-      "row": 2,
-      "col": 1,
-      "bbox": [
-        64,
-        128,
-        128,
-        192
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0002,
-      "bad_frac_t2": 0.0,
-      "distance": 0.0666121244430542,
-      "z_score": -0.09,
-      "is_candidate": false
-    },
-    {
-      "patch_id": 18,
-      "row": 2,
-      "col": 2,
-      "bbox": [
-        128,
-        128,
-        192,
-        192
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0117,
-      "bad_frac_t2": 0.0,
-      "distance": 0.06525659561157227,
-      "z_score": -0.17,
-      "is_candidate": false
-    },
-    {
-      "patch_id": 19,
-      "row": 2,
-      "col": 3,
-      "bbox": [
-        192,
-        128,
-        256,
-        192
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.044319987297058105,
-      "z_score": -1.33,
-      "is_candidate": false
-    },
-    {
-      "patch_id": 20,
-      "row": 2,
-      "col": 4,
-      "bbox": [
         256,
         128,
-        320,
-        192
+        320
       ],
       "is_valid": true,
       "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.07385921478271484,
-      "z_score": 0.31,
-      "is_candidate": false
-    },
-    {
-      "patch_id": 21,
-      "row": 2,
-      "col": 5,
-      "bbox": [
-        320,
-        128,
-        384,
-        192
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.03697395324707031,
-      "z_score": -1.74,
-      "is_candidate": false
-    },
-    {
-      "patch_id": 22,
-      "row": 2,
-      "col": 6,
-      "bbox": [
-        384,
-        128,
-        448,
-        192
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.04915487766265869,
-      "z_score": -1.06,
-      "is_candidate": false
-    },
-    {
-      "patch_id": 23,
-      "row": 2,
-      "col": 7,
-      "bbox": [
-        448,
-        128,
-        512,
-        192
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.07984352111816406,
-      "z_score": 0.64,
-      "is_candidate": false
-    },
-    {
-      "patch_id": 24,
-      "row": 3,
-      "col": 0,
-      "bbox": [
-        0,
-        192,
-        64,
-        256
-      ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.15364623069763184,
-      "z_score": 4.74,
+      "bad_frac_t1": 0.0027,
+      "bad_frac_t2": 0.0742,
+      "distance": 0.07901233434677124,
+      "z_score": 10.9,
       "is_candidate": true
     },
     {
@@ -662,9 +68,153 @@
       "drop_reason": null,
       "bad_frac_t1": 0.0,
       "bad_frac_t2": 0.0,
-      "distance": 0.08706367015838623,
-      "z_score": 1.04,
-      "is_candidate": false
+      "distance": 0.07162356376647949,
+      "z_score": 9.75,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 34,
+      "row": 4,
+      "col": 2,
+      "bbox": [
+        128,
+        256,
+        192,
+        320
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0205,
+      "distance": 0.06297385692596436,
+      "z_score": 8.4,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 9,
+      "row": 1,
+      "col": 1,
+      "bbox": [
+        64,
+        64,
+        128,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.05271649360656738,
+      "z_score": 6.81,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 11,
+      "row": 1,
+      "col": 3,
+      "bbox": [
+        192,
+        64,
+        256,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0032,
+      "bad_frac_t2": 0.0,
+      "distance": 0.04662728309631348,
+      "z_score": 5.86,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 22,
+      "row": 2,
+      "col": 6,
+      "bbox": [
+        384,
+        128,
+        448,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0005,
+      "bad_frac_t2": 0.0,
+      "distance": 0.04543769359588623,
+      "z_score": 5.68,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 1,
+      "row": 0,
+      "col": 1,
+      "bbox": [
+        64,
+        0,
+        128,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0188,
+      "bad_frac_t2": 0.0,
+      "distance": 0.04468679428100586,
+      "z_score": 5.56,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 24,
+      "row": 3,
+      "col": 0,
+      "bbox": [
+        0,
+        192,
+        64,
+        256
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.04435312747955322,
+      "z_score": 5.51,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 8,
+      "row": 1,
+      "col": 0,
+      "bbox": [
+        0,
+        64,
+        64,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.04207390546798706,
+      "z_score": 5.15,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 10,
+      "row": 1,
+      "col": 2,
+      "bbox": [
+        128,
+        64,
+        192,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0339,
+      "bad_frac_t2": 0.0,
+      "distance": 0.03984558582305908,
+      "z_score": 4.8,
+      "is_candidate": true
     },
     {
       "patch_id": 26,
@@ -678,11 +228,625 @@
       ],
       "is_valid": true,
       "drop_reason": null,
-      "bad_frac_t1": 0.0007,
-      "bad_frac_t2": 0.0017,
-      "distance": 0.04122006893157959,
-      "z_score": -1.5,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.03764843940734863,
+      "z_score": 4.46,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 13,
+      "row": 1,
+      "col": 5,
+      "bbox": [
+        320,
+        64,
+        384,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.032928287982940674,
+      "z_score": 3.73,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 12,
+      "row": 1,
+      "col": 4,
+      "bbox": [
+        256,
+        64,
+        320,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0229,
+      "bad_frac_t2": 0.0,
+      "distance": 0.03236675262451172,
+      "z_score": 3.64,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 0,
+      "row": 0,
+      "col": 0,
+      "bbox": [
+        0,
+        0,
+        64,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0002,
+      "bad_frac_t2": 0.0,
+      "distance": 0.03056389093399048,
+      "z_score": 3.36,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 35,
+      "row": 4,
+      "col": 3,
+      "bbox": [
+        192,
+        256,
+        256,
+        320
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0273,
+      "distance": 0.030485153198242188,
+      "z_score": 3.35,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 5,
+      "row": 0,
+      "col": 5,
+      "bbox": [
+        320,
+        0,
+        384,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0085,
+      "bad_frac_t2": 0.0,
+      "distance": 0.029267311096191406,
+      "z_score": 3.16,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 7,
+      "row": 0,
+      "col": 7,
+      "bbox": [
+        448,
+        0,
+        512,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0325,
+      "bad_frac_t2": 0.0,
+      "distance": 0.02707010507583618,
+      "z_score": 2.82,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 14,
+      "row": 1,
+      "col": 6,
+      "bbox": [
+        384,
+        64,
+        448,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0034,
+      "bad_frac_t2": 0.0024,
+      "distance": 0.024153053760528564,
+      "z_score": 2.36,
+      "is_candidate": true
+    }
+  ],
+  "all_patches": [
+    {
+      "patch_id": 0,
+      "row": 0,
+      "col": 0,
+      "bbox": [
+        0,
+        0,
+        64,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0002,
+      "bad_frac_t2": 0.0,
+      "distance": 0.03056389093399048,
+      "z_score": 3.36,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 1,
+      "row": 0,
+      "col": 1,
+      "bbox": [
+        64,
+        0,
+        128,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0188,
+      "bad_frac_t2": 0.0,
+      "distance": 0.04468679428100586,
+      "z_score": 5.56,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 2,
+      "row": 0,
+      "col": 2,
+      "bbox": [
+        128,
+        0,
+        192,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0657,
+      "bad_frac_t2": 0.0,
+      "distance": 0.008646547794342041,
+      "z_score": -0.05,
       "is_candidate": false
+    },
+    {
+      "patch_id": 3,
+      "row": 0,
+      "col": 3,
+      "bbox": [
+        192,
+        0,
+        256,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.1758,
+      "bad_frac_t2": 0.0,
+      "distance": 0.019130289554595947,
+      "z_score": 1.58,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 4,
+      "row": 0,
+      "col": 4,
+      "bbox": [
+        256,
+        0,
+        320,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.1023,
+      "bad_frac_t2": 0.0,
+      "distance": 0.01604825258255005,
+      "z_score": 1.1,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 5,
+      "row": 0,
+      "col": 5,
+      "bbox": [
+        320,
+        0,
+        384,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0085,
+      "bad_frac_t2": 0.0,
+      "distance": 0.029267311096191406,
+      "z_score": 3.16,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 6,
+      "row": 0,
+      "col": 6,
+      "bbox": [
+        384,
+        0,
+        448,
+        64
+      ],
+      "is_valid": false,
+      "drop_reason": "Cloud/Bad pixel (T1: 23.2%, T2: 0.0%)",
+      "bad_frac_t1": 0.2322,
+      "bad_frac_t2": 0.0,
+      "distance": 0.0,
+      "z_score": 0.0,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 7,
+      "row": 0,
+      "col": 7,
+      "bbox": [
+        448,
+        0,
+        512,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0325,
+      "bad_frac_t2": 0.0,
+      "distance": 0.02707010507583618,
+      "z_score": 2.82,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 8,
+      "row": 1,
+      "col": 0,
+      "bbox": [
+        0,
+        64,
+        64,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.04207390546798706,
+      "z_score": 5.15,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 9,
+      "row": 1,
+      "col": 1,
+      "bbox": [
+        64,
+        64,
+        128,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.05271649360656738,
+      "z_score": 6.81,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 10,
+      "row": 1,
+      "col": 2,
+      "bbox": [
+        128,
+        64,
+        192,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0339,
+      "bad_frac_t2": 0.0,
+      "distance": 0.03984558582305908,
+      "z_score": 4.8,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 11,
+      "row": 1,
+      "col": 3,
+      "bbox": [
+        192,
+        64,
+        256,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0032,
+      "bad_frac_t2": 0.0,
+      "distance": 0.04662728309631348,
+      "z_score": 5.86,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 12,
+      "row": 1,
+      "col": 4,
+      "bbox": [
+        256,
+        64,
+        320,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0229,
+      "bad_frac_t2": 0.0,
+      "distance": 0.03236675262451172,
+      "z_score": 3.64,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 13,
+      "row": 1,
+      "col": 5,
+      "bbox": [
+        320,
+        64,
+        384,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.032928287982940674,
+      "z_score": 3.73,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 14,
+      "row": 1,
+      "col": 6,
+      "bbox": [
+        384,
+        64,
+        448,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0034,
+      "bad_frac_t2": 0.0024,
+      "distance": 0.024153053760528564,
+      "z_score": 2.36,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 15,
+      "row": 1,
+      "col": 7,
+      "bbox": [
+        448,
+        64,
+        512,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.011605501174926758,
+      "z_score": 0.41,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 16,
+      "row": 2,
+      "col": 0,
+      "bbox": [
+        0,
+        128,
+        64,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.0061484575271606445,
+      "z_score": -0.44,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 17,
+      "row": 2,
+      "col": 1,
+      "bbox": [
+        64,
+        128,
+        128,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.008970856666564941,
+      "z_score": 0.0,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 18,
+      "row": 2,
+      "col": 2,
+      "bbox": [
+        128,
+        128,
+        192,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.0072487592697143555,
+      "z_score": -0.27,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 19,
+      "row": 2,
+      "col": 3,
+      "bbox": [
+        192,
+        128,
+        256,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.005208492279052734,
+      "z_score": -0.59,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 20,
+      "row": 2,
+      "col": 4,
+      "bbox": [
+        256,
+        128,
+        320,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.0034214258193969727,
+      "z_score": -0.86,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 21,
+      "row": 2,
+      "col": 5,
+      "bbox": [
+        320,
+        128,
+        384,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.013907074928283691,
+      "z_score": 0.77,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 22,
+      "row": 2,
+      "col": 6,
+      "bbox": [
+        384,
+        128,
+        448,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0005,
+      "bad_frac_t2": 0.0,
+      "distance": 0.04543769359588623,
+      "z_score": 5.68,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 23,
+      "row": 2,
+      "col": 7,
+      "bbox": [
+        448,
+        128,
+        512,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.019970595836639404,
+      "z_score": 1.71,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 24,
+      "row": 3,
+      "col": 0,
+      "bbox": [
+        0,
+        192,
+        64,
+        256
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.04435312747955322,
+      "z_score": 5.51,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 25,
+      "row": 3,
+      "col": 1,
+      "bbox": [
+        64,
+        192,
+        128,
+        256
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.07162356376647949,
+      "z_score": 9.75,
+      "is_candidate": true
+    },
+    {
+      "patch_id": 26,
+      "row": 3,
+      "col": 2,
+      "bbox": [
+        128,
+        192,
+        192,
+        256
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.03764843940734863,
+      "z_score": 4.46,
+      "is_candidate": true
     },
     {
       "patch_id": 27,
@@ -697,10 +861,10 @@
       "is_valid": true,
       "drop_reason": null,
       "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.025420188903808594,
-      "z_score": -2.38,
-      "is_candidate": false
+      "bad_frac_t2": 0.0454,
+      "distance": 0.09696143865585327,
+      "z_score": 13.69,
+      "is_candidate": true
     },
     {
       "patch_id": 28,
@@ -716,8 +880,8 @@
       "drop_reason": null,
       "bad_frac_t1": 0.0,
       "bad_frac_t2": 0.0,
-      "distance": 0.06118589639663696,
-      "z_score": -0.39,
+      "distance": 0.0216367244720459,
+      "z_score": 1.97,
       "is_candidate": false
     },
     {
@@ -734,8 +898,8 @@
       "drop_reason": null,
       "bad_frac_t1": 0.0,
       "bad_frac_t2": 0.0,
-      "distance": 0.0642661452293396,
-      "z_score": -0.22,
+      "distance": 0.008171558380126953,
+      "z_score": -0.12,
       "is_candidate": false
     },
     {
@@ -752,8 +916,8 @@
       "drop_reason": null,
       "bad_frac_t1": 0.0,
       "bad_frac_t2": 0.0,
-      "distance": 0.05544954538345337,
-      "z_score": -0.71,
+      "distance": 0.01633375883102417,
+      "z_score": 1.15,
       "is_candidate": false
     },
     {
@@ -768,11 +932,11 @@
       ],
       "is_valid": true,
       "drop_reason": null,
-      "bad_frac_t1": 0.0049,
+      "bad_frac_t1": 0.0,
       "bad_frac_t2": 0.0,
-      "distance": 0.1128917932510376,
-      "z_score": 2.48,
-      "is_candidate": true
+      "distance": 0.015089750289916992,
+      "z_score": 0.95,
+      "is_candidate": false
     },
     {
       "patch_id": 32,
@@ -784,12 +948,12 @@
         64,
         320
       ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.08627516031265259,
-      "z_score": 1.0,
+      "is_valid": false,
+      "drop_reason": "Cloud/Bad pixel (T1: 30.0%, T2: 16.2%)",
+      "bad_frac_t1": 0.3,
+      "bad_frac_t2": 0.1624,
+      "distance": 0.0,
+      "z_score": 0.0,
       "is_candidate": false
     },
     {
@@ -804,11 +968,11 @@
       ],
       "is_valid": true,
       "drop_reason": null,
-      "bad_frac_t1": 0.0005,
-      "bad_frac_t2": 0.002,
-      "distance": 0.06826359033584595,
-      "z_score": 0.0,
-      "is_candidate": false
+      "bad_frac_t1": 0.0027,
+      "bad_frac_t2": 0.0742,
+      "distance": 0.07901233434677124,
+      "z_score": 10.9,
+      "is_candidate": true
     },
     {
       "patch_id": 34,
@@ -823,10 +987,10 @@
       "is_valid": true,
       "drop_reason": null,
       "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.09146833419799805,
-      "z_score": 1.29,
-      "is_candidate": false
+      "bad_frac_t2": 0.0205,
+      "distance": 0.06297385692596436,
+      "z_score": 8.4,
+      "is_candidate": true
     },
     {
       "patch_id": 35,
@@ -841,10 +1005,10 @@
       "is_valid": true,
       "drop_reason": null,
       "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.08466076850891113,
-      "z_score": 0.91,
-      "is_candidate": false
+      "bad_frac_t2": 0.0273,
+      "distance": 0.030485153198242188,
+      "z_score": 3.35,
+      "is_candidate": true
     },
     {
       "patch_id": 36,
@@ -860,8 +1024,8 @@
       "drop_reason": null,
       "bad_frac_t1": 0.0,
       "bad_frac_t2": 0.0,
-      "distance": 0.0628347396850586,
-      "z_score": -0.3,
+      "distance": 0.005604922771453857,
+      "z_score": -0.52,
       "is_candidate": false
     },
     {
@@ -878,8 +1042,8 @@
       "drop_reason": null,
       "bad_frac_t1": 0.0,
       "bad_frac_t2": 0.0,
-      "distance": 0.03813832998275757,
-      "z_score": -1.67,
+      "distance": 0.006020545959472656,
+      "z_score": -0.46,
       "is_candidate": false
     },
     {
@@ -896,8 +1060,8 @@
       "drop_reason": null,
       "bad_frac_t1": 0.0,
       "bad_frac_t2": 0.0,
-      "distance": 0.03321570158004761,
-      "z_score": -1.95,
+      "distance": 0.003784656524658203,
+      "z_score": -0.81,
       "is_candidate": false
     },
     {
@@ -910,12 +1074,12 @@
         512,
         320
       ],
-      "is_valid": false,
-      "drop_reason": "Cloud/Bad pixel (T1: 42.3%, T2: 25.4%)",
-      "bad_frac_t1": 0.4229,
-      "bad_frac_t2": 0.2537,
-      "distance": 0.0,
-      "z_score": 0.0,
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.0031423568725585938,
+      "z_score": -0.91,
       "is_candidate": false
     },
     {
@@ -928,12 +1092,12 @@
         64,
         384
       ],
-      "is_valid": true,
-      "drop_reason": null,
-      "bad_frac_t1": 0.0017,
-      "bad_frac_t2": 0.0,
-      "distance": 0.09111195802688599,
-      "z_score": 1.27,
+      "is_valid": false,
+      "drop_reason": "Cloud/Bad pixel (T1: 37.5%, T2: 11.9%)",
+      "bad_frac_t1": 0.3748,
+      "bad_frac_t2": 0.1191,
+      "distance": 0.0,
+      "z_score": 0.0,
       "is_candidate": false
     },
     {
@@ -948,10 +1112,10 @@
       ],
       "is_valid": true,
       "drop_reason": null,
-      "bad_frac_t1": 0.0007,
-      "bad_frac_t2": 0.0,
-      "distance": 0.07675790786743164,
-      "z_score": 0.47,
+      "bad_frac_t1": 0.0933,
+      "bad_frac_t2": 0.0762,
+      "distance": 0.017051994800567627,
+      "z_score": 1.26,
       "is_candidate": false
     },
     {
@@ -966,11 +1130,11 @@
       ],
       "is_valid": true,
       "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.14807641506195068,
-      "z_score": 4.43,
-      "is_candidate": true
+      "bad_frac_t1": 0.0652,
+      "bad_frac_t2": 0.0498,
+      "distance": 0.00367891788482666,
+      "z_score": -0.82,
+      "is_candidate": false
     },
     {
       "patch_id": 43,
@@ -984,10 +1148,10 @@
       ],
       "is_valid": true,
       "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.09657084941864014,
-      "z_score": 1.57,
+      "bad_frac_t1": 0.0151,
+      "bad_frac_t2": 0.0105,
+      "distance": 0.002519547939300537,
+      "z_score": -1.0,
       "is_candidate": false
     },
     {
@@ -1002,10 +1166,10 @@
       ],
       "is_valid": true,
       "drop_reason": null,
-      "bad_frac_t1": 0.0117,
+      "bad_frac_t1": 0.0,
       "bad_frac_t2": 0.0,
-      "distance": 0.08145129680633545,
-      "z_score": 0.73,
+      "distance": 0.003307819366455078,
+      "z_score": -0.88,
       "is_candidate": false
     },
     {
@@ -1022,7 +1186,7 @@
       "drop_reason": null,
       "bad_frac_t1": 0.0,
       "bad_frac_t2": 0.0,
-      "distance": 0.05629003047943115,
+      "distance": 0.004727423191070557,
       "z_score": -0.66,
       "is_candidate": false
     },
@@ -1040,8 +1204,8 @@
       "drop_reason": null,
       "bad_frac_t1": 0.0,
       "bad_frac_t2": 0.0,
-      "distance": 0.03875076770782471,
-      "z_score": -1.64,
+      "distance": 0.006233274936676025,
+      "z_score": -0.43,
       "is_candidate": false
     },
     {
@@ -1056,10 +1220,10 @@
       ],
       "is_valid": true,
       "drop_reason": null,
-      "bad_frac_t1": 0.1372,
-      "bad_frac_t2": 0.0808,
-      "distance": 0.07806295156478882,
-      "z_score": 0.54,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.0049114227294921875,
+      "z_score": -0.63,
       "is_candidate": false
     },
     {
@@ -1074,10 +1238,10 @@
       ],
       "is_valid": true,
       "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.07525074481964111,
-      "z_score": 0.39,
+      "bad_frac_t1": 0.0178,
+      "bad_frac_t2": 0.0063,
+      "distance": 0.008065342903137207,
+      "z_score": -0.14,
       "is_candidate": false
     },
     {
@@ -1092,10 +1256,10 @@
       ],
       "is_valid": true,
       "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.07423937320709229,
-      "z_score": 0.33,
+      "bad_frac_t1": 0.0579,
+      "bad_frac_t2": 0.0061,
+      "distance": 0.007225215435028076,
+      "z_score": -0.27,
       "is_candidate": false
     },
     {
@@ -1110,10 +1274,10 @@
       ],
       "is_valid": true,
       "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.05063420534133911,
-      "z_score": -0.98,
+      "bad_frac_t1": 0.1023,
+      "bad_frac_t2": 0.0854,
+      "distance": 0.007179677486419678,
+      "z_score": -0.28,
       "is_candidate": false
     },
     {
@@ -1128,10 +1292,10 @@
       ],
       "is_valid": true,
       "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.05825084447860718,
-      "z_score": -0.56,
+      "bad_frac_t1": 0.0806,
+      "bad_frac_t2": 0.0876,
+      "distance": 0.0077852606773376465,
+      "z_score": -0.18,
       "is_candidate": false
     },
     {
@@ -1146,10 +1310,10 @@
       ],
       "is_valid": true,
       "drop_reason": null,
-      "bad_frac_t1": 0.0193,
+      "bad_frac_t1": 0.0,
       "bad_frac_t2": 0.0,
-      "distance": 0.06995773315429688,
-      "z_score": 0.09,
+      "distance": 0.0037412643432617188,
+      "z_score": -0.81,
       "is_candidate": false
     },
     {
@@ -1164,10 +1328,10 @@
       ],
       "is_valid": true,
       "drop_reason": null,
-      "bad_frac_t1": 0.0024,
+      "bad_frac_t1": 0.0,
       "bad_frac_t2": 0.0,
-      "distance": 0.10331475734710693,
-      "z_score": 1.95,
+      "distance": 0.002545177936553955,
+      "z_score": -1.0,
       "is_candidate": false
     },
     {
@@ -1184,8 +1348,8 @@
       "drop_reason": null,
       "bad_frac_t1": 0.0,
       "bad_frac_t2": 0.0,
-      "distance": 0.06358993053436279,
-      "z_score": -0.26,
+      "distance": 0.005802273750305176,
+      "z_score": -0.49,
       "is_candidate": false
     },
     {
@@ -1202,8 +1366,8 @@
       "drop_reason": null,
       "bad_frac_t1": 0.0,
       "bad_frac_t2": 0.0,
-      "distance": 0.05303478240966797,
-      "z_score": -0.85,
+      "distance": 0.0021982192993164062,
+      "z_score": -1.05,
       "is_candidate": false
     },
     {
@@ -1220,8 +1384,8 @@
       "drop_reason": null,
       "bad_frac_t1": 0.0,
       "bad_frac_t2": 0.0,
-      "distance": 0.08090412616729736,
-      "z_score": 0.7,
+      "distance": 0.01590120792388916,
+      "z_score": 1.08,
       "is_candidate": false
     },
     {
@@ -1236,11 +1400,11 @@
       ],
       "is_valid": true,
       "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.11367517709732056,
-      "z_score": 2.52,
-      "is_candidate": true
+      "bad_frac_t1": 0.0002,
+      "bad_frac_t2": 0.0032,
+      "distance": 0.00970911979675293,
+      "z_score": 0.11,
+      "is_candidate": false
     },
     {
       "patch_id": 58,
@@ -1254,10 +1418,10 @@
       ],
       "is_valid": true,
       "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.024108529090881348,
-      "z_score": -2.45,
+      "bad_frac_t1": 0.0767,
+      "bad_frac_t2": 0.0845,
+      "distance": 0.0033971667289733887,
+      "z_score": -0.87,
       "is_candidate": false
     },
     {
@@ -1272,10 +1436,10 @@
       ],
       "is_valid": true,
       "drop_reason": null,
-      "bad_frac_t1": 0.0,
-      "bad_frac_t2": 0.0,
-      "distance": 0.019733190536499023,
-      "z_score": -2.69,
+      "bad_frac_t1": 0.0459,
+      "bad_frac_t2": 0.0383,
+      "distance": 0.0032553672790527344,
+      "z_score": -0.89,
       "is_candidate": false
     },
     {
@@ -1290,10 +1454,10 @@
       ],
       "is_valid": true,
       "drop_reason": null,
-      "bad_frac_t1": 0.0066,
+      "bad_frac_t1": 0.0,
       "bad_frac_t2": 0.0,
-      "distance": 0.07821911573410034,
-      "z_score": 0.55,
+      "distance": 0.004552602767944336,
+      "z_score": -0.69,
       "is_candidate": false
     },
     {
@@ -1310,8 +1474,8 @@
       "drop_reason": null,
       "bad_frac_t1": 0.0,
       "bad_frac_t2": 0.0,
-      "distance": 0.0903882384300232,
-      "z_score": 1.23,
+      "distance": 0.002041161060333252,
+      "z_score": -1.08,
       "is_candidate": false
     },
     {
@@ -1328,8 +1492,8 @@
       "drop_reason": null,
       "bad_frac_t1": 0.0,
       "bad_frac_t2": 0.0,
-      "distance": 0.05727112293243408,
-      "z_score": -0.61,
+      "distance": 0.0021352171897888184,
+      "z_score": -1.06,
       "is_candidate": false
     },
     {
@@ -1346,9 +1510,9 @@
       "drop_reason": null,
       "bad_frac_t1": 0.0,
       "bad_frac_t2": 0.0,
-      "distance": 0.10432696342468262,
-      "z_score": 2.0,
-      "is_candidate": true
+      "distance": 0.0070108771324157715,
+      "z_score": -0.31,
+      "is_candidate": false
     }
   ]
 }
