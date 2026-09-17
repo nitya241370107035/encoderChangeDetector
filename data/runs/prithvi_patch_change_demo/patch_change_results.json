@@ -1,0 +1,1936 @@
+{
+  "encoder": "Prithvi-EO-2.0-300M",
+  "embedding_dim": 1024,
+  "before_image": "data/tiles/berlin_tesla/2021-02-22/S2A_33UVU_20210222_2_L2A_tile_00002.tif",
+  "after_image": "data/tiles/berlin_tesla/2023-09-10/S2A_33UVU_20230910_1_L2A_tile_00002.tif",
+  "grid_size": 8,
+  "patch_pixels": [
+    64,
+    64
+  ],
+  "total_patches": 64,
+  "valid_patches": 61,
+  "dropped_patches": 3,
+  "robust_stats": {
+    "median_distance": 0.009,
+    "mad": 0.0064,
+    "z_threshold": 2.0
+  },
+  "num_candidates": 19,
+  "candidates": [
+    {
+      "patch_id": 27,
+      "row": 3,
+      "col": 3,
+      "bbox": [
+        192,
+        192,
+        256,
+        256
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0454,
+      "distance": 0.09695708751678467,
+      "z_score": 13.69,
+      "is_candidate": true,
+      "predicted_transition": "Wetland & Ecological Succession",
+      "confidence": 98.0,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 0.1,
+        "Urban / Infrastructure Expansion": 0.2,
+        "Land Inundation / Flooding / Submergence": 0.3,
+        "Afforestation / Revegetation / Greening": 0.3,
+        "Deforestation / Demolition / Land Clearing": 0.5,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 0.5,
+        "Wetland & Ecological Succession": 98.0
+      }
+    },
+    {
+      "patch_id": 33,
+      "row": 4,
+      "col": 1,
+      "bbox": [
+        64,
+        256,
+        128,
+        320
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0027,
+      "bad_frac_t2": 0.0742,
+      "distance": 0.07901215553283691,
+      "z_score": 10.9,
+      "is_candidate": true,
+      "predicted_transition": "Wetland & Ecological Succession",
+      "confidence": 74.2,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 0.2,
+        "Urban / Infrastructure Expansion": 1.4,
+        "Land Inundation / Flooding / Submergence": 1.3,
+        "Afforestation / Revegetation / Greening": 0.9,
+        "Deforestation / Demolition / Land Clearing": 5.4,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 16.6,
+        "Wetland & Ecological Succession": 74.2
+      }
+    },
+    {
+      "patch_id": 25,
+      "row": 3,
+      "col": 1,
+      "bbox": [
+        64,
+        192,
+        128,
+        256
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.07162153720855713,
+      "z_score": 9.75,
+      "is_candidate": true,
+      "predicted_transition": "Wetland & Ecological Succession",
+      "confidence": 95.4,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 0.3,
+        "Urban / Infrastructure Expansion": 0.3,
+        "Land Inundation / Flooding / Submergence": 0.5,
+        "Afforestation / Revegetation / Greening": 0.6,
+        "Deforestation / Demolition / Land Clearing": 0.8,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 2.1,
+        "Wetland & Ecological Succession": 95.4
+      }
+    },
+    {
+      "patch_id": 34,
+      "row": 4,
+      "col": 2,
+      "bbox": [
+        128,
+        256,
+        192,
+        320
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0205,
+      "distance": 0.06296634674072266,
+      "z_score": 8.4,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 66.5,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 0.6,
+        "Urban / Infrastructure Expansion": 0.8,
+        "Land Inundation / Flooding / Submergence": 1.3,
+        "Afforestation / Revegetation / Greening": 0.9,
+        "Deforestation / Demolition / Land Clearing": 1.6,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 66.5,
+        "Wetland & Ecological Succession": 28.3
+      }
+    },
+    {
+      "patch_id": 9,
+      "row": 1,
+      "col": 1,
+      "bbox": [
+        64,
+        64,
+        128,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.05271482467651367,
+      "z_score": 6.81,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 68.8,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 24.0,
+        "Urban / Infrastructure Expansion": 0.8,
+        "Land Inundation / Flooding / Submergence": 3.6,
+        "Afforestation / Revegetation / Greening": 1.8,
+        "Deforestation / Demolition / Land Clearing": 0.3,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 68.8,
+        "Wetland & Ecological Succession": 0.7
+      }
+    },
+    {
+      "patch_id": 11,
+      "row": 1,
+      "col": 3,
+      "bbox": [
+        192,
+        64,
+        256,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0032,
+      "bad_frac_t2": 0.0,
+      "distance": 0.046627163887023926,
+      "z_score": 5.86,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 91.9,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 3.8,
+        "Urban / Infrastructure Expansion": 0.4,
+        "Land Inundation / Flooding / Submergence": 2.8,
+        "Afforestation / Revegetation / Greening": 0.7,
+        "Deforestation / Demolition / Land Clearing": 0.2,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 91.9,
+        "Wetland & Ecological Succession": 0.3
+      }
+    },
+    {
+      "patch_id": 22,
+      "row": 2,
+      "col": 6,
+      "bbox": [
+        384,
+        128,
+        448,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0005,
+      "bad_frac_t2": 0.0,
+      "distance": 0.045439064502716064,
+      "z_score": 5.68,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 68.8,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 24.3,
+        "Urban / Infrastructure Expansion": 0.9,
+        "Land Inundation / Flooding / Submergence": 3.3,
+        "Afforestation / Revegetation / Greening": 1.7,
+        "Deforestation / Demolition / Land Clearing": 0.3,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 68.8,
+        "Wetland & Ecological Succession": 0.8
+      }
+    },
+    {
+      "patch_id": 1,
+      "row": 0,
+      "col": 1,
+      "bbox": [
+        64,
+        0,
+        128,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0188,
+      "bad_frac_t2": 0.0,
+      "distance": 0.04468482732772827,
+      "z_score": 5.56,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 93.5,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 3.2,
+        "Urban / Infrastructure Expansion": 0.4,
+        "Land Inundation / Flooding / Submergence": 1.8,
+        "Afforestation / Revegetation / Greening": 0.6,
+        "Deforestation / Demolition / Land Clearing": 0.2,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 93.5,
+        "Wetland & Ecological Succession": 0.3
+      }
+    },
+    {
+      "patch_id": 24,
+      "row": 3,
+      "col": 0,
+      "bbox": [
+        0,
+        192,
+        64,
+        256
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.044355690479278564,
+      "z_score": 5.51,
+      "is_candidate": true,
+      "predicted_transition": "Wetland & Ecological Succession",
+      "confidence": 89.3,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 0.5,
+        "Urban / Infrastructure Expansion": 0.4,
+        "Land Inundation / Flooding / Submergence": 0.8,
+        "Afforestation / Revegetation / Greening": 1.0,
+        "Deforestation / Demolition / Land Clearing": 1.2,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 6.8,
+        "Wetland & Ecological Succession": 89.3
+      }
+    },
+    {
+      "patch_id": 8,
+      "row": 1,
+      "col": 0,
+      "bbox": [
+        0,
+        64,
+        64,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.04207116365432739,
+      "z_score": 5.15,
+      "is_candidate": true,
+      "predicted_transition": "Water Reclamation / Coastal Infrastructure",
+      "confidence": 47.2,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 47.2,
+        "Urban / Infrastructure Expansion": 1.0,
+        "Land Inundation / Flooding / Submergence": 3.9,
+        "Afforestation / Revegetation / Greening": 2.3,
+        "Deforestation / Demolition / Land Clearing": 0.3,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 44.4,
+        "Wetland & Ecological Succession": 0.9
+      }
+    },
+    {
+      "patch_id": 10,
+      "row": 1,
+      "col": 2,
+      "bbox": [
+        128,
+        64,
+        192,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0339,
+      "bad_frac_t2": 0.0,
+      "distance": 0.03984344005584717,
+      "z_score": 4.81,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 88.7,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 6.3,
+        "Urban / Infrastructure Expansion": 0.6,
+        "Land Inundation / Flooding / Submergence": 3.1,
+        "Afforestation / Revegetation / Greening": 0.8,
+        "Deforestation / Demolition / Land Clearing": 0.2,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 88.7,
+        "Wetland & Ecological Succession": 0.3
+      }
+    },
+    {
+      "patch_id": 26,
+      "row": 3,
+      "col": 2,
+      "bbox": [
+        128,
+        192,
+        192,
+        256
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.03764444589614868,
+      "z_score": 4.46,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 89.7,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 0.6,
+        "Urban / Infrastructure Expansion": 0.4,
+        "Land Inundation / Flooding / Submergence": 1.1,
+        "Afforestation / Revegetation / Greening": 0.6,
+        "Deforestation / Demolition / Land Clearing": 0.9,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 89.7,
+        "Wetland & Ecological Succession": 6.7
+      }
+    },
+    {
+      "patch_id": 13,
+      "row": 1,
+      "col": 5,
+      "bbox": [
+        320,
+        64,
+        384,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.03292733430862427,
+      "z_score": 3.73,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 67.3,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 26.4,
+        "Urban / Infrastructure Expansion": 1.0,
+        "Land Inundation / Flooding / Submergence": 2.8,
+        "Afforestation / Revegetation / Greening": 1.4,
+        "Deforestation / Demolition / Land Clearing": 0.3,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 67.3,
+        "Wetland & Ecological Succession": 0.8
+      }
+    },
+    {
+      "patch_id": 12,
+      "row": 1,
+      "col": 4,
+      "bbox": [
+        256,
+        64,
+        320,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0229,
+      "bad_frac_t2": 0.0,
+      "distance": 0.03236496448516846,
+      "z_score": 3.64,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 83.1,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 10.5,
+        "Urban / Infrastructure Expansion": 0.7,
+        "Land Inundation / Flooding / Submergence": 3.8,
+        "Afforestation / Revegetation / Greening": 1.3,
+        "Deforestation / Demolition / Land Clearing": 0.2,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 83.1,
+        "Wetland & Ecological Succession": 0.4
+      }
+    },
+    {
+      "patch_id": 0,
+      "row": 0,
+      "col": 0,
+      "bbox": [
+        0,
+        0,
+        64,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0002,
+      "bad_frac_t2": 0.0,
+      "distance": 0.030563950538635254,
+      "z_score": 3.36,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 47.4,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 44.1,
+        "Urban / Infrastructure Expansion": 1.0,
+        "Land Inundation / Flooding / Submergence": 4.5,
+        "Afforestation / Revegetation / Greening": 1.8,
+        "Deforestation / Demolition / Land Clearing": 0.3,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 47.4,
+        "Wetland & Ecological Succession": 0.9
+      }
+    },
+    {
+      "patch_id": 35,
+      "row": 4,
+      "col": 3,
+      "bbox": [
+        192,
+        256,
+        256,
+        320
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0273,
+      "distance": 0.03048121929168701,
+      "z_score": 3.35,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 92.8,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 2.1,
+        "Urban / Infrastructure Expansion": 0.6,
+        "Land Inundation / Flooding / Submergence": 0.4,
+        "Afforestation / Revegetation / Greening": 0.6,
+        "Deforestation / Demolition / Land Clearing": 0.8,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 92.8,
+        "Wetland & Ecological Succession": 2.6
+      }
+    },
+    {
+      "patch_id": 5,
+      "row": 0,
+      "col": 5,
+      "bbox": [
+        320,
+        0,
+        384,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0085,
+      "bad_frac_t2": 0.0,
+      "distance": 0.029264450073242188,
+      "z_score": 3.16,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 86.2,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 6.5,
+        "Urban / Infrastructure Expansion": 0.5,
+        "Land Inundation / Flooding / Submergence": 5.4,
+        "Afforestation / Revegetation / Greening": 0.9,
+        "Deforestation / Demolition / Land Clearing": 0.2,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 86.2,
+        "Wetland & Ecological Succession": 0.3
+      }
+    },
+    {
+      "patch_id": 7,
+      "row": 0,
+      "col": 7,
+      "bbox": [
+        448,
+        0,
+        512,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0325,
+      "bad_frac_t2": 0.0,
+      "distance": 0.02706146240234375,
+      "z_score": 2.82,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 98.4,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 0.3,
+        "Urban / Infrastructure Expansion": 0.3,
+        "Land Inundation / Flooding / Submergence": 0.3,
+        "Afforestation / Revegetation / Greening": 0.3,
+        "Deforestation / Demolition / Land Clearing": 0.2,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 98.4,
+        "Wetland & Ecological Succession": 0.2
+      }
+    },
+    {
+      "patch_id": 14,
+      "row": 1,
+      "col": 6,
+      "bbox": [
+        384,
+        64,
+        448,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0034,
+      "bad_frac_t2": 0.0024,
+      "distance": 0.024151623249053955,
+      "z_score": 2.36,
+      "is_candidate": true,
+      "predicted_transition": "Water Reclamation / Coastal Infrastructure",
+      "confidence": 61.7,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 61.7,
+        "Urban / Infrastructure Expansion": 1.3,
+        "Land Inundation / Flooding / Submergence": 2.3,
+        "Afforestation / Revegetation / Greening": 1.8,
+        "Deforestation / Demolition / Land Clearing": 0.3,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 31.7,
+        "Wetland & Ecological Succession": 0.9
+      }
+    }
+  ],
+  "all_patches": [
+    {
+      "patch_id": 0,
+      "row": 0,
+      "col": 0,
+      "bbox": [
+        0,
+        0,
+        64,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0002,
+      "bad_frac_t2": 0.0,
+      "distance": 0.030563950538635254,
+      "z_score": 3.36,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 47.4,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 44.1,
+        "Urban / Infrastructure Expansion": 1.0,
+        "Land Inundation / Flooding / Submergence": 4.5,
+        "Afforestation / Revegetation / Greening": 1.8,
+        "Deforestation / Demolition / Land Clearing": 0.3,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 47.4,
+        "Wetland & Ecological Succession": 0.9
+      }
+    },
+    {
+      "patch_id": 1,
+      "row": 0,
+      "col": 1,
+      "bbox": [
+        64,
+        0,
+        128,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0188,
+      "bad_frac_t2": 0.0,
+      "distance": 0.04468482732772827,
+      "z_score": 5.56,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 93.5,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 3.2,
+        "Urban / Infrastructure Expansion": 0.4,
+        "Land Inundation / Flooding / Submergence": 1.8,
+        "Afforestation / Revegetation / Greening": 0.6,
+        "Deforestation / Demolition / Land Clearing": 0.2,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 93.5,
+        "Wetland & Ecological Succession": 0.3
+      }
+    },
+    {
+      "patch_id": 2,
+      "row": 0,
+      "col": 2,
+      "bbox": [
+        128,
+        0,
+        192,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0657,
+      "bad_frac_t2": 0.0,
+      "distance": 0.00864410400390625,
+      "z_score": -0.05,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 3,
+      "row": 0,
+      "col": 3,
+      "bbox": [
+        192,
+        0,
+        256,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.1758,
+      "bad_frac_t2": 0.0,
+      "distance": 0.019112348556518555,
+      "z_score": 1.58,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 4,
+      "row": 0,
+      "col": 4,
+      "bbox": [
+        256,
+        0,
+        320,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.1023,
+      "bad_frac_t2": 0.0,
+      "distance": 0.01604139804840088,
+      "z_score": 1.1,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 5,
+      "row": 0,
+      "col": 5,
+      "bbox": [
+        320,
+        0,
+        384,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0085,
+      "bad_frac_t2": 0.0,
+      "distance": 0.029264450073242188,
+      "z_score": 3.16,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 86.2,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 6.5,
+        "Urban / Infrastructure Expansion": 0.5,
+        "Land Inundation / Flooding / Submergence": 5.4,
+        "Afforestation / Revegetation / Greening": 0.9,
+        "Deforestation / Demolition / Land Clearing": 0.2,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 86.2,
+        "Wetland & Ecological Succession": 0.3
+      }
+    },
+    {
+      "patch_id": 6,
+      "row": 0,
+      "col": 6,
+      "bbox": [
+        384,
+        0,
+        448,
+        64
+      ],
+      "is_valid": false,
+      "drop_reason": "Cloud/Bad pixel (T1: 23.2%, T2: 0.0%)",
+      "bad_frac_t1": 0.2322,
+      "bad_frac_t2": 0.0,
+      "distance": 0.0,
+      "z_score": 0.0,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 7,
+      "row": 0,
+      "col": 7,
+      "bbox": [
+        448,
+        0,
+        512,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0325,
+      "bad_frac_t2": 0.0,
+      "distance": 0.02706146240234375,
+      "z_score": 2.82,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 98.4,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 0.3,
+        "Urban / Infrastructure Expansion": 0.3,
+        "Land Inundation / Flooding / Submergence": 0.3,
+        "Afforestation / Revegetation / Greening": 0.3,
+        "Deforestation / Demolition / Land Clearing": 0.2,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 98.4,
+        "Wetland & Ecological Succession": 0.2
+      }
+    },
+    {
+      "patch_id": 8,
+      "row": 1,
+      "col": 0,
+      "bbox": [
+        0,
+        64,
+        64,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.04207116365432739,
+      "z_score": 5.15,
+      "is_candidate": true,
+      "predicted_transition": "Water Reclamation / Coastal Infrastructure",
+      "confidence": 47.2,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 47.2,
+        "Urban / Infrastructure Expansion": 1.0,
+        "Land Inundation / Flooding / Submergence": 3.9,
+        "Afforestation / Revegetation / Greening": 2.3,
+        "Deforestation / Demolition / Land Clearing": 0.3,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 44.4,
+        "Wetland & Ecological Succession": 0.9
+      }
+    },
+    {
+      "patch_id": 9,
+      "row": 1,
+      "col": 1,
+      "bbox": [
+        64,
+        64,
+        128,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.05271482467651367,
+      "z_score": 6.81,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 68.8,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 24.0,
+        "Urban / Infrastructure Expansion": 0.8,
+        "Land Inundation / Flooding / Submergence": 3.6,
+        "Afforestation / Revegetation / Greening": 1.8,
+        "Deforestation / Demolition / Land Clearing": 0.3,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 68.8,
+        "Wetland & Ecological Succession": 0.7
+      }
+    },
+    {
+      "patch_id": 10,
+      "row": 1,
+      "col": 2,
+      "bbox": [
+        128,
+        64,
+        192,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0339,
+      "bad_frac_t2": 0.0,
+      "distance": 0.03984344005584717,
+      "z_score": 4.81,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 88.7,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 6.3,
+        "Urban / Infrastructure Expansion": 0.6,
+        "Land Inundation / Flooding / Submergence": 3.1,
+        "Afforestation / Revegetation / Greening": 0.8,
+        "Deforestation / Demolition / Land Clearing": 0.2,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 88.7,
+        "Wetland & Ecological Succession": 0.3
+      }
+    },
+    {
+      "patch_id": 11,
+      "row": 1,
+      "col": 3,
+      "bbox": [
+        192,
+        64,
+        256,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0032,
+      "bad_frac_t2": 0.0,
+      "distance": 0.046627163887023926,
+      "z_score": 5.86,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 91.9,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 3.8,
+        "Urban / Infrastructure Expansion": 0.4,
+        "Land Inundation / Flooding / Submergence": 2.8,
+        "Afforestation / Revegetation / Greening": 0.7,
+        "Deforestation / Demolition / Land Clearing": 0.2,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 91.9,
+        "Wetland & Ecological Succession": 0.3
+      }
+    },
+    {
+      "patch_id": 12,
+      "row": 1,
+      "col": 4,
+      "bbox": [
+        256,
+        64,
+        320,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0229,
+      "bad_frac_t2": 0.0,
+      "distance": 0.03236496448516846,
+      "z_score": 3.64,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 83.1,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 10.5,
+        "Urban / Infrastructure Expansion": 0.7,
+        "Land Inundation / Flooding / Submergence": 3.8,
+        "Afforestation / Revegetation / Greening": 1.3,
+        "Deforestation / Demolition / Land Clearing": 0.2,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 83.1,
+        "Wetland & Ecological Succession": 0.4
+      }
+    },
+    {
+      "patch_id": 13,
+      "row": 1,
+      "col": 5,
+      "bbox": [
+        320,
+        64,
+        384,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.03292733430862427,
+      "z_score": 3.73,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 67.3,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 26.4,
+        "Urban / Infrastructure Expansion": 1.0,
+        "Land Inundation / Flooding / Submergence": 2.8,
+        "Afforestation / Revegetation / Greening": 1.4,
+        "Deforestation / Demolition / Land Clearing": 0.3,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 67.3,
+        "Wetland & Ecological Succession": 0.8
+      }
+    },
+    {
+      "patch_id": 14,
+      "row": 1,
+      "col": 6,
+      "bbox": [
+        384,
+        64,
+        448,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0034,
+      "bad_frac_t2": 0.0024,
+      "distance": 0.024151623249053955,
+      "z_score": 2.36,
+      "is_candidate": true,
+      "predicted_transition": "Water Reclamation / Coastal Infrastructure",
+      "confidence": 61.7,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 61.7,
+        "Urban / Infrastructure Expansion": 1.3,
+        "Land Inundation / Flooding / Submergence": 2.3,
+        "Afforestation / Revegetation / Greening": 1.8,
+        "Deforestation / Demolition / Land Clearing": 0.3,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 31.7,
+        "Wetland & Ecological Succession": 0.9
+      }
+    },
+    {
+      "patch_id": 15,
+      "row": 1,
+      "col": 7,
+      "bbox": [
+        448,
+        64,
+        512,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.011605143547058105,
+      "z_score": 0.41,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 16,
+      "row": 2,
+      "col": 0,
+      "bbox": [
+        0,
+        128,
+        64,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.0061492919921875,
+      "z_score": -0.44,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 17,
+      "row": 2,
+      "col": 1,
+      "bbox": [
+        64,
+        128,
+        128,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.008970499038696289,
+      "z_score": 0.0,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 18,
+      "row": 2,
+      "col": 2,
+      "bbox": [
+        128,
+        128,
+        192,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.007249236106872559,
+      "z_score": -0.27,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 19,
+      "row": 2,
+      "col": 3,
+      "bbox": [
+        192,
+        128,
+        256,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.00520855188369751,
+      "z_score": -0.59,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 20,
+      "row": 2,
+      "col": 4,
+      "bbox": [
+        256,
+        128,
+        320,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.003421783447265625,
+      "z_score": -0.86,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 21,
+      "row": 2,
+      "col": 5,
+      "bbox": [
+        320,
+        128,
+        384,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.013904929161071777,
+      "z_score": 0.77,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 22,
+      "row": 2,
+      "col": 6,
+      "bbox": [
+        384,
+        128,
+        448,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0005,
+      "bad_frac_t2": 0.0,
+      "distance": 0.045439064502716064,
+      "z_score": 5.68,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 68.8,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 24.3,
+        "Urban / Infrastructure Expansion": 0.9,
+        "Land Inundation / Flooding / Submergence": 3.3,
+        "Afforestation / Revegetation / Greening": 1.7,
+        "Deforestation / Demolition / Land Clearing": 0.3,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 68.8,
+        "Wetland & Ecological Succession": 0.8
+      }
+    },
+    {
+      "patch_id": 23,
+      "row": 2,
+      "col": 7,
+      "bbox": [
+        448,
+        128,
+        512,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.01996922492980957,
+      "z_score": 1.71,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 24,
+      "row": 3,
+      "col": 0,
+      "bbox": [
+        0,
+        192,
+        64,
+        256
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.044355690479278564,
+      "z_score": 5.51,
+      "is_candidate": true,
+      "predicted_transition": "Wetland & Ecological Succession",
+      "confidence": 89.3,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 0.5,
+        "Urban / Infrastructure Expansion": 0.4,
+        "Land Inundation / Flooding / Submergence": 0.8,
+        "Afforestation / Revegetation / Greening": 1.0,
+        "Deforestation / Demolition / Land Clearing": 1.2,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 6.8,
+        "Wetland & Ecological Succession": 89.3
+      }
+    },
+    {
+      "patch_id": 25,
+      "row": 3,
+      "col": 1,
+      "bbox": [
+        64,
+        192,
+        128,
+        256
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.07162153720855713,
+      "z_score": 9.75,
+      "is_candidate": true,
+      "predicted_transition": "Wetland & Ecological Succession",
+      "confidence": 95.4,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 0.3,
+        "Urban / Infrastructure Expansion": 0.3,
+        "Land Inundation / Flooding / Submergence": 0.5,
+        "Afforestation / Revegetation / Greening": 0.6,
+        "Deforestation / Demolition / Land Clearing": 0.8,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 2.1,
+        "Wetland & Ecological Succession": 95.4
+      }
+    },
+    {
+      "patch_id": 26,
+      "row": 3,
+      "col": 2,
+      "bbox": [
+        128,
+        192,
+        192,
+        256
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.03764444589614868,
+      "z_score": 4.46,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 89.7,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 0.6,
+        "Urban / Infrastructure Expansion": 0.4,
+        "Land Inundation / Flooding / Submergence": 1.1,
+        "Afforestation / Revegetation / Greening": 0.6,
+        "Deforestation / Demolition / Land Clearing": 0.9,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 89.7,
+        "Wetland & Ecological Succession": 6.7
+      }
+    },
+    {
+      "patch_id": 27,
+      "row": 3,
+      "col": 3,
+      "bbox": [
+        192,
+        192,
+        256,
+        256
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0454,
+      "distance": 0.09695708751678467,
+      "z_score": 13.69,
+      "is_candidate": true,
+      "predicted_transition": "Wetland & Ecological Succession",
+      "confidence": 98.0,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 0.1,
+        "Urban / Infrastructure Expansion": 0.2,
+        "Land Inundation / Flooding / Submergence": 0.3,
+        "Afforestation / Revegetation / Greening": 0.3,
+        "Deforestation / Demolition / Land Clearing": 0.5,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 0.5,
+        "Wetland & Ecological Succession": 98.0
+      }
+    },
+    {
+      "patch_id": 28,
+      "row": 3,
+      "col": 4,
+      "bbox": [
+        256,
+        192,
+        320,
+        256
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.021635770797729492,
+      "z_score": 1.97,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 29,
+      "row": 3,
+      "col": 5,
+      "bbox": [
+        320,
+        192,
+        384,
+        256
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.00817251205444336,
+      "z_score": -0.12,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 30,
+      "row": 3,
+      "col": 6,
+      "bbox": [
+        384,
+        192,
+        448,
+        256
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.01633286476135254,
+      "z_score": 1.15,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 31,
+      "row": 3,
+      "col": 7,
+      "bbox": [
+        448,
+        192,
+        512,
+        256
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.015089929103851318,
+      "z_score": 0.95,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 32,
+      "row": 4,
+      "col": 0,
+      "bbox": [
+        0,
+        256,
+        64,
+        320
+      ],
+      "is_valid": false,
+      "drop_reason": "Cloud/Bad pixel (T1: 30.0%, T2: 16.2%)",
+      "bad_frac_t1": 0.3,
+      "bad_frac_t2": 0.1624,
+      "distance": 0.0,
+      "z_score": 0.0,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 33,
+      "row": 4,
+      "col": 1,
+      "bbox": [
+        64,
+        256,
+        128,
+        320
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0027,
+      "bad_frac_t2": 0.0742,
+      "distance": 0.07901215553283691,
+      "z_score": 10.9,
+      "is_candidate": true,
+      "predicted_transition": "Wetland & Ecological Succession",
+      "confidence": 74.2,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 0.2,
+        "Urban / Infrastructure Expansion": 1.4,
+        "Land Inundation / Flooding / Submergence": 1.3,
+        "Afforestation / Revegetation / Greening": 0.9,
+        "Deforestation / Demolition / Land Clearing": 5.4,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 16.6,
+        "Wetland & Ecological Succession": 74.2
+      }
+    },
+    {
+      "patch_id": 34,
+      "row": 4,
+      "col": 2,
+      "bbox": [
+        128,
+        256,
+        192,
+        320
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0205,
+      "distance": 0.06296634674072266,
+      "z_score": 8.4,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 66.5,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 0.6,
+        "Urban / Infrastructure Expansion": 0.8,
+        "Land Inundation / Flooding / Submergence": 1.3,
+        "Afforestation / Revegetation / Greening": 0.9,
+        "Deforestation / Demolition / Land Clearing": 1.6,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 66.5,
+        "Wetland & Ecological Succession": 28.3
+      }
+    },
+    {
+      "patch_id": 35,
+      "row": 4,
+      "col": 3,
+      "bbox": [
+        192,
+        256,
+        256,
+        320
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0273,
+      "distance": 0.03048121929168701,
+      "z_score": 3.35,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 92.8,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 2.1,
+        "Urban / Infrastructure Expansion": 0.6,
+        "Land Inundation / Flooding / Submergence": 0.4,
+        "Afforestation / Revegetation / Greening": 0.6,
+        "Deforestation / Demolition / Land Clearing": 0.8,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 92.8,
+        "Wetland & Ecological Succession": 2.6
+      }
+    },
+    {
+      "patch_id": 36,
+      "row": 4,
+      "col": 4,
+      "bbox": [
+        256,
+        256,
+        320,
+        320
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.0056053996086120605,
+      "z_score": -0.52,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 37,
+      "row": 4,
+      "col": 5,
+      "bbox": [
+        320,
+        256,
+        384,
+        320
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.006020069122314453,
+      "z_score": -0.46,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 38,
+      "row": 4,
+      "col": 6,
+      "bbox": [
+        384,
+        256,
+        448,
+        320
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.0037848353385925293,
+      "z_score": -0.81,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 39,
+      "row": 4,
+      "col": 7,
+      "bbox": [
+        448,
+        256,
+        512,
+        320
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.00314176082611084,
+      "z_score": -0.91,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 40,
+      "row": 5,
+      "col": 0,
+      "bbox": [
+        0,
+        320,
+        64,
+        384
+      ],
+      "is_valid": false,
+      "drop_reason": "Cloud/Bad pixel (T1: 37.5%, T2: 11.9%)",
+      "bad_frac_t1": 0.3748,
+      "bad_frac_t2": 0.1191,
+      "distance": 0.0,
+      "z_score": 0.0,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 41,
+      "row": 5,
+      "col": 1,
+      "bbox": [
+        64,
+        320,
+        128,
+        384
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0933,
+      "bad_frac_t2": 0.0762,
+      "distance": 0.017051279544830322,
+      "z_score": 1.26,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 42,
+      "row": 5,
+      "col": 2,
+      "bbox": [
+        128,
+        320,
+        192,
+        384
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0652,
+      "bad_frac_t2": 0.0498,
+      "distance": 0.0036794543266296387,
+      "z_score": -0.82,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 43,
+      "row": 5,
+      "col": 3,
+      "bbox": [
+        192,
+        320,
+        256,
+        384
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0151,
+      "bad_frac_t2": 0.0105,
+      "distance": 0.002519369125366211,
+      "z_score": -1.0,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 44,
+      "row": 5,
+      "col": 4,
+      "bbox": [
+        256,
+        320,
+        320,
+        384
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.003307819366455078,
+      "z_score": -0.88,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 45,
+      "row": 5,
+      "col": 5,
+      "bbox": [
+        320,
+        320,
+        384,
+        384
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.00472712516784668,
+      "z_score": -0.66,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 46,
+      "row": 5,
+      "col": 6,
+      "bbox": [
+        384,
+        320,
+        448,
+        384
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.006233572959899902,
+      "z_score": -0.43,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 47,
+      "row": 5,
+      "col": 7,
+      "bbox": [
+        448,
+        320,
+        512,
+        384
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.004909932613372803,
+      "z_score": -0.63,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 48,
+      "row": 6,
+      "col": 0,
+      "bbox": [
+        0,
+        384,
+        64,
+        448
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0178,
+      "bad_frac_t2": 0.0063,
+      "distance": 0.008066236972808838,
+      "z_score": -0.14,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 49,
+      "row": 6,
+      "col": 1,
+      "bbox": [
+        64,
+        384,
+        128,
+        448
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0579,
+      "bad_frac_t2": 0.0061,
+      "distance": 0.007226347923278809,
+      "z_score": -0.27,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 50,
+      "row": 6,
+      "col": 2,
+      "bbox": [
+        128,
+        384,
+        192,
+        448
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.1023,
+      "bad_frac_t2": 0.0854,
+      "distance": 0.007179975509643555,
+      "z_score": -0.28,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 51,
+      "row": 6,
+      "col": 3,
+      "bbox": [
+        192,
+        384,
+        256,
+        448
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0806,
+      "bad_frac_t2": 0.0876,
+      "distance": 0.007784545421600342,
+      "z_score": -0.18,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 52,
+      "row": 6,
+      "col": 4,
+      "bbox": [
+        256,
+        384,
+        320,
+        448
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.0037412047386169434,
+      "z_score": -0.81,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 53,
+      "row": 6,
+      "col": 5,
+      "bbox": [
+        320,
+        384,
+        384,
+        448
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.0025454163551330566,
+      "z_score": -1.0,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 54,
+      "row": 6,
+      "col": 6,
+      "bbox": [
+        384,
+        384,
+        448,
+        448
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.00580286979675293,
+      "z_score": -0.49,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 55,
+      "row": 6,
+      "col": 7,
+      "bbox": [
+        448,
+        384,
+        512,
+        448
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.002198457717895508,
+      "z_score": -1.05,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 56,
+      "row": 7,
+      "col": 0,
+      "bbox": [
+        0,
+        448,
+        64,
+        512
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.01590132713317871,
+      "z_score": 1.08,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 57,
+      "row": 7,
+      "col": 1,
+      "bbox": [
+        64,
+        448,
+        128,
+        512
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0002,
+      "bad_frac_t2": 0.0032,
+      "distance": 0.009710192680358887,
+      "z_score": 0.12,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 58,
+      "row": 7,
+      "col": 2,
+      "bbox": [
+        128,
+        448,
+        192,
+        512
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0767,
+      "bad_frac_t2": 0.0845,
+      "distance": 0.003398120403289795,
+      "z_score": -0.87,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 59,
+      "row": 7,
+      "col": 3,
+      "bbox": [
+        192,
+        448,
+        256,
+        512
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0459,
+      "bad_frac_t2": 0.0383,
+      "distance": 0.0032546520233154297,
+      "z_score": -0.89,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 60,
+      "row": 7,
+      "col": 4,
+      "bbox": [
+        256,
+        448,
+        320,
+        512
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.004552364349365234,
+      "z_score": -0.69,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 61,
+      "row": 7,
+      "col": 5,
+      "bbox": [
+        320,
+        448,
+        384,
+        512
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.002040266990661621,
+      "z_score": -1.08,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 62,
+      "row": 7,
+      "col": 6,
+      "bbox": [
+        384,
+        448,
+        448,
+        512
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.0021355152130126953,
+      "z_score": -1.06,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 63,
+      "row": 7,
+      "col": 7,
+      "bbox": [
+        448,
+        448,
+        512,
+        512
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.007010519504547119,
+      "z_score": -0.31,
+      "is_candidate": false
+    }
+  ]
+}

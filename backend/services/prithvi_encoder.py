@@ -66,17 +66,34 @@ class PrithviEncoder:
 
     def _load_model(self):
         """Loads PrithviMAE architecture and weights, downloading from HuggingFace if needed."""
-        from huggingface_hub import hf_hub_download
+        base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+        local_cfg = os.path.join(base_dir, "models", "retrieval", "prithvi", CONFIG_FILENAME)
+        local_mae = os.path.join(base_dir, "models", "retrieval", "prithvi", MAE_FILENAME)
 
-        # 1. Download or locate model code and configuration
-        logger.info(f"Loading Prithvi configuration from '{MODEL_REPO}'...")
-        cfg_file = hf_hub_download(repo_id=MODEL_REPO, filename=CONFIG_FILENAME)
-        mae_file = hf_hub_download(repo_id=MODEL_REPO, filename=MAE_FILENAME)
+        if os.path.exists(local_cfg) and os.path.exists(local_mae):
+            logger.info("Loading Prithvi configuration and architecture from local disk...")
+            cfg_file = local_cfg
+            mae_file = local_mae
+        else:
+            from huggingface_hub import hf_hub_download
+            logger.info(f"Loading Prithvi configuration from '{MODEL_REPO}'...")
+            cfg_file = hf_hub_download(repo_id=MODEL_REPO, filename=CONFIG_FILENAME)
+            mae_file = hf_hub_download(repo_id=MODEL_REPO, filename=MAE_FILENAME)
 
         # Dynamically import prithvi_mae
         spec = importlib.util.spec_from_file_location("prithvi_mae", mae_file)
         mae_module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mae_module)
+
+        # Patch device mismatch in HuggingFace prithvi_mae pos_embed interpolation
+        orig_interpolate = mae_module._interpolate_pos_encoding
+        def patched_interpolate(*args, **kwargs):
+            pos_embed = args[0] if len(args) > 0 else kwargs.get("pos_embed")
+            res = orig_interpolate(*args, **kwargs)
+            if hasattr(pos_embed, "device") and res.device != pos_embed.device:
+                return res.to(pos_embed.device)
+            return res
+        mae_module._interpolate_pos_encoding = patched_interpolate
 
         with open(cfg_file, "r") as f:
             full_cfg = json.load(f)

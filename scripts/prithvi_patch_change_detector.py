@@ -23,6 +23,12 @@ from typing import Tuple, Optional, List, Dict, Any
 import numpy as np
 from PIL import Image
 import cv2
+import torch
+
+if sys.platform == "win32":
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace", line_buffering=True)
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace", line_buffering=True)
 
 # Ensure project root is in sys.path
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -35,6 +41,29 @@ except ImportError:
     rasterio = None
 
 from backend.services.prithvi_encoder import get_prithvi_encoder
+from backend.services.temporal_head import load_trained_head
+
+
+def compute_patch_spectral_deltas(crop_b: np.ndarray, crop_a: np.ndarray) -> np.ndarray:
+    """
+    Computes [delta_ndvi, delta_ndbi, delta_ndwi] from multi-band crops (C, H, W).
+    Assumes standard Sentinel-2 order:
+    0: Blue (B02), 1: Green (B03), 2: Red (B04), 3: NIR (B08), 4: SWIR1 (B11), 5: SWIR2 (B12)
+    """
+    def get_indices(c: np.ndarray):
+        b_green = c[1].astype(np.float32)
+        b_red = c[2].astype(np.float32)
+        b_nir = c[3].astype(np.float32)
+        b_swir = c[4].astype(np.float32) if c.shape[0] > 4 else c[3].astype(np.float32)
+        eps = 1e-6
+        ndvi = (b_nir - b_red) / (b_nir + b_red + eps)
+        ndbi = (b_swir - b_nir) / (b_swir + b_nir + eps)
+        ndwi = (b_green - b_nir) / (b_green + b_nir + eps)
+        return float(np.nanmean(ndvi)), float(np.nanmean(ndbi)), float(np.nanmean(ndwi))
+
+    ndvi1, ndbi1, ndwi1 = get_indices(crop_b)
+    ndvi2, ndbi2, ndwi2 = get_indices(crop_a)
+    return np.array([ndvi2 - ndvi1, ndbi2 - ndbi1, ndwi2 - ndwi1], dtype=np.float32)
 
 
 def _to_rgb_preview(multiband: np.ndarray, band_descriptions: Optional[List[str]] = None) -> Image.Image:
@@ -259,6 +288,39 @@ def analyze_prithvi_patches(
         print(f"\n[Stage 4] Detected {len(candidates)} Change Candidate Patches (z >= {z_threshold}):")
         for rank, cand in enumerate(candidates[:10], 1):
             print(f"  Rank #{rank:02d} | Patch [{cand['row']}, {cand['col']}] (BBox: {cand['bbox']}) | Dist: {cand['distance']:.4f} | z-score: {cand['z_score']:+.2f}")
+
+        # 4.5. Semantic Classification of Anomaly Patches via Trained Temporal Head
+        change_head, head_classes = load_trained_head("models/change_head/temporal_change_head.pth")
+        if change_head is not None and candidates:
+            head_dev = "cuda" if torch.cuda.is_available() else "cpu"
+            change_head = change_head.to(head_dev).eval()
+            print(f"\n[Stage 4.5] Classifying {len(candidates)} candidates via SOTA Gated Residual Semantic Head ({head_dev})...")
+
+            val_id_to_idx = {val_id: i for i, val_id in enumerate(valid_indices)}
+
+            for rank, cand in enumerate(candidates, 1):
+                i = val_id_to_idx[cand["patch_id"]]
+                e1 = vecs_b[i]
+                e2 = vecs_a[i]
+                delta_e = e2 - e1
+                c_b = crops_before[i]
+                c_a = crops_after[i]
+                delta_s = compute_patch_spectral_deltas(c_b, c_a)
+
+                feat_vec = np.concatenate([delta_e, e1, delta_s], axis=0).astype(np.float32)
+                with torch.no_grad():
+                    feat_t = torch.from_numpy(feat_vec).unsqueeze(0).to(head_dev)
+                    probs = change_head.predict_probabilities(feat_t).cpu().numpy()[0]
+                    p_idx = int(np.argmax(probs))
+                    p_label = head_classes[p_idx]
+                    p_conf = float(probs[p_idx])
+
+                cand["predicted_transition"] = p_label
+                cand["confidence"] = round(p_conf * 100, 1)
+                cand["transition_probabilities"] = {
+                    head_classes[k]: round(float(probs[k]) * 100, 1) for k in range(len(head_classes))
+                }
+                print(f"  Candidate #{rank:02d} | Patch [{cand['row']}, {cand['col']}] => {p_label} ({cand['confidence']}%)")
     else:
         print("Warning: No clear/valid patches found after quality filtering!")
         candidates = []
@@ -306,14 +368,29 @@ def analyze_prithvi_patches(
         cv2.line(p3, (i * patch_w, 0), (i * patch_w, H), (30, 41, 59), 1)
         cv2.line(p3, (0, i * patch_h), (W, i * patch_h), (30, 41, 59), 1)
 
-    # Highlight Candidates on Panel 4
+    # Highlight Candidates on Panel 4 with Semantic Badges
     for rank, cand in enumerate(candidates, 1):
         x0, y0, x1, y1 = cand["bbox"]
         color = (239, 68, 68) if rank <= 3 else (245, 158, 11)
         cv2.rectangle(p4, (x0, y0), (x1, y1), color, 2)
-        label = f"#{rank} z={cand['z_score']:+.1f}"
-        cv2.rectangle(p4, (x0, y0), (x0 + 75, y0 + 16), color, -1)
-        cv2.putText(p4, label, (x0 + 2, y0 + 12), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (255, 255, 255), 1, cv2.LINE_AA)
+
+        pred_trans = cand.get("predicted_transition", "")
+        short_trans = pred_trans.split(" / ")[0] if " / " in pred_trans else pred_trans
+        short_trans = short_trans.replace(" (Snow & Ice Shift)", "").replace(" & Ecological Succession", "")
+        conf = cand.get("confidence", 0)
+
+        badge_line1 = f"#{rank} z={cand['z_score']:+.1f}"
+        badge_line2 = f"{short_trans} ({conf:.0f}%)" if pred_trans else ""
+
+        box_w = max(len(badge_line1) * 7 + 10, len(badge_line2) * 6 + 10)
+        box_h = 28 if badge_line2 else 16
+
+        cv2.rectangle(p4, (x0, y0), (min(x0 + box_w, W), min(y0 + box_h, H)), (15, 23, 42), -1)
+        cv2.rectangle(p4, (x0, y0), (min(x0 + box_w, W), min(y0 + box_h, H)), color, 1)
+        cv2.putText(p4, badge_line1, (x0 + 3, y0 + 11), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (255, 255, 255), 1, cv2.LINE_AA)
+        if badge_line2:
+            cv2.putText(p4, badge_line2, (x0 + 3, y0 + 23), cv2.FONT_HERSHEY_SIMPLEX, 0.30, color, 1, cv2.LINE_AA)
+
 
     # Composite canvas
     header_h = 50

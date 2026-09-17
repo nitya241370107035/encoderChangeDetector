@@ -1,0 +1,1496 @@
+{
+  "encoder": "Prithvi-EO-2.0-300M",
+  "embedding_dim": 1024,
+  "before_image": "data/tiles/region_23.08_72.62/2025-03-12/S2C_42QZL_20250312_0_L2A_tile_00001.tif",
+  "after_image": "data/tiles/region_23.08_72.62/2026-05-21/S2B_42QZL_20260521_0_L2A_tile_00001.tif",
+  "grid_size": 8,
+  "patch_pixels": [
+    64,
+    64
+  ],
+  "total_patches": 64,
+  "valid_patches": 64,
+  "dropped_patches": 0,
+  "robust_stats": {
+    "median_distance": 0.0075,
+    "mad": 0.0018,
+    "z_threshold": 2.0
+  },
+  "num_candidates": 8,
+  "candidates": [
+    {
+      "patch_id": 44,
+      "row": 5,
+      "col": 4,
+      "bbox": [
+        256,
+        320,
+        320,
+        384
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.06773233413696289,
+      "z_score": 34.28,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 58.9,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 9.7,
+        "Urban / Infrastructure Expansion": 2.0,
+        "Land Inundation / Flooding / Submergence": 27.7,
+        "Afforestation / Revegetation / Greening": 0.7,
+        "Deforestation / Demolition / Land Clearing": 0.3,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 58.9,
+        "Wetland & Ecological Succession": 0.7
+      }
+    },
+    {
+      "patch_id": 37,
+      "row": 4,
+      "col": 5,
+      "bbox": [
+        320,
+        256,
+        384,
+        320
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.02861762046813965,
+      "z_score": 12.0,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 81.2,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 3.5,
+        "Urban / Infrastructure Expansion": 1.3,
+        "Land Inundation / Flooding / Submergence": 12.5,
+        "Afforestation / Revegetation / Greening": 0.6,
+        "Deforestation / Demolition / Land Clearing": 0.3,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 81.2,
+        "Wetland & Ecological Succession": 0.6
+      }
+    },
+    {
+      "patch_id": 60,
+      "row": 7,
+      "col": 4,
+      "bbox": [
+        256,
+        448,
+        320,
+        512
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0005,
+      "bad_frac_t2": 0.0005,
+      "distance": 0.019803166389465332,
+      "z_score": 6.99,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 40.1,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 4.9,
+        "Urban / Infrastructure Expansion": 14.7,
+        "Land Inundation / Flooding / Submergence": 36.9,
+        "Afforestation / Revegetation / Greening": 1.5,
+        "Deforestation / Demolition / Land Clearing": 0.6,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 40.1,
+        "Wetland & Ecological Succession": 1.3
+      }
+    },
+    {
+      "patch_id": 39,
+      "row": 4,
+      "col": 7,
+      "bbox": [
+        448,
+        256,
+        512,
+        320
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.001,
+      "bad_frac_t2": 0.002,
+      "distance": 0.01727694272994995,
+      "z_score": 5.55,
+      "is_candidate": true,
+      "predicted_transition": "Urban / Infrastructure Expansion",
+      "confidence": 60.5,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 1.2,
+        "Urban / Infrastructure Expansion": 60.5,
+        "Land Inundation / Flooding / Submergence": 20.4,
+        "Afforestation / Revegetation / Greening": 1.3,
+        "Deforestation / Demolition / Land Clearing": 1.1,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 9.6,
+        "Wetland & Ecological Succession": 6.0
+      }
+    },
+    {
+      "patch_id": 38,
+      "row": 4,
+      "col": 6,
+      "bbox": [
+        384,
+        256,
+        448,
+        320
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.013514041900634766,
+      "z_score": 3.4,
+      "is_candidate": true,
+      "predicted_transition": "Urban / Infrastructure Expansion",
+      "confidence": 89.2,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 0.8,
+        "Urban / Infrastructure Expansion": 89.2,
+        "Land Inundation / Flooding / Submergence": 6.3,
+        "Afforestation / Revegetation / Greening": 0.6,
+        "Deforestation / Demolition / Land Clearing": 0.9,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 1.7,
+        "Wetland & Ecological Succession": 0.6
+      }
+    },
+    {
+      "patch_id": 52,
+      "row": 6,
+      "col": 4,
+      "bbox": [
+        256,
+        384,
+        320,
+        448
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0005,
+      "distance": 0.012762606143951416,
+      "z_score": 2.98,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 62.0,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 3.1,
+        "Urban / Infrastructure Expansion": 1.8,
+        "Land Inundation / Flooding / Submergence": 21.6,
+        "Afforestation / Revegetation / Greening": 0.9,
+        "Deforestation / Demolition / Land Clearing": 0.3,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 62.0,
+        "Wetland & Ecological Succession": 10.2
+      }
+    },
+    {
+      "patch_id": 45,
+      "row": 5,
+      "col": 5,
+      "bbox": [
+        320,
+        320,
+        384,
+        384
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0015,
+      "distance": 0.01242440938949585,
+      "z_score": 2.78,
+      "is_candidate": true,
+      "predicted_transition": "Wetland & Ecological Succession",
+      "confidence": 92.1,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 0.2,
+        "Urban / Infrastructure Expansion": 2.2,
+        "Land Inundation / Flooding / Submergence": 2.1,
+        "Afforestation / Revegetation / Greening": 0.4,
+        "Deforestation / Demolition / Land Clearing": 0.4,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 2.5,
+        "Wetland & Ecological Succession": 92.1
+      }
+    },
+    {
+      "patch_id": 59,
+      "row": 7,
+      "col": 3,
+      "bbox": [
+        192,
+        448,
+        256,
+        512
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0007,
+      "distance": 0.011868894100189209,
+      "z_score": 2.47,
+      "is_candidate": true,
+      "predicted_transition": "Urban / Infrastructure Expansion",
+      "confidence": 36.3,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 0.9,
+        "Urban / Infrastructure Expansion": 36.3,
+        "Land Inundation / Flooding / Submergence": 17.3,
+        "Afforestation / Revegetation / Greening": 1.4,
+        "Deforestation / Demolition / Land Clearing": 1.7,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 13.5,
+        "Wetland & Ecological Succession": 28.9
+      }
+    }
+  ],
+  "all_patches": [
+    {
+      "patch_id": 0,
+      "row": 0,
+      "col": 0,
+      "bbox": [
+        0,
+        0,
+        64,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0002,
+      "bad_frac_t2": 0.0251,
+      "distance": 0.00953066349029541,
+      "z_score": 1.14,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 1,
+      "row": 0,
+      "col": 1,
+      "bbox": [
+        64,
+        0,
+        128,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0007,
+      "bad_frac_t2": 0.0085,
+      "distance": 0.00731658935546875,
+      "z_score": -0.12,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 2,
+      "row": 0,
+      "col": 2,
+      "bbox": [
+        128,
+        0,
+        192,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0005,
+      "bad_frac_t2": 0.0105,
+      "distance": 0.008697748184204102,
+      "z_score": 0.66,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 3,
+      "row": 0,
+      "col": 3,
+      "bbox": [
+        192,
+        0,
+        256,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0005,
+      "bad_frac_t2": 0.0088,
+      "distance": 0.007165670394897461,
+      "z_score": -0.21,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 4,
+      "row": 0,
+      "col": 4,
+      "bbox": [
+        256,
+        0,
+        320,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0044,
+      "distance": 0.006048619747161865,
+      "z_score": -0.85,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 5,
+      "row": 0,
+      "col": 5,
+      "bbox": [
+        320,
+        0,
+        384,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0051,
+      "bad_frac_t2": 0.0173,
+      "distance": 0.006733059883117676,
+      "z_score": -0.46,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 6,
+      "row": 0,
+      "col": 6,
+      "bbox": [
+        384,
+        0,
+        448,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0044,
+      "bad_frac_t2": 0.0056,
+      "distance": 0.003970444202423096,
+      "z_score": -2.03,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 7,
+      "row": 0,
+      "col": 7,
+      "bbox": [
+        448,
+        0,
+        512,
+        64
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0012,
+      "distance": 0.00613248348236084,
+      "z_score": -0.8,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 8,
+      "row": 1,
+      "col": 0,
+      "bbox": [
+        0,
+        64,
+        64,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0066,
+      "distance": 0.009001493453979492,
+      "z_score": 0.84,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 9,
+      "row": 1,
+      "col": 1,
+      "bbox": [
+        64,
+        64,
+        128,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.001,
+      "bad_frac_t2": 0.0085,
+      "distance": 0.009254813194274902,
+      "z_score": 0.98,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 10,
+      "row": 1,
+      "col": 2,
+      "bbox": [
+        128,
+        64,
+        192,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0007,
+      "bad_frac_t2": 0.0139,
+      "distance": 0.010203719139099121,
+      "z_score": 1.52,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 11,
+      "row": 1,
+      "col": 3,
+      "bbox": [
+        192,
+        64,
+        256,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0012,
+      "bad_frac_t2": 0.0032,
+      "distance": 0.006143450736999512,
+      "z_score": -0.79,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 12,
+      "row": 1,
+      "col": 4,
+      "bbox": [
+        256,
+        64,
+        320,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0029,
+      "bad_frac_t2": 0.0032,
+      "distance": 0.004751980304718018,
+      "z_score": -1.58,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 13,
+      "row": 1,
+      "col": 5,
+      "bbox": [
+        320,
+        64,
+        384,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0039,
+      "bad_frac_t2": 0.0076,
+      "distance": 0.006543755531311035,
+      "z_score": -0.56,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 14,
+      "row": 1,
+      "col": 6,
+      "bbox": [
+        384,
+        64,
+        448,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0002,
+      "bad_frac_t2": 0.0017,
+      "distance": 0.007505297660827637,
+      "z_score": -0.02,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 15,
+      "row": 1,
+      "col": 7,
+      "bbox": [
+        448,
+        64,
+        512,
+        128
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0002,
+      "distance": 0.007230162620544434,
+      "z_score": -0.17,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 16,
+      "row": 2,
+      "col": 0,
+      "bbox": [
+        0,
+        128,
+        64,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0161,
+      "bad_frac_t2": 0.042,
+      "distance": 0.009839653968811035,
+      "z_score": 1.31,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 17,
+      "row": 2,
+      "col": 1,
+      "bbox": [
+        64,
+        128,
+        128,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0012,
+      "bad_frac_t2": 0.0176,
+      "distance": 0.006810486316680908,
+      "z_score": -0.41,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 18,
+      "row": 2,
+      "col": 2,
+      "bbox": [
+        128,
+        128,
+        192,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.002,
+      "bad_frac_t2": 0.0132,
+      "distance": 0.005558967590332031,
+      "z_score": -1.12,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 19,
+      "row": 2,
+      "col": 3,
+      "bbox": [
+        192,
+        128,
+        256,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0002,
+      "bad_frac_t2": 0.0129,
+      "distance": 0.005742251873016357,
+      "z_score": -1.02,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 20,
+      "row": 2,
+      "col": 4,
+      "bbox": [
+        256,
+        128,
+        320,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0005,
+      "bad_frac_t2": 0.0139,
+      "distance": 0.008708178997039795,
+      "z_score": 0.67,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 21,
+      "row": 2,
+      "col": 5,
+      "bbox": [
+        320,
+        128,
+        384,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0002,
+      "bad_frac_t2": 0.009,
+      "distance": 0.008614301681518555,
+      "z_score": 0.61,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 22,
+      "row": 2,
+      "col": 6,
+      "bbox": [
+        384,
+        128,
+        448,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0056,
+      "distance": 0.009435117244720459,
+      "z_score": 1.08,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 23,
+      "row": 2,
+      "col": 7,
+      "bbox": [
+        448,
+        128,
+        512,
+        192
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0017,
+      "distance": 0.005533099174499512,
+      "z_score": -1.14,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 24,
+      "row": 3,
+      "col": 0,
+      "bbox": [
+        0,
+        192,
+        64,
+        256
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0056,
+      "bad_frac_t2": 0.0208,
+      "distance": 0.008508920669555664,
+      "z_score": 0.55,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 25,
+      "row": 3,
+      "col": 1,
+      "bbox": [
+        64,
+        192,
+        128,
+        256
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0007,
+      "bad_frac_t2": 0.0117,
+      "distance": 0.006315886974334717,
+      "z_score": -0.69,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 26,
+      "row": 3,
+      "col": 2,
+      "bbox": [
+        128,
+        192,
+        192,
+        256
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.001,
+      "bad_frac_t2": 0.0046,
+      "distance": 0.007976710796356201,
+      "z_score": 0.25,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 27,
+      "row": 3,
+      "col": 3,
+      "bbox": [
+        192,
+        192,
+        256,
+        256
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0017,
+      "bad_frac_t2": 0.0103,
+      "distance": 0.010633409023284912,
+      "z_score": 1.76,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 28,
+      "row": 3,
+      "col": 4,
+      "bbox": [
+        256,
+        192,
+        320,
+        256
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0059,
+      "distance": 0.006296396255493164,
+      "z_score": -0.71,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 29,
+      "row": 3,
+      "col": 5,
+      "bbox": [
+        320,
+        192,
+        384,
+        256
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0002,
+      "bad_frac_t2": 0.0017,
+      "distance": 0.008362293243408203,
+      "z_score": 0.47,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 30,
+      "row": 3,
+      "col": 6,
+      "bbox": [
+        384,
+        192,
+        448,
+        256
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0002,
+      "bad_frac_t2": 0.0032,
+      "distance": 0.004987657070159912,
+      "z_score": -1.45,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 31,
+      "row": 3,
+      "col": 7,
+      "bbox": [
+        448,
+        192,
+        512,
+        256
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0007,
+      "bad_frac_t2": 0.0029,
+      "distance": 0.004212021827697754,
+      "z_score": -1.89,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 32,
+      "row": 4,
+      "col": 0,
+      "bbox": [
+        0,
+        256,
+        64,
+        320
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0002,
+      "distance": 0.005056262016296387,
+      "z_score": -1.41,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 33,
+      "row": 4,
+      "col": 1,
+      "bbox": [
+        64,
+        256,
+        128,
+        320
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0081,
+      "distance": 0.006905674934387207,
+      "z_score": -0.36,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 34,
+      "row": 4,
+      "col": 2,
+      "bbox": [
+        128,
+        256,
+        192,
+        320
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0015,
+      "bad_frac_t2": 0.0095,
+      "distance": 0.007126450538635254,
+      "z_score": -0.23,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 35,
+      "row": 4,
+      "col": 3,
+      "bbox": [
+        192,
+        256,
+        256,
+        320
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0249,
+      "bad_frac_t2": 0.0549,
+      "distance": 0.007564067840576172,
+      "z_score": 0.02,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 36,
+      "row": 4,
+      "col": 4,
+      "bbox": [
+        256,
+        256,
+        320,
+        320
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.010819494724273682,
+      "z_score": 1.87,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 37,
+      "row": 4,
+      "col": 5,
+      "bbox": [
+        320,
+        256,
+        384,
+        320
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.02861762046813965,
+      "z_score": 12.0,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 81.2,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 3.5,
+        "Urban / Infrastructure Expansion": 1.3,
+        "Land Inundation / Flooding / Submergence": 12.5,
+        "Afforestation / Revegetation / Greening": 0.6,
+        "Deforestation / Demolition / Land Clearing": 0.3,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 81.2,
+        "Wetland & Ecological Succession": 0.6
+      }
+    },
+    {
+      "patch_id": 38,
+      "row": 4,
+      "col": 6,
+      "bbox": [
+        384,
+        256,
+        448,
+        320
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.013514041900634766,
+      "z_score": 3.4,
+      "is_candidate": true,
+      "predicted_transition": "Urban / Infrastructure Expansion",
+      "confidence": 89.2,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 0.8,
+        "Urban / Infrastructure Expansion": 89.2,
+        "Land Inundation / Flooding / Submergence": 6.3,
+        "Afforestation / Revegetation / Greening": 0.6,
+        "Deforestation / Demolition / Land Clearing": 0.9,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 1.7,
+        "Wetland & Ecological Succession": 0.6
+      }
+    },
+    {
+      "patch_id": 39,
+      "row": 4,
+      "col": 7,
+      "bbox": [
+        448,
+        256,
+        512,
+        320
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.001,
+      "bad_frac_t2": 0.002,
+      "distance": 0.01727694272994995,
+      "z_score": 5.55,
+      "is_candidate": true,
+      "predicted_transition": "Urban / Infrastructure Expansion",
+      "confidence": 60.5,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 1.2,
+        "Urban / Infrastructure Expansion": 60.5,
+        "Land Inundation / Flooding / Submergence": 20.4,
+        "Afforestation / Revegetation / Greening": 1.3,
+        "Deforestation / Demolition / Land Clearing": 1.1,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 9.6,
+        "Wetland & Ecological Succession": 6.0
+      }
+    },
+    {
+      "patch_id": 40,
+      "row": 5,
+      "col": 0,
+      "bbox": [
+        0,
+        320,
+        64,
+        384
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0017,
+      "distance": 0.00706106424331665,
+      "z_score": -0.27,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 41,
+      "row": 5,
+      "col": 1,
+      "bbox": [
+        64,
+        320,
+        128,
+        384
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0054,
+      "distance": 0.008933186531066895,
+      "z_score": 0.8,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 42,
+      "row": 5,
+      "col": 2,
+      "bbox": [
+        128,
+        320,
+        192,
+        384
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0007,
+      "distance": 0.010631322860717773,
+      "z_score": 1.76,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 43,
+      "row": 5,
+      "col": 3,
+      "bbox": [
+        192,
+        320,
+        256,
+        384
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0088,
+      "bad_frac_t2": 0.0161,
+      "distance": 0.010810613632202148,
+      "z_score": 1.87,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 44,
+      "row": 5,
+      "col": 4,
+      "bbox": [
+        256,
+        320,
+        320,
+        384
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.06773233413696289,
+      "z_score": 34.28,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 58.9,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 9.7,
+        "Urban / Infrastructure Expansion": 2.0,
+        "Land Inundation / Flooding / Submergence": 27.7,
+        "Afforestation / Revegetation / Greening": 0.7,
+        "Deforestation / Demolition / Land Clearing": 0.3,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 58.9,
+        "Wetland & Ecological Succession": 0.7
+      }
+    },
+    {
+      "patch_id": 45,
+      "row": 5,
+      "col": 5,
+      "bbox": [
+        320,
+        320,
+        384,
+        384
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0015,
+      "distance": 0.01242440938949585,
+      "z_score": 2.78,
+      "is_candidate": true,
+      "predicted_transition": "Wetland & Ecological Succession",
+      "confidence": 92.1,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 0.2,
+        "Urban / Infrastructure Expansion": 2.2,
+        "Land Inundation / Flooding / Submergence": 2.1,
+        "Afforestation / Revegetation / Greening": 0.4,
+        "Deforestation / Demolition / Land Clearing": 0.4,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 2.5,
+        "Wetland & Ecological Succession": 92.1
+      }
+    },
+    {
+      "patch_id": 46,
+      "row": 5,
+      "col": 6,
+      "bbox": [
+        384,
+        320,
+        448,
+        384
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.007491469383239746,
+      "z_score": -0.02,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 47,
+      "row": 5,
+      "col": 7,
+      "bbox": [
+        448,
+        320,
+        512,
+        384
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0054,
+      "bad_frac_t2": 0.0007,
+      "distance": 0.009941160678863525,
+      "z_score": 1.37,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 48,
+      "row": 6,
+      "col": 0,
+      "bbox": [
+        0,
+        384,
+        64,
+        448
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0032,
+      "distance": 0.009557783603668213,
+      "z_score": 1.15,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 49,
+      "row": 6,
+      "col": 1,
+      "bbox": [
+        64,
+        384,
+        128,
+        448
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0063,
+      "distance": 0.00674206018447876,
+      "z_score": -0.45,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 50,
+      "row": 6,
+      "col": 2,
+      "bbox": [
+        128,
+        384,
+        192,
+        448
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0007,
+      "bad_frac_t2": 0.0049,
+      "distance": 0.008214592933654785,
+      "z_score": 0.39,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 51,
+      "row": 6,
+      "col": 3,
+      "bbox": [
+        192,
+        384,
+        256,
+        448
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.0072457194328308105,
+      "z_score": -0.16,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 52,
+      "row": 6,
+      "col": 4,
+      "bbox": [
+        256,
+        384,
+        320,
+        448
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0005,
+      "distance": 0.012762606143951416,
+      "z_score": 2.98,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 62.0,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 3.1,
+        "Urban / Infrastructure Expansion": 1.8,
+        "Land Inundation / Flooding / Submergence": 21.6,
+        "Afforestation / Revegetation / Greening": 0.9,
+        "Deforestation / Demolition / Land Clearing": 0.3,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 62.0,
+        "Wetland & Ecological Succession": 10.2
+      }
+    },
+    {
+      "patch_id": 53,
+      "row": 6,
+      "col": 5,
+      "bbox": [
+        320,
+        384,
+        384,
+        448
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.004591763019561768,
+      "z_score": -1.68,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 54,
+      "row": 6,
+      "col": 6,
+      "bbox": [
+        384,
+        384,
+        448,
+        448
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.005198538303375244,
+      "z_score": -1.33,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 55,
+      "row": 6,
+      "col": 7,
+      "bbox": [
+        448,
+        384,
+        512,
+        448
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0034,
+      "distance": 0.009737491607666016,
+      "z_score": 1.25,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 56,
+      "row": 7,
+      "col": 0,
+      "bbox": [
+        0,
+        448,
+        64,
+        512
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0154,
+      "distance": 0.010567247867584229,
+      "z_score": 1.73,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 57,
+      "row": 7,
+      "col": 1,
+      "bbox": [
+        64,
+        448,
+        128,
+        512
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0029,
+      "distance": 0.009479403495788574,
+      "z_score": 1.11,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 58,
+      "row": 7,
+      "col": 2,
+      "bbox": [
+        128,
+        448,
+        192,
+        512
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0024,
+      "bad_frac_t2": 0.012,
+      "distance": 0.006819486618041992,
+      "z_score": -0.41,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 59,
+      "row": 7,
+      "col": 3,
+      "bbox": [
+        192,
+        448,
+        256,
+        512
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0007,
+      "distance": 0.011868894100189209,
+      "z_score": 2.47,
+      "is_candidate": true,
+      "predicted_transition": "Urban / Infrastructure Expansion",
+      "confidence": 36.3,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 0.9,
+        "Urban / Infrastructure Expansion": 36.3,
+        "Land Inundation / Flooding / Submergence": 17.3,
+        "Afforestation / Revegetation / Greening": 1.4,
+        "Deforestation / Demolition / Land Clearing": 1.7,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 13.5,
+        "Wetland & Ecological Succession": 28.9
+      }
+    },
+    {
+      "patch_id": 60,
+      "row": 7,
+      "col": 4,
+      "bbox": [
+        256,
+        448,
+        320,
+        512
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0005,
+      "bad_frac_t2": 0.0005,
+      "distance": 0.019803166389465332,
+      "z_score": 6.99,
+      "is_candidate": true,
+      "predicted_transition": "Cryospheric Dynamics (Snow & Ice Shift)",
+      "confidence": 40.1,
+      "transition_probabilities": {
+        "Water Reclamation / Coastal Infrastructure": 4.9,
+        "Urban / Infrastructure Expansion": 14.7,
+        "Land Inundation / Flooding / Submergence": 36.9,
+        "Afforestation / Revegetation / Greening": 1.5,
+        "Deforestation / Demolition / Land Clearing": 0.6,
+        "Cryospheric Dynamics (Snow & Ice Shift)": 40.1,
+        "Wetland & Ecological Succession": 1.3
+      }
+    },
+    {
+      "patch_id": 61,
+      "row": 7,
+      "col": 5,
+      "bbox": [
+        320,
+        448,
+        384,
+        512
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.001,
+      "distance": 0.004272520542144775,
+      "z_score": -1.86,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 62,
+      "row": 7,
+      "col": 6,
+      "bbox": [
+        384,
+        448,
+        448,
+        512
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0,
+      "bad_frac_t2": 0.0,
+      "distance": 0.0067108869552612305,
+      "z_score": -0.47,
+      "is_candidate": false
+    },
+    {
+      "patch_id": 63,
+      "row": 7,
+      "col": 7,
+      "bbox": [
+        448,
+        448,
+        512,
+        512
+      ],
+      "is_valid": true,
+      "drop_reason": null,
+      "bad_frac_t1": 0.0017,
+      "bad_frac_t2": 0.0022,
+      "distance": 0.007409036159515381,
+      "z_score": -0.07,
+      "is_candidate": false
+    }
+  ]
+}

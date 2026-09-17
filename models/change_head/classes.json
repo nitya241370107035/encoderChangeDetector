@@ -1,0 +1,65 @@
+{
+  "classes": [
+    "Water Reclamation / Coastal Infrastructure",
+    "Urban / Infrastructure Expansion",
+    "Land Inundation / Flooding / Submergence",
+    "Afforestation / Revegetation / Greening",
+    "Deforestation / Demolition / Land Clearing",
+    "Cryospheric Dynamics (Snow & Ice Shift)",
+    "Wetland & Ecological Succession"
+  ],
+  "in_dim": 2059,
+  "best_epoch": 110,
+  "overall_accuracy": 83.15,
+  "macro_f1": 82.16,
+  "metrics": {
+    "accuracy": 83.15,
+    "macro_precision": 81.67,
+    "macro_recall": 82.93,
+    "macro_f1": 82.16,
+    "per_class": {
+      "Water Reclamation / Coastal Infrastructure": {
+        "count": 241,
+        "precision": 83.9,
+        "recall": 82.16,
+        "f1": 83.02
+      },
+      "Urban / Infrastructure Expansion": {
+        "count": 47,
+        "precision": 70.83,
+        "recall": 72.34,
+        "f1": 71.58
+      },
+      "Land Inundation / Flooding / Submergence": {
+        "count": 250,
+        "precision": 78.36,
+        "recall": 84.0,
+        "f1": 81.08
+      },
+      "Afforestation / Revegetation / Greening": {
+        "count": 149,
+        "precision": 96.88,
+        "recall": 83.22,
+        "f1": 89.53
+      },
+      "Deforestation / Demolition / Land Clearing": {
+        "count": 28,
+        "precision": 58.06,
+        "recall": 64.29,
+        "f1": 61.02
+      },
+      "Cryospheric Dynamics (Snow & Ice Shift)": {
+        "count": 73,
+        "precision": 90.79,
+        "recall": 94.52,
+        "f1": 92.62
+      },
+      "Wetland & Ecological Succession": {
+        "count": 13,
+        "precision": 92.86,
+        "recall": 100.0,
+        "f1": 96.3
+      }
+    }
+  }
+}
