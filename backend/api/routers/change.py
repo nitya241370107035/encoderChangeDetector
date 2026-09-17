@@ -2,8 +2,9 @@
 backend/api/routers/change.py
 =============================
 Change Detection API Router:
-Resolves multi-temporal change pairs using per-pixel bad-mask exclusion
-rather than coarse whole-tile discard.
+1. /grid-map: Sovereign multi-region offline mosaic grid
+2. /stage-tile: Quality Check Gate & Staging engine (drops cloudy tiles, stages clean tiles, generates manifest.json)
+3. /pair: Pixel-precise change detection using per-pixel bad-mask exclusion
 """
 
 import logging
@@ -14,6 +15,8 @@ import psycopg2.extras
 
 from backend.ingestion.db_writer import get_pg_connection
 from backend.services.change_pair import resolve_change_pair
+from backend.services.change_stager import get_all_regions_grid_map, stage_tile_temporal_series
+from backend.services.quality_auditor import quality_engine
 
 logger = logging.getLogger("change_router")
 router = APIRouter(prefix="/api/v1/change", tags=["Change Detection"])
@@ -28,6 +31,43 @@ class TilePairChangeRequest(BaseModel):
     mask_after_path: Optional[str] = Field(None, description="Direct file path to subsequent bad-mask GeoTIFF")
     min_usable_fraction: float = Field(0.30, ge=0.05, le=0.95, description="Minimum clear ground fraction required")
     diff_threshold: float = Field(0.15, ge=0.01, le=1.0, description="Fixed-scale reflectance change threshold")
+
+
+class StageTileRequest(BaseModel):
+    tile_id: str = Field(..., description="Target tile ID to stage multi-temporal series for")
+    staging_dir: str = Field("change_staging", description="Target folder name under data/")
+
+
+@router.get("/grid-map", response_model=Dict[str, Any])
+def get_grid_map():
+    """
+    Returns all ingested regions and tiles formatted for the sovereign canvas.
+    """
+    try:
+        return get_all_regions_grid_map()
+    except Exception as e:
+        logger.error(f"Error assembling grid map: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Grid map assembly failed: {str(e)}")
+
+
+@router.post("/stage-tile", response_model=Dict[str, Any])
+def stage_tile(request: StageTileRequest):
+    """
+    Passes all temporal observations through the Quality Check Engine (inspecting mask.tif).
+    DROPS tiles exceeding the bad pixel threshold (>15%), and STAYS/copies only validated
+    clean observations into data/change_staging/<site_key>/.
+    Writes manifest.json detailing selected_tiles and dropped_tiles.
+    """
+    try:
+        return stage_tile_temporal_series(
+            tile_id=request.tile_id,
+            staging_dir_name=request.staging_dir
+        )
+    except ValueError as ve:
+        raise HTTPException(status_code=404, detail=str(ve))
+    except Exception as e:
+        logger.error(f"Error staging tile {request.tile_id}: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Staging failed: {str(e)}")
 
 
 @router.post("/pair", response_model=Dict[str, Any])

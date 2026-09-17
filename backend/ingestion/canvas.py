@@ -34,6 +34,7 @@ from rasterio.vrt import WarpedVRT
 
 from backend.ingestion.input_validator import ValidatedFileInput
 from backend.ingestion.stac_search import STACSceneMetadata
+from backend.ingestion.normalization.radiometric_offset import detect_and_correct_sentinel2_offset
 
 logger = logging.getLogger(__name__)
 
@@ -328,6 +329,14 @@ def assemble_mosaicked_canvas_from_stac(
                         with WarpedVRT(src, crs="EPSG:4326", transform=target_transform,
                                        width=width, height=height, resampling=Resampling.bilinear) as vrt:
                             data = vrt.read(1, out_shape=(height, width), resampling=Resampling.bilinear).astype(np.float32)
+                            
+                            # Dual-verification radiometric offset check for Sentinel-2 PB 04.00+
+                            data, _ = detect_and_correct_sentinel2_offset(
+                                data,
+                                metadata_properties=scene.properties,
+                                band_name=b_name
+                            )
+
                             # Overwrite zeros with non-nodata pixels across granule boundaries
                             valid_mask = (data > 0)
                             combined_band[valid_mask] = data[valid_mask]
@@ -412,8 +421,23 @@ def assemble_canvas_from_file(
                 raw_data = vrt.read(out_shape=(src.count, height, width), resampling=Resampling.bilinear)
         final_band_names = file_input.band_order
 
+    raw_data_float = raw_data.astype(np.float32)
+    sensor_name = getattr(file_input, "sensor", "") or ""
+    # If Sentinel-2 or unspecified sensor, run radiometric offset check across bands
+    if "sentinel" in sensor_name.lower() or not sensor_name:
+        corrected_bands = []
+        for b_idx in range(raw_data_float.shape[0]):
+            b_label = final_band_names[b_idx] if b_idx < len(final_band_names) else f"band_{b_idx+1}"
+            c_band, _ = detect_and_correct_sentinel2_offset(
+                raw_data_float[b_idx],
+                metadata_properties={"sensor": sensor_name},
+                band_name=b_label
+            )
+            corrected_bands.append(c_band)
+        raw_data_float = np.stack(corrected_bands, axis=0)
+
     return CanvasData(
-        data=raw_data.astype(np.float32),
+        data=raw_data_float,
         band_names=final_band_names,
         transform=target_transform,
         crs="EPSG:4326",

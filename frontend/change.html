@@ -3,24 +3,685 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AeroLens — Multi-Temporal Change Detection Studio</title>
-  <link rel="stylesheet" href="/frontend/index.css">
+  <title>AeroLens — Sovereign Multi-Temporal Change Detection Studio</title>
+  <link rel="stylesheet" href="/frontend/index.css?v=20260917_v3">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Leaflet Core CSS & JS (Local Offline Support) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
   <style>
+    /* ============================================================
+       SOVEREIGN OFFLINE CHANGE DETECTION STUDIO THEME
+       ============================================================ */
+    :root {
+      --bg-void: #030712;
+      --bg-card: rgba(11, 17, 32, 0.94);
+      --border-cyan: rgba(6, 182, 212, 0.4);
+      --border-cyan-glow: rgba(6, 182, 212, 0.9);
+      --border-emerald: #10b981;
+      --cyan-bright: #38bdf8;
+      --emerald-bright: #34d399;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    html, body {
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-void);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      font-family: 'Inter', sans-serif;
+      color: #f1f5f9;
+    }
+
     .nav-item.active {
       background: linear-gradient(135deg, rgba(6, 182, 212, 0.25), rgba(99, 102, 241, 0.25));
-      border-color: var(--border-active);
+      border-color: var(--border-cyan);
       color: #38bdf8;
+    }
+
+    /* Main Studio Container */
+    .studio-container {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      height: calc(100vh - 64px);
+      background-color: var(--bg-void);
+      overflow: hidden;
+    }
+
+    /* Offline Leaflet Canvas — Deep Black Void */
+    #changeMap {
+      width: 100%;
+      height: 100%;
+      background: #02040a !important;
+    }
+
+    .leaflet-container {
+      background: #02040a !important;
+    }
+
+    /* Clean Seamless Tile Grid — Completely Invisible by default, lights up on Hover */
+    .tile-grid-polygon {
+      stroke: transparent !important;
+      stroke-width: 0 !important;
+      fill: transparent !important;
+      fill-opacity: 0 !important;
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+
+    .tile-grid-polygon:hover, .tile-grid-hovered {
+      stroke: #38bdf8 !important;
+      stroke-width: 2.5 !important;
+      fill: rgba(56, 189, 248, 0.22) !important;
+      fill-opacity: 0.22 !important;
+      filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.9));
+    }
+
+    .tile-grid-locked {
+      stroke: #10b981 !important;
+      stroke-width: 3.5 !important;
+      fill: rgba(16, 185, 129, 0.28) !important;
+      filter: drop-shadow(0 0 14px rgba(16, 185, 129, 0.95)) !important;
+      stroke-dasharray: 6, 4;
+      animation: pulseTarget 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseTarget {
+      0%, 100% { stroke-opacity: 1.0; stroke-width: 3.5; }
+      50% { stroke-opacity: 0.6; stroke-width: 4.5; }
+    }
+
+    /* Floating Region Illuminated Header Signboard */
+    .region-floating-badge {
+      background: rgba(11, 17, 32, 0.94);
+      border: 1.5px solid #38bdf8;
+      border-radius: 10px;
+      padding: 6px 14px;
+      color: #f8fafc;
+      font-family: var(--font-mono);
+      white-space: nowrap;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.85), 0 0 16px rgba(6, 182, 212, 0.45);
+      pointer-events: auto;
+      cursor: pointer;
+      transform: translate(-50%, -100%);
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .region-floating-badge:hover {
+      border-color: #34d399;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.95), 0 0 22px rgba(52, 211, 153, 0.6);
+      transform: translate(-50%, -105%);
+    }
+
+    .region-badge-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .region-badge-name {
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      color: #38bdf8;
+      text-transform: uppercase;
+    }
+
+    .region-badge-tag {
+      font-size: 10px;
+      background: rgba(6, 182, 212, 0.25);
+      color: #a5f3fc;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .region-badge-meta {
+      font-size: 10px;
+      color: #94a3b8;
+    }
+
+    /* Floating Top Tactical Control HUD */
+    .tactical-hud {
+      position: absolute;
+      top: 18px;
+      left: 24px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(11, 17, 32, 0.90);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-cyan);
+      border-radius: 12px;
+      padding: 8px 16px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba(6, 182, 212, 0.15);
+    }
+
+    .hud-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--cyan-bright);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hud-pill {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      color: #94a3b8;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hud-pill:hover, .hud-pill.active {
+      background: rgba(6, 182, 212, 0.2);
+      border-color: var(--cyan-bright);
+      color: #f8fafc;
+      box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+    }
+
+    .offline-badge {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #34d399;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .offline-dot {
+      width: 7px;
+      height: 7px;
+      background-color: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulseDot 2s infinite;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* Live Tile Hover Crosshair Tooltip */
+    .tile-hover-hud {
+      position: absolute;
+      top: 80px;
+      left: 24px;
+      z-index: 1000;
+      background: rgba(11, 17, 32, 0.94);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-cyan);
+      border-radius: 12px;
+      padding: 12px 18px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7);
+      display: none;
+      min-width: 290px;
+      pointer-events: none;
+    }
+
+    .tile-hover-hud.visible {
+      display: block;
+      animation: fadeIn 0.15s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Bottom Floating Multi-Temporal Timeline Controller Deck */
+    .timeline-deck {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(11, 17, 32, 0.94);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-cyan);
+      border-radius: 16px;
+      padding: 10px 20px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85), 0 0 24px rgba(6, 182, 212, 0.2);
+    }
+
+    .timeline-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--cyan-bright);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .timeline-chips-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      max-width: 620px;
+      padding: 4px 2px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .timeline-chips-wrapper::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+
+    .timeline-chip {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      color: #94a3b8;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 10px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .timeline-chip:hover {
+      border-color: var(--cyan-bright);
+      color: #fff;
+    }
+
+    .timeline-chip.active {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.35), rgba(99, 102, 241, 0.35));
+      border-color: #38bdf8;
+      color: #38bdf8;
+      box-shadow: 0 0 12px rgba(6, 182, 212, 0.4);
+      font-weight: 700;
+    }
+
+    .timeline-play-btn {
+      background: linear-gradient(135deg, #06b6d4, #2563eb);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: 0.04em;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .timeline-play-btn:hover {
+      filter: brightness(1.15);
+      transform: scale(1.02);
+    }
+
+    /* Target Tile Side Inspection Drawer */
+    .target-drawer {
+      position: absolute;
+      top: 18px;
+      right: 24px;
+      bottom: 24px;
+      width: 430px;
+      z-index: 1001;
+      background: rgba(11, 17, 32, 0.96);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-cyan);
+      border-radius: 16px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(6, 182, 212, 0.15);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: translateX(470px);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .target-drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.6);
+    }
+
+    .drawer-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--cyan-bright);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .drawer-close {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 6px;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+
+    .drawer-close:hover {
+      color: #f1f5f9;
+    }
+
+    .drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .tile-thumb-preview {
+      width: 100%;
+      height: 220px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: #000;
+    }
+
+    .metadata-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .meta-box {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 8px 12px;
+    }
+
+    .meta-label {
+      color: #64748b;
+      font-size: 10px;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .meta-value {
+      color: #e2e8f0;
+      font-weight: 600;
+    }
+
+    /* Multi-Epoch Filmstrip */
+    .filmstrip-section {
+      margin-top: 4px;
+    }
+
+    .filmstrip-header {
+      font-size: 12px;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .filmstrip-row {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+    }
+
+    .filmstrip-item {
+      flex: 0 0 110px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 6px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filmstrip-item:hover {
+      border-color: var(--cyan-bright);
+    }
+
+    .filmstrip-item img {
+      width: 100%;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 4px;
+      margin-bottom: 4px;
+    }
+
+    .filmstrip-tag {
+      font-size: 10px;
+      font-family: var(--font-mono);
+      color: var(--cyan-bright);
+      font-weight: 700;
+    }
+
+    .filmstrip-date {
+      font-size: 9px;
+      color: #64748b;
+    }
+
+    /* Big Action Button */
+    .action-btn-container {
+      padding: 16px 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(15, 23, 42, 0.6);
+    }
+
+    .btn-run-change {
+      width: 100%;
+      background: linear-gradient(135deg, #06b6d4, #2563eb);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 8px 24px rgba(6, 182, 212, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .btn-run-change:hover {
+      filter: brightness(1.12);
+      box-shadow: 0 12px 28px rgba(6, 182, 212, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .btn-run-change:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Staged Evidence Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.88);
+      backdrop-filter: blur(16px);
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .modal-card {
+      background: #0b1120;
+      border: 1px solid var(--border-cyan);
+      border-radius: 16px;
+      width: 90%;
+      max-width: 920px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 40px rgba(6, 182, 212, 0.25);
+      padding: 24px;
+      position: relative;
+    }
+
+    .comparison-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    .epoch-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .epoch-card img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      margin-top: 8px;
+    }
+
+    .deltas-strip {
+      display: flex;
+      gap: 12px;
+      margin: 16px 0;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 12px 16px;
+      justify-content: space-around;
+      font-family: var(--font-mono);
+    }
+
+    .delta-metric {
+      text-align: center;
+    }
+
+    .delta-num {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .delta-num.pos { color: #34d399; }
+    .delta-num.neg { color: #f87171; }
+    .delta-num.neutral { color: #94a3b8; }
+
+    /* Quality Audit Summary Card */
+    .quality-audit-card {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(6, 182, 212, 0.35);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-top: 14px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .quality-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .badge-stay {
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      border: 1px solid #10b981;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .badge-dropped {
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      border: 1px solid #ef4444;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 700;
     }
   </style>
 </head>
 <body>
+
   <!-- Top Aerospace Navigation Bar -->
   <header>
     <div class="logo-section">
       <div class="logo-badge">🛰️</div>
       <div>
         <div class="logo-title">AEROLENS &bull; CHANGE DETECTION STUDIO</div>
-        <div class="logo-subtitle">BI-TEMPORAL DIFFERENCE INDEXING &bull; DEFENSE DGIS</div>
+        <div class="logo-subtitle">SOVEREIGN MULTI-TEMPORAL MOSAIC CANVAS &bull; DEFENSE DGIS</div>
       </div>
     </div>
     <nav class="nav-links">
@@ -31,27 +692,798 @@
       <a href="/review.html" class="nav-item" id="nav-review" style="text-decoration: none;"><span>📝</span> Review Tool</a>
     </nav>
     <div class="header-status">
-      <a href="/" class="ingest-aoi-nav-btn" style="text-decoration: none;"><span>🗺️</span> Open Map Explorer</a>
-      <span class="tag-badge">Phase 3: Next Up</span>
+      <div class="offline-badge">
+        <div class="offline-dot"></div>
+        <span>SOVEREIGN OFFLINE ARCHIVE</span>
+      </div>
+      <span class="tag-badge" id="totalTilesBadge">0 TILES ONLINE</span>
     </div>
   </header>
 
-  <div class="content-container">
-    <div class="coming-soon-wrapper">
-      <div class="coming-soon-card">
-        <div class="coming-soon-icon">🔄</div>
-        <h2>Multi-Temporal Structural Change Detection</h2>
-        <p>
-          Bi-temporal and multi-year structural change analysis comparing historical ($T_1$) vs recent ($T_2$) Sentinel-2 observation canvases with automated spectral difference indexing ($\Delta\text{NDVI}$, $\Delta\text{NDBI}$, $\Delta\text{NDWI}$).
-        </p>
-        <div class="badge-cluster">
-          <span class="feature-tag">Bi-Temporal Canvas Alignment</span>
-          <span class="feature-tag">NDVI Vegetation Dynamics</span>
-          <span class="feature-tag">NDBI Urban Construction Tracking</span>
-          <span class="feature-tag">NDWI Surface Water Alterations</span>
+  <!-- Main Studio Map Container -->
+  <div class="studio-container">
+    <div id="changeMap"></div>
+
+    <!-- Floating Top Tactical HUD -->
+    <div class="tactical-hud">
+      <div class="hud-title"><span>📐</span> View:</div>
+      <div style="display: flex; gap: 4px;">
+        <button id="btnModeAtlas" class="hud-pill active" onclick="switchCanvasMode('atlas')">
+          <span>🔲</span> Side-by-Side Atlas
+        </button>
+        <button id="btnModeGps" class="hud-pill" onclick="switchCanvasMode('gps')">
+          <span>🌍</span> Real Earth GPS
+        </button>
+      </div>
+
+      <div style="height: 20px; width: 1px; background: rgba(255,255,255,0.15); margin: 0 4px;"></div>
+
+      <div class="hud-title"><span>🎯</span> Focus:</div>
+      <div id="regionPillsContainer" style="display: flex; gap: 8px;">
+        <!-- Ingested region jump pills loaded via JS -->
+      </div>
+    </div>
+
+    <!-- Live Tile Hover HUD -->
+    <div class="tile-hover-hud" id="tileHoverHud">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <span id="hoverTileId" style="font-family: var(--font-mono); font-size: 11px; color: var(--cyan-bright); font-weight: 700;">TILE_ID</span>
+        <span id="hoverRegionTag" style="font-size: 10px; background: rgba(6,182,212,0.2); color: #38bdf8; padding: 2px 6px; border-radius: 4px; font-weight: 600;">REGION</span>
+      </div>
+      <div style="font-family: var(--font-mono); font-size: 11px; color: #94a3b8;" id="hoverCoords">Lat: -- | Lon: --</div>
+      <div style="display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; font-family: var(--font-mono);">
+        <span id="hoverDates" style="color: #34d399; font-weight: 600;">⚡ 2 Epochs Available</span>
+        <span id="hoverNdvi" style="color: #cbd5e1;">NDVI: --</span>
+      </div>
+    </div>
+
+    <!-- Floating Bottom Multi-Temporal Timeline Controller Deck -->
+    <div class="timeline-deck" id="timelineDeck">
+      <div class="timeline-title" id="timelineTitleLabel">
+        <span>⏱️</span> Timeline:
+      </div>
+      <button class="timeline-play-btn" id="btnTimelinePlay" onclick="toggleTimelinePlay()">
+        <span id="playIcon">▶</span> <span id="playText">Play</span>
+      </button>
+      <div class="timeline-chips-wrapper" id="timelineChipsWrapper">
+        <!-- Timeline chips injected via JS -->
+      </div>
+      <div style="height: 20px; width: 1px; background: rgba(255,255,255,0.15); margin: 0 4px;"></div>
+      <span id="activeEpochIndicator" style="font-family: var(--font-mono); font-size: 11px; color: #34d399; font-weight: 700; white-space: nowrap;">
+        ALL EPOCHS
+      </span>
+    </div>
+
+    <!-- Target Tile Side Inspection Drawer -->
+    <div class="target-drawer" id="targetDrawer">
+      <div class="drawer-header">
+        <div class="drawer-title">
+          <span>🎯</span> Targeted Ground Footprint
         </div>
+        <button class="drawer-close" onclick="closeTargetDrawer()">✕</button>
+      </div>
+      <div class="drawer-body">
+        <img id="drawerThumbImg" class="tile-thumb-preview" src="" alt="Tile Preview">
+
+        <div class="metadata-grid">
+          <div class="meta-box">
+            <div class="meta-label">Selected Tile</div>
+            <div class="meta-value" id="drawerTileId" style="font-size: 11px; word-break: break-all;">--</div>
+          </div>
+          <div class="meta-box">
+            <div class="meta-label">Spatial Key</div>
+            <div class="meta-value" id="drawerSiteKey" style="font-size: 11px;">--</div>
+          </div>
+          <div class="meta-box">
+            <div class="meta-label">Real Coordinates</div>
+            <div class="meta-value" id="drawerCoords">--</div>
+          </div>
+          <div class="meta-box">
+            <div class="meta-label">Sensor / Resolution</div>
+            <div class="meta-value" id="drawerSensor">Sentinel-2 (10m)</div>
+          </div>
+          <div class="meta-box">
+            <div class="meta-label">Cloud Cover</div>
+            <div class="meta-value" id="drawerCloud">0.0%</div>
+          </div>
+          <div class="meta-box">
+            <div class="meta-label">Mean NDVI</div>
+            <div class="meta-value" id="drawerNdvi">--</div>
+          </div>
+        </div>
+
+        <div class="filmstrip-section">
+          <div class="filmstrip-header">
+            <span>🎞️</span> Multi-Temporal Observation Epochs
+          </div>
+          <div class="filmstrip-row" id="drawerFilmstrip">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+      </div>
+
+      <div class="action-btn-container">
+        <button class="btn-run-change" id="btnRunChange" onclick="stageTargetTile()">
+          <span>⚡</span> Run Change Detection Engine on this Tile
+        </button>
       </div>
     </div>
   </div>
+
+  <!-- Staged Multi-Temporal Evidence Modal -->
+  <div class="modal-backdrop" id="evidenceModal">
+    <div class="modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 14px;">
+        <h3 style="margin: 0; font-size: 16px; color: var(--emerald-bright); display: flex; align-items: center; gap: 8px;">
+          <span>✅</span> Quality-Audited Multi-Temporal Evidence Staged
+        </h3>
+        <button onclick="closeEvidenceModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 18px; cursor: pointer;">✕</button>
+      </div>
+
+      <div style="margin-top: 14px; font-size: 12px; color: #94a3b8; font-family: var(--font-mono);">
+        Staging Directory: <span id="stagedDirText" style="color: var(--cyan-bright);">data/change_staging/...</span>
+      </div>
+
+      <!-- Quality Audit Gate Summary -->
+      <div class="quality-audit-card" id="modalQualitySummary">
+        <!-- Injected via JS -->
+      </div>
+
+      <!-- Before vs After Comparison Grid -->
+      <div class="comparison-wrapper" id="modalComparisonWrapper">
+        <!-- Injected via JS -->
+      </div>
+
+      <!-- Spectral Deltas -->
+      <div class="deltas-strip" id="modalDeltasStrip">
+        <!-- Injected via JS -->
+      </div>
+
+      <div style="background: rgba(6,182,212,0.1); border: 1px solid var(--border-cyan); border-radius: 8px; padding: 12px; margin-top: 16px; font-size: 12px; display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 20px;">🤖</span>
+        <div>
+          <strong style="color: #38bdf8;">Quality Audit Complete:</strong> All observations were audited against <code>mask.tif</code>. High cloud / bad pixel observations were dropped. Only clean observations are staged and recorded in <code>manifest.json</code>.
+        </div>
+      </div>
+
+      <div style="margin-top: 18px; display: flex; justify-content: flex-end; gap: 12px;">
+        <button onclick="closeEvidenceModal()" class="hud-pill" style="padding: 10px 18px; color: #fff;">Close Window</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client-Side Change Studio Controller -->
+  <script>
+    let changeMap = null;
+    let gridData = null;
+    let currentImageOverlays = [];
+    let currentGridLayers = [];
+    let currentBannerMarkers = [];
+    let selectedTile = null;
+    let selectedRegionId = null;
+
+    let canvasMode = 'atlas';
+    let regionLayouts = {};
+
+    let availableDates = [];
+    let currentDateFilter = 'all';
+    let timelinePlayInterval = null;
+
+    // 1. Initialize Completely Offline Leaflet Canvas
+    function initChangeMap() {
+      changeMap = L.map('changeMap', {
+        center: [0.07, 0.13],
+        zoom: 11,
+        minZoom: 1,
+        maxZoom: 18,
+        worldCopyJump: true,
+        attributionControl: false
+      });
+
+      loadGridMapData();
+    }
+
+    // 2. Fetch all ingested regions & tiles from backend
+    async function loadGridMapData() {
+      try {
+        const res = await fetch('/api/v1/change/grid-map');
+        if (!res.ok) throw new Error('Failed to load grid map data');
+        gridData = await res.json();
+
+        document.getElementById('totalTilesBadge').innerText = `${gridData.total_tiles} TILES ONLINE`;
+
+        computeAtlasCoordinates();
+        renderRegionPills();
+        renderTimelineDeck();
+        renderCanvas();
+        fitToAllRegions();
+
+      } catch (err) {
+        console.error('Grid map load error:', err);
+      }
+    }
+
+    // 3. Compute Side-by-Side Atlas Coordinates
+    function computeAtlasCoordinates() {
+      if (!gridData || !gridData.regions) return;
+
+      const GAP = 0.035;
+      let currentLon = 0.0;
+      const baseLat = 0.0;
+      regionLayouts = {};
+
+      const sortedRegions = [...gridData.regions].sort((a, b) => {
+        if (a.region_id.includes('berlin')) return -1;
+        if (b.region_id.includes('berlin')) return 1;
+        return a.region_name.localeCompare(b.region_name);
+      });
+
+      sortedRegions.forEach((reg, idx) => {
+        const [minLon, minLat, maxLon, maxLat] = reg.bbox;
+        const width = maxLon - minLon;
+        const height = maxLat - minLat;
+
+        regionLayouts[reg.region_id] = {
+          region_id: reg.region_id,
+          region_name: reg.region_name || reg.region_id,
+          index: idx + 1,
+          anchor_lat: baseLat,
+          anchor_lon: currentLon,
+          width: width,
+          height: height,
+          atlas_bounds: [
+            [baseLat, currentLon],
+            [baseLat + height, currentLon + width]
+          ],
+          label_pos: [baseLat + height + 0.012, currentLon + (width / 2.0)],
+          gps_label_pos: [maxLat + 0.008, minLon + (width / 2.0)],
+          tile_count: reg.tile_count,
+          dates: reg.dates || []
+        };
+
+        currentLon += width + GAP;
+      });
+
+      gridData.tiles.forEach(tile => {
+        const rLayout = regionLayouts[tile.region_id];
+        const rData = gridData.regions.find(r => r.region_id === tile.region_id);
+
+        if (rLayout && rData) {
+          const [rMinLon, rMinLat] = rData.bbox;
+          const [tMinLon, tMinLat, tMaxLon, tMaxLat] = tile.bbox_wgs84;
+
+          const dLatMin = tMinLat - rMinLat;
+          const dLatMax = tMaxLat - rMinLat;
+          const dLonMin = tMinLon - rMinLon;
+          const dLonMax = tMaxLon - rMinLon;
+
+          tile.atlas_bounds = [
+            [rLayout.anchor_lat + dLatMin, rLayout.anchor_lon + dLonMin],
+            [rLayout.anchor_lat + dLatMax, rLayout.anchor_lon + dLonMax]
+          ];
+        } else {
+          tile.atlas_bounds = tile.bounds;
+        }
+      });
+    }
+
+    // 4. Switch Canvas Mode
+    function switchCanvasMode(mode) {
+      if (canvasMode === mode) return;
+      canvasMode = mode;
+
+      document.getElementById('btnModeAtlas').classList.toggle('active', mode === 'atlas');
+      document.getElementById('btnModeGps').classList.toggle('active', mode === 'gps');
+
+      renderCanvas();
+      fitToAllRegions();
+    }
+
+    // 5. Region Selection & Synchronized Focus
+    function selectRegion(regionId, autoFly = true) {
+      selectedRegionId = regionId;
+
+      document.querySelectorAll('#regionPillsContainer .hud-pill').forEach(b => b.classList.remove('active'));
+      if (regionId) {
+        const activePill = document.getElementById(`pill-reg-${regionId}`);
+        if (activePill) activePill.classList.add('active');
+      } else {
+        const allPill = document.getElementById('pill-all-regions');
+        if (allPill) allPill.classList.add('active');
+      }
+
+      if (timelinePlayInterval) {
+        clearInterval(timelinePlayInterval);
+        timelinePlayInterval = null;
+        document.getElementById('playIcon').innerText = '▶';
+        document.getElementById('playText').innerText = 'Play';
+      }
+
+      currentDateFilter = 'all';
+      renderTimelineDeck();
+      renderCanvas();
+
+      if (autoFly) {
+        if (regionId) {
+          focusRegion(regionId);
+        } else {
+          fitToAllRegions();
+        }
+      }
+    }
+
+    function renderRegionPills() {
+      const container = document.getElementById('regionPillsContainer');
+      container.innerHTML = '';
+
+      const allBtn = document.createElement('button');
+      allBtn.className = 'hud-pill active';
+      allBtn.id = 'pill-all-regions';
+      allBtn.innerText = '🌐 All Regions';
+      allBtn.onclick = () => selectRegion(null);
+      container.appendChild(allBtn);
+
+      gridData.regions.forEach(reg => {
+        const btn = document.createElement('button');
+        btn.className = 'hud-pill';
+        btn.id = `pill-reg-${reg.region_id}`;
+        btn.innerText = `📍 ${reg.region_name} (${reg.tile_count})`;
+        btn.onclick = () => selectRegion(reg.region_id);
+        container.appendChild(btn);
+      });
+    }
+
+    function fitToAllRegions() {
+      if (!gridData || !gridData.tiles || gridData.tiles.length === 0) return;
+
+      if (canvasMode === 'atlas') {
+        const boundsList = gridData.tiles.map(t => t.atlas_bounds);
+        changeMap.fitBounds(L.latLngBounds(boundsList.flat()), { padding: [50, 50], maxZoom: 13 });
+      } else {
+        const boundsList = gridData.tiles.map(t => t.bounds);
+        changeMap.fitBounds(L.latLngBounds(boundsList.flat()), { padding: [50, 50], maxZoom: 13 });
+      }
+    }
+
+    function focusRegion(regionId) {
+      if (canvasMode === 'atlas') {
+        const rLayout = regionLayouts[regionId];
+        if (rLayout) {
+          changeMap.flyToBounds(rLayout.atlas_bounds, { padding: [40, 40], maxZoom: 14, duration: 1.0 });
+        }
+      } else {
+        const reg = gridData.regions.find(r => r.region_id === regionId);
+        if (reg) {
+          changeMap.flyToBounds([
+            [reg.bbox[1], reg.bbox[0]],
+            [reg.bbox[3], reg.bbox[2]]
+          ], { padding: [40, 40], maxZoom: 14, duration: 1.0 });
+        }
+      }
+    }
+
+    // 6. Dynamic Region-Specific Timeline Deck Rendering & Logic
+    function renderTimelineDeck() {
+      const chipsWrapper = document.getElementById('timelineChipsWrapper');
+      const titleLabel = document.getElementById('timelineTitleLabel');
+      chipsWrapper.innerHTML = '';
+
+      let rawDates = [];
+      let regionDisplayName = 'All Regions';
+
+      if (selectedRegionId) {
+        const reg = gridData.regions.find(r => r.region_id === selectedRegionId);
+        regionDisplayName = reg ? (reg.region_name || reg.region_id) : selectedRegionId;
+        const regionTiles = gridData.tiles.filter(t => t.region_id === selectedRegionId);
+        rawDates = Array.from(new Set(regionTiles.map(t => t.date_short))).sort();
+      } else {
+        rawDates = Array.from(new Set(gridData.tiles.map(t => t.date_short))).sort();
+      }
+
+      if (titleLabel) {
+        titleLabel.innerHTML = `<span>⏱️</span> Timeline (${regionDisplayName}):`;
+      }
+
+      availableDates = ['all', ...rawDates];
+
+      if (!availableDates.includes(currentDateFilter)) {
+        currentDateFilter = 'all';
+      }
+
+      const allChip = document.createElement('div');
+      allChip.className = `timeline-chip ${currentDateFilter === 'all' ? 'active' : ''}`;
+      allChip.id = 'chip-all';
+      allChip.innerText = '🌐 All (Merged)';
+      allChip.onclick = () => selectTimelineEpoch('all');
+      chipsWrapper.appendChild(allChip);
+
+      rawDates.forEach(d => {
+        const chip = document.createElement('div');
+        chip.className = `timeline-chip ${currentDateFilter === d ? 'active' : ''}`;
+        chip.id = `chip-${d}`;
+        chip.innerText = d;
+        chip.onclick = () => selectTimelineEpoch(d);
+        chipsWrapper.appendChild(chip);
+      });
+
+      const statusEl = document.getElementById('activeEpochIndicator');
+      if (statusEl) {
+        statusEl.innerText = currentDateFilter === 'all' 
+          ? `${regionDisplayName.toUpperCase()}: ALL EPOCHS` 
+          : `${regionDisplayName.toUpperCase()}: ${currentDateFilter}`;
+      }
+    }
+
+    function selectTimelineEpoch(dateVal) {
+      currentDateFilter = dateVal;
+
+      document.querySelectorAll('.timeline-chip').forEach(c => c.classList.remove('active'));
+      const activeEl = document.getElementById(`chip-${dateVal}`);
+      if (activeEl) activeEl.classList.add('active');
+
+      const statusEl = document.getElementById('activeEpochIndicator');
+      const regionName = selectedRegionId 
+        ? (gridData.regions.find(r => r.region_id === selectedRegionId)?.region_name || selectedRegionId).toUpperCase()
+        : 'ALL REGIONS';
+
+      if (statusEl) {
+        statusEl.innerText = dateVal === 'all' 
+          ? `${regionName}: ALL EPOCHS` 
+          : `${regionName}: ${dateVal}`;
+      }
+
+      renderCanvas();
+    }
+
+    function toggleTimelinePlay() {
+      const playIcon = document.getElementById('playIcon');
+      const playText = document.getElementById('playText');
+
+      if (timelinePlayInterval) {
+        clearInterval(timelinePlayInterval);
+        timelinePlayInterval = null;
+        playIcon.innerText = '▶';
+        playText.innerText = 'Play';
+      } else {
+        playIcon.innerText = '⏸';
+        playText.innerText = 'Pause';
+        
+        let idx = availableDates.indexOf(currentDateFilter);
+        if (idx === -1 || idx === availableDates.length - 1) idx = 0;
+
+        timelinePlayInterval = setInterval(() => {
+          idx = (idx + 1) % availableDates.length;
+          selectTimelineEpoch(availableDates[idx]);
+        }, 1800);
+      }
+    }
+
+    // 7. Render Canvas (ImageOverlays + Cybernetic Grid Polygons + Region Signboards)
+    function renderCanvas() {
+      currentImageOverlays.forEach(l => changeMap.removeLayer(l));
+      currentGridLayers.forEach(l => changeMap.removeLayer(l));
+      currentBannerMarkers.forEach(m => changeMap.removeLayer(m));
+      currentImageOverlays = [];
+      currentGridLayers = [];
+      currentBannerMarkers = [];
+
+      if (!gridData || !gridData.tiles) return;
+
+      // 1. Render Floating Region Signboards
+      Object.values(regionLayouts).forEach(rLayout => {
+        const labelPos = canvasMode === 'atlas' ? rLayout.label_pos : rLayout.gps_label_pos;
+        const isRegSelected = selectedRegionId === rLayout.region_id;
+        const activeBorder = isRegSelected ? 'style="border-color: #10b981; box-shadow: 0 8px 28px rgba(0,0,0,0.95), 0 0 22px rgba(16, 185, 129, 0.7);"' : '';
+
+        const bannerHtml = `
+          <div class="region-floating-badge" ${activeBorder} onclick="selectRegion('${rLayout.region_id}')">
+            <div class="region-badge-top">
+              <span class="offline-dot" style="${isRegSelected ? 'background-color: #10b981;' : ''}"></span>
+              <span class="region-badge-name" style="${isRegSelected ? 'color: #34d399;' : ''}">${rLayout.region_name}</span>
+              <span class="region-badge-tag">${rLayout.tile_count} TILES</span>
+            </div>
+            <div class="region-badge-meta">
+              <span>📅 Epochs: ${rLayout.dates.join(', ')}</span>
+            </div>
+          </div>
+        `;
+        const bannerIcon = L.divIcon({
+          html: bannerHtml,
+          className: 'custom-region-signboard',
+          iconSize: [220, 40],
+          iconAnchor: [110, 40]
+        });
+        const marker = L.marker(labelPos, { icon: bannerIcon, interactive: true }).addTo(changeMap);
+        currentBannerMarkers.push(marker);
+      });
+
+      // 2. Filter tiles for current epoch
+      let tilesToRender = [];
+      if (currentDateFilter === 'all') {
+        const siteKeyMap = {};
+        gridData.tiles.forEach(t => {
+          if (!siteKeyMap[t.site_key] || t.date_short > siteKeyMap[t.site_key].date_short) {
+            siteKeyMap[t.site_key] = t;
+          }
+        });
+        tilesToRender = Object.values(siteKeyMap);
+      } else {
+        const siteKeyMap = {};
+        gridData.tiles.forEach(t => {
+          if (t.date_short === currentDateFilter) {
+            siteKeyMap[t.site_key] = t;
+          }
+        });
+        gridData.tiles.forEach(t => {
+          if (!siteKeyMap[t.site_key]) {
+            siteKeyMap[t.site_key] = { ...t, _dimmed: true };
+          }
+        });
+        tilesToRender = Object.values(siteKeyMap);
+      }
+
+      // 3. Add ImageOverlays and Interactive Polygons (Invisible by default, glows on hover)
+      tilesToRender.forEach(tile => {
+        const renderBounds = canvasMode === 'atlas' ? tile.atlas_bounds : tile.bounds;
+
+        if (tile.thumbnail_url) {
+          const overlay = L.imageOverlay(tile.thumbnail_url, renderBounds, {
+            opacity: tile._dimmed ? 0.35 : 1.0,
+            interactive: false
+          }).addTo(changeMap);
+          currentImageOverlays.push(overlay);
+        }
+
+        const isLocked = selectedTile && selectedTile.tile_id === tile.tile_id;
+        const polygon = L.rectangle(renderBounds, {
+          className: isLocked ? 'tile-grid-locked' : 'tile-grid-polygon',
+          color: isLocked ? '#10b981' : 'transparent',
+          weight: isLocked ? 3.5 : 0,
+          fillColor: isLocked ? '#10b981' : 'transparent',
+          fillOpacity: isLocked ? 0.28 : 0.0
+        }).addTo(changeMap);
+
+        polygon.on('mouseover', (e) => {
+          if (selectedTile && selectedTile.tile_id === tile.tile_id) return;
+          polygon.setStyle({
+            color: '#38bdf8',
+            weight: 2.5,
+            fillColor: '#38bdf8',
+            fillOpacity: 0.22
+          });
+          showTileHoverHud(tile, e);
+        });
+
+        polygon.on('mouseout', () => {
+          if (selectedTile && selectedTile.tile_id === tile.tile_id) return;
+          polygon.setStyle({
+            color: 'transparent',
+            weight: 0,
+            fillColor: 'transparent',
+            fillOpacity: 0.0
+          });
+          hideTileHoverHud();
+        });
+
+        polygon.on('click', () => {
+          lockAndInspectTile(tile, polygon);
+        });
+
+        currentGridLayers.push({ polygon, tile });
+      });
+    }
+
+    // 8. Hover HUD
+    function showTileHoverHud(tile, e) {
+      const hud = document.getElementById('tileHoverHud');
+      document.getElementById('hoverTileId').innerText = tile.tile_id;
+      document.getElementById('hoverRegionTag').innerText = (tile.region_id || 'REGION').toUpperCase();
+      document.getElementById('hoverCoords').innerText = `Real Lat: ${tile.centroid_lat.toFixed(4)}° | Lon: ${tile.centroid_lon.toFixed(4)}°`;
+      document.getElementById('hoverDates').innerText = `⚡ ${tile.epoch_count} Epochs (${tile.available_dates.join(', ')})`;
+      document.getElementById('hoverNdvi').innerText = tile.mean_ndvi !== null ? `NDVI: ${tile.mean_ndvi.toFixed(2)}` : 'NDVI: N/A';
+
+      hud.classList.add('visible');
+    }
+
+    function hideTileHoverHud() {
+      document.getElementById('tileHoverHud').classList.remove('visible');
+    }
+
+    // 9. Lock & Inspect Target Tile in Drawer
+    function lockAndInspectTile(tile, polygon) {
+      selectedTile = tile;
+
+      if (selectedRegionId !== tile.region_id) {
+        selectRegion(tile.region_id, false);
+      }
+
+      currentGridLayers.forEach(item => {
+        if (!selectedTile || item.tile.tile_id !== selectedTile.tile_id) {
+          item.polygon.setStyle({
+            color: 'transparent',
+            weight: 0,
+            fillColor: 'transparent',
+            fillOpacity: 0.0
+          });
+        }
+      });
+
+      polygon.setStyle({
+        color: '#10b981',
+        weight: 3.5,
+        fillColor: '#10b981',
+        fillOpacity: 0.28
+      });
+
+      document.getElementById('drawerThumbImg').src = tile.thumbnail_url || '';
+      document.getElementById('drawerTileId').innerText = tile.tile_id;
+      document.getElementById('drawerSiteKey').innerText = tile.site_key;
+      document.getElementById('drawerCoords').innerText = `${tile.centroid_lat.toFixed(4)}°, ${tile.centroid_lon.toFixed(4)}°`;
+      document.getElementById('drawerSensor').innerText = `${tile.sensor} (10m)`;
+      document.getElementById('drawerCloud').innerText = `${tile.cloud_pct}%`;
+      document.getElementById('drawerNdvi').innerText = tile.mean_ndvi !== null ? tile.mean_ndvi.toFixed(3) : 'N/A';
+
+      const filmstrip = document.getElementById('drawerFilmstrip');
+      filmstrip.innerHTML = '';
+
+      const siblingTiles = gridData.tiles
+        .filter(t => t.site_key === tile.site_key)
+        .sort((a, b) => a.date_short.localeCompare(b.date_short));
+      
+      siblingTiles.forEach((st, idx) => {
+        const item = document.createElement('div');
+        item.className = 'filmstrip-item';
+        item.innerHTML = `
+          <img src="${st.thumbnail_url}" alt="Epoch ${idx+1}">
+          <div class="filmstrip-tag">T${idx+1} (${st.date_short})</div>
+          <div class="filmstrip-date">${st.sensor}</div>
+        `;
+        filmstrip.appendChild(item);
+      });
+
+      document.getElementById('targetDrawer').classList.add('open');
+    }
+
+    function closeTargetDrawer() {
+      document.getElementById('targetDrawer').classList.remove('open');
+    }
+
+    // 10. Stage Selected Tile Multi-Year Files via Backend API
+    async function stageTargetTile() {
+      if (!selectedTile) return;
+      const btn = document.getElementById('btnRunChange');
+      btn.disabled = true;
+      btn.innerHTML = '<span>⏳</span> Running Quality Check & Staging...';
+
+      try {
+        const res = await fetch('/api/v1/change/stage-tile', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tile_id: selectedTile.tile_id })
+        });
+
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.detail || 'Failed to stage tile');
+        }
+
+        const data = await res.json();
+        showEvidenceModal(data);
+
+      } catch (err) {
+        alert(`Error staging files: ${err.message}`);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>⚡</span> Run Change Detection Engine on this Tile';
+      }
+    }
+
+    // 11. Show Staged Evidence Modal with Quality Gate Breakdown
+    function showEvidenceModal(data) {
+      document.getElementById('stagedDirText').innerText = data.staging_dir;
+
+      // Quality Audit Gate Summary
+      const summaryEl = document.getElementById('modalQualitySummary');
+      const q = data.quality_audit || {};
+      const selected = q.selected_tiles || [];
+      const dropped = q.dropped_tiles || [];
+
+      let qualityHtml = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 6px;">
+          <strong style="color: #38bdf8;">🛡️ Quality Check Gate Audit Report</strong>
+          <span>Total Evaluated: <strong>${q.total_evaluated || 0}</strong> | Passed: <strong style="color: #34d399;">${q.passed_count || 0}</strong> | Dropped: <strong style="color: #f87171;">${q.dropped_count || 0}</strong></span>
+        </div>
+      `;
+
+      // Render STAY tiles
+      selected.forEach(s => {
+        qualityHtml += `
+          <div class="quality-row">
+            <span>✅ <strong style="color: #f1f5f9;">${s.epoch} (${s.date})</strong>: ${s.tile_id}</span>
+            <div>
+              <span style="color: #94a3b8; margin-right: 8px;">Bad Pixels: ${s.bad_pixels.toLocaleString()} (${s.bad_pixel_pct}%)</span>
+              <span class="badge-stay">STAY</span>
+            </div>
+          </div>
+        `;
+      });
+
+      // Render DROPPED tiles if any
+      dropped.forEach(d => {
+        qualityHtml += `
+          <div class="quality-row" style="background: rgba(239, 68, 68, 0.08); padding: 4px 6px; border-radius: 4px;">
+            <span>❌ <strong style="color: #f87171;">${d.date}</strong>: ${d.tile_id}</span>
+            <div>
+              <span style="color: #fca5a5; margin-right: 8px;">Bad Pixels: ${d.bad_pixels.toLocaleString()} (${d.bad_pixel_pct}%)</span>
+              <span class="badge-dropped">DROPPED</span>
+            </div>
+          </div>
+        `;
+      });
+
+      summaryEl.innerHTML = qualityHtml;
+
+      // Comparison wrapper for staged STAY observations
+      const compWrapper = document.getElementById('modalComparisonWrapper');
+      compWrapper.innerHTML = '';
+
+      data.epochs.forEach((ep) => {
+        const qc = ep.quality_check || {};
+        const card = document.createElement('div');
+        card.className = 'epoch-card';
+        card.innerHTML = `
+          <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 12px;">
+            <strong style="color: var(--cyan-bright);">${ep.epoch}: Observation (${ep.date_short})</strong>
+            <span class="badge-stay">CLEAN &bull; ${qc.usable_pct || 100}% Usable</span>
+          </div>
+          <img src="${ep.files.thumb_url}" alt="${ep.epoch}">
+          <div style="font-family: var(--font-mono); font-size: 10px; color: #64748b; margin-top: 6px; text-align: left; word-break: break-all;">
+            <div>📄 TIF: ${ep.files.tif.split('/').pop()}</div>
+            <div>🛡️ MASK: ${ep.files.mask.split('/').pop()}</div>
+            <div>🔍 Bad Pixels: ${(qc.bad_pixels || 0).toLocaleString()} / ${(qc.total_pixels || 262144).toLocaleString()} (${qc.bad_pixel_pct || 0}%)</div>
+          </div>
+        `;
+        compWrapper.appendChild(card);
+      });
+
+      // Deltas Strip
+      const deltasStrip = document.getElementById('modalDeltasStrip');
+      const deltas = data.spectral_deltas || {};
+      
+      const formatDelta = (val) => {
+        if (val === undefined || val === null) return { text: 'N/A', cls: 'neutral' };
+        const text = (val > 0 ? '+' : '') + val.toFixed(3);
+        const cls = val > 0.05 ? 'pos' : (val < -0.05 ? 'neg' : 'neutral');
+        return { text, cls };
+      };
+
+      const dNdvi = formatDelta(deltas.delta_ndvi);
+      const dNdbi = formatDelta(deltas.delta_ndbi);
+      const dNdwi = formatDelta(deltas.delta_ndwi);
+
+      deltasStrip.innerHTML = `
+        <div class="delta-metric">
+          <div style="font-size: 11px; color: #64748b;">ΔNDVI (Vegetation)</div>
+          <div class="delta-num ${dNdvi.cls}">${dNdvi.text}</div>
+        </div>
+        <div class="delta-metric">
+          <div style="font-size: 11px; color: #64748b;">ΔNDBI (Urban/Built-Up)</div>
+          <div class="delta-num ${dNdbi.cls}">${dNdbi.text}</div>
+        </div>
+        <div class="delta-metric">
+          <div style="font-size: 11px; color: #64748b;">ΔNDWI (Water/Moisture)</div>
+          <div class="delta-num ${dNdwi.cls}">${dNdwi.text}</div>
+        </div>
+      `;
+
+      document.getElementById('evidenceModal').classList.add('open');
+    }
+
+    function closeEvidenceModal() {
+      document.getElementById('evidenceModal').classList.remove('open');
+    }
+
+    window.addEventListener('DOMContentLoaded', initChangeMap);
+  </script>
 </body>
 </html>
