@@ -21,6 +21,7 @@ data/change_staging/
 data/datasets/
 !data/README.md
 !data/custom_aoi.geojson
+!data/runs/**/*.png
 
 
 

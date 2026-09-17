@@ -1,0 +1,77 @@
+{
+  "site_id": "site_22.9936_72.2603_c013ddfa",
+  "baseline_epoch": "T1_2022-02-26",
+  "followup_epoch": "T3_2026-05-21",
+  "total_pixels": 262144,
+  "total_changed_pixels": 63603,
+  "total_changed_percentage": 24.26,
+  "significance_threshold_magnitude": 0.2,
+  "transition_breakdown": {
+    "New Built-up / Urbanization": {
+      "code": 1,
+      "pixel_count": 22446,
+      "area_percentage": 8.56,
+      "color_rgb": [
+        239,
+        68,
+        68
+      ],
+      "color_name": "Red"
+    },
+    "Vegetation Loss / Clearing": {
+      "code": 2,
+      "pixel_count": 22922,
+      "area_percentage": 8.74,
+      "color_rgb": [
+        245,
+        158,
+        11
+      ],
+      "color_name": "Amber"
+    },
+    "Vegetation Growth / Regrowth": {
+      "code": 3,
+      "pixel_count": 5006,
+      "area_percentage": 1.91,
+      "color_rgb": [
+        16,
+        185,
+        129
+      ],
+      "color_name": "Emerald"
+    },
+    "Water Inundation / Ponding": {
+      "code": 4,
+      "pixel_count": 1238,
+      "area_percentage": 0.47,
+      "color_rgb": [
+        14,
+        165,
+        233
+      ],
+      "color_name": "Sky Blue"
+    },
+    "Water Depletion / Reclamation": {
+      "code": 5,
+      "pixel_count": 1044,
+      "area_percentage": 0.4,
+      "color_rgb": [
+        234,
+        179,
+        8
+      ],
+      "color_name": "Yellow"
+    },
+    "Other Surface Transformation": {
+      "code": 6,
+      "pixel_count": 10947,
+      "area_percentage": 4.18,
+      "color_rgb": [
+        168,
+        85,
+        247
+      ],
+      "color_name": "Purple"
+    }
+  }
+}

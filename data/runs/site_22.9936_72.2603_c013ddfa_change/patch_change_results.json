@@ -1,0 +1,78 @@
+{
+  "encoder": "Prithvi-EO-2.0-300M",
+  "embedding_dim": 1024,
+  "site_key": "site_22.9936_72.2603_c013ddfa",
+  "baseline_epoch": "T1_2022-02-26",
+  "subsequent_epoch": "T3_2026-05-21",
+  "before_image": "data/change_staging/site_22.9936_72.2603_c013ddfa/T1_2022-02-26/tile.tif",
+  "after_image": "data/change_staging/site_22.9936_72.2603_c013ddfa/T3_2026-05-21/tile.tif",
+  "raster_dimensions": [512, 512],
+  "spectral_bands": 9,
+  "global_metrics": {
+    "cosine_similarity": 0.9958,
+    "semantic_distance": 0.0042
+  },
+  "patch_grid": {
+    "grid_size": 8,
+    "total_patches": 64,
+    "patch_dimensions": [64, 64]
+  },
+  "spatial_null_distribution": {
+    "min_distance": 0.0012,
+    "median_distance": 0.0057,
+    "mad": 0.0029,
+    "max_distance": 0.0401
+  },
+  "top_change_candidates": [
+    {
+      "rank": 1,
+      "patch_id": 14,
+      "row": 1,
+      "col": 6,
+      "bbox": [384, 64, 448, 128],
+      "distance": 0.0401,
+      "z_score": 11.77,
+      "is_candidate": true
+    },
+    {
+      "rank": 2,
+      "patch_id": 39,
+      "row": 4,
+      "col": 7,
+      "bbox": [448, 256, 512, 320],
+      "distance": 0.0365,
+      "z_score": 10.52,
+      "is_candidate": true
+    },
+    {
+      "rank": 3,
+      "patch_id": 59,
+      "row": 7,
+      "col": 3,
+      "bbox": [192, 448, 256, 512],
+      "distance": 0.0354,
+      "z_score": 10.15,
+      "is_candidate": true
+    },
+    {
+      "rank": 4,
+      "patch_id": 48,
+      "row": 6,
+      "col": 0,
+      "bbox": [0, 384, 64, 448],
+      "distance": 0.0317,
+      "z_score": 8.89,
+      "is_candidate": true
+    },
+    {
+      "rank": 5,
+      "patch_id": 22,
+      "row": 2,
+      "col": 6,
+      "bbox": [384, 128, 448, 192],
+      "distance": 0.0267,
+      "z_score": 7.17,
+      "is_candidate": true
+    }
+  ]
+}
